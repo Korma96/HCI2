@@ -68,6 +68,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Classroom.cs" />
+    <Compile Include="Model\Course.cs" />
+    <Compile Include="Model\Software.cs" />
+    <Compile Include="Model\Subject.cs" />
+    <Compile Include="Model\Term.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -95,7 +100,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controller\" />
-    <Folder Include="Model\" />
     <Folder Include="View\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
