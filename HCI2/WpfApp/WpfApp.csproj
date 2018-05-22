@@ -68,6 +68,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\OsType.cs" />
     <Compile Include="Model\Classroom.cs" />
     <Compile Include="Model\Course.cs" />
     <Compile Include="Model\Software.cs" />
