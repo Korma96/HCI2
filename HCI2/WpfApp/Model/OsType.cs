@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WpfApp.Model
 {
-    enum OsType
+    public enum OsType
     {
         Windows,
         Linux,

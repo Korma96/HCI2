@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WpfApp.Model
 {
-    class Subject
+    public class Subject
     {
 
         public int Id { get; set; }
