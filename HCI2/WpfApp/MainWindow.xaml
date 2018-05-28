@@ -3,10 +3,23 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfApp"
+        xmlns:schedule="http://schemas.syncfusion.com/wpf"
+        xmlns:local="clr-namespace:WpfApp.View"
         mc:Ignorable="d"
         Title="Computer Center HCI" Height="450" Width="800">
-    <Grid>
-        
+    <Grid x:Name="LayoutRoot">
+
+        <local:MySfSchedule ScheduleDateRange="{Binding VisibleDays}" IsHighLightWorkingHours="True" WorkStartHour="7" WorkEndHour="22" ShowNonWorkingHours="False"
+                             NonWorkingDays="Sunday" ShowAllDay="False"
+                             TimeInterval="FifteenMin" IntervalHeight="15" FirstDayOfWeek="Monday"
+                             x:Name="schedule" ScheduleType="WorkWeek" ItemsSource="{Binding MappedAppointments}">
+            <local:MySfSchedule.AppointmentMapping>
+                <schedule:ScheduleAppointmentMapping
+	                SubjectMapping="MappedSubject"
+	                StartTimeMapping="MappedStartTime"
+	                EndTimeMapping="MappedEndTime"/>
+            </local:MySfSchedule.AppointmentMapping>
+        </local:MySfSchedule>
+
     </Grid>
 </Window>
