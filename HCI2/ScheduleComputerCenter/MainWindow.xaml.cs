@@ -16,7 +16,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using ScheduleComputerCenter.Model;
-using System.Linq;
 
 namespace ScheduleComputerCenter
 {
@@ -49,6 +48,8 @@ namespace ScheduleComputerCenter
         {
             InitializeComponent();
             this.DataContext = this;
+
+            ComputerCentre.AddDummyData();
 
             WindowState = WindowState.Maximized;
 

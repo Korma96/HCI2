@@ -1,9 +1,9 @@
-namespace WpfApp.Migrations
+namespace ScheduleComputerCenter.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class FirstMigration : DbMigration
+    public partial class Ajmoo : DbMigration
     {
         public override void Up()
         {
@@ -18,11 +18,8 @@ namespace WpfApp.Migrations
                         Table = c.Boolean(nullable: false),
                         SmartTable = c.Boolean(nullable: false),
                         OsType = c.Int(nullable: false),
-                        Software_Id = c.Int(),
                     })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Softwares", t => t.Software_Id)
-                .Index(t => t.Software_Id);
+                .PrimaryKey(t => t.Id);
             
             CreateTable(
                 "dbo.Softwares",
@@ -36,8 +33,11 @@ namespace WpfApp.Migrations
                         YearOfFounding = c.Int(nullable: false),
                         price = c.Int(nullable: false),
                         Description = c.String(),
+                        Classroom_Id = c.Int(),
                     })
-                .PrimaryKey(t => t.Id);
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Classrooms", t => t.Classroom_Id)
+                .Index(t => t.Classroom_Id);
             
             CreateTable(
                 "dbo.Courses",
@@ -47,6 +47,7 @@ namespace WpfApp.Migrations
                         Name = c.String(),
                         DateOfFounding = c.String(),
                         Description = c.String(),
+                        Mark = c.String(),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -87,10 +88,10 @@ namespace WpfApp.Migrations
         {
             DropForeignKey("dbo.Subjects", "Software_Id", "dbo.Softwares");
             DropForeignKey("dbo.Subjects", "Course_Id", "dbo.Courses");
-            DropForeignKey("dbo.Classrooms", "Software_Id", "dbo.Softwares");
+            DropForeignKey("dbo.Softwares", "Classroom_Id", "dbo.Classrooms");
             DropIndex("dbo.Subjects", new[] { "Software_Id" });
             DropIndex("dbo.Subjects", new[] { "Course_Id" });
-            DropIndex("dbo.Classrooms", new[] { "Software_Id" });
+            DropIndex("dbo.Softwares", new[] { "Classroom_Id" });
             DropTable("dbo.Terms");
             DropTable("dbo.Subjects");
             DropTable("dbo.Courses");

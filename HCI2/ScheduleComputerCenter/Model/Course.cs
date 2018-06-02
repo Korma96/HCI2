@@ -12,17 +12,19 @@ namespace ScheduleComputerCenter.Model
         public string Name { get; set; }
         public String DateOfFounding { get; set; }
         public String Description { get; set; }
+        public String Mark { get; set; }
 
         public Course()
         {
         }
 
-        public Course(int id, string name, string dateOfFounding, string description)
+        public Course(int id, string name, string dateOfFounding, string description, string mark)
         {
             Id = id;
             Name = name;
             DateOfFounding = dateOfFounding;
             Description = description;
+            Mark = mark;
         }
     }
 }

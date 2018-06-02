@@ -15,13 +15,13 @@ namespace ScheduleComputerCenter.Model
         public Boolean Table { get; set; }
         public Boolean SmartTable { get; set; }
         public OsType OsType { get; set; }
-        public Software Software { get; set; }
+        public List<Software> Softwares { get; set; }
 
         public Classroom()
         {
         }
 
-        public Classroom(int id, string description, int numOfSeats, bool projector, bool table, bool smartTable, OsType osType, Software software)
+        public Classroom(int id, string description, int numOfSeats, bool projector, bool table, bool smartTable, OsType osType, List<Software> softwares)
         {
             Id = id;
             Description = description;
@@ -30,7 +30,7 @@ namespace ScheduleComputerCenter.Model
             Table = table;
             SmartTable = smartTable;
             OsType = osType;
-            Software = software;
+            Softwares = softwares;
         }
 
     
