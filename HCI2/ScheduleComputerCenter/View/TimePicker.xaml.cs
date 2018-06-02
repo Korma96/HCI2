@@ -11,10 +11,14 @@ namespace ScheduleComputerCenter.View
     /// </summary>
     public partial class TimePicker : UserControl
     {
-        public TimePicker(string hoursAndMinutes)
+        public TimePicker()
         {
             InitializeComponent();
+  
+        }
 
+        public void setHoursAndMinutes(string hoursAndMinutes)
+        {
             string[] tokens = hoursAndMinutes.Split(':');
             this.txtHours.Text = tokens[0].Trim();
             this.txtMinutes.Text = tokens[1].Trim();
@@ -24,9 +28,6 @@ namespace ScheduleComputerCenter.View
             OldHours = value;
             int.TryParse(this.txtMinutes.Text, out value);
             OldMinutes = value;
-
-            //txtHours.Focus();
-  
         }
 
         public int OldHours { get; set; }

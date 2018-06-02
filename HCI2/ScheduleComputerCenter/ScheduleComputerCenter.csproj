@@ -69,6 +69,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\RoutedCommands.cs" />
     <Compile Include="Migrations\201805232214505_FirstMigration.cs" />
     <Compile Include="Migrations\201805232214505_FirstMigration.Designer.cs">
       <DependentUpon>201805232214505_FirstMigration.cs</DependentUpon>
@@ -83,8 +84,8 @@
     <Compile Include="Repository\SoftwareRepository.cs" />
     <Compile Include="Repository\SubjectRepository.cs" />
     <Compile Include="Repository\TermRepository.cs" />
-    <Compile Include="View\AddNewTermDialog.xaml.cs">
-      <DependentUpon>AddNewTermDialog.xaml</DependentUpon>
+    <Compile Include="View\AddNewOrUpdateTermDialog.xaml.cs">
+      <DependentUpon>AddNewOrUpdateTermDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\TimePicker.xaml.cs">
       <DependentUpon>TimePicker.xaml</DependentUpon>
@@ -101,7 +102,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\AddNewTermDialog.xaml">
+    <Page Include="View\AddNewOrUpdateTermDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -153,6 +154,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\add_new.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\update.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
