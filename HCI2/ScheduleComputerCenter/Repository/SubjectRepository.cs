@@ -8,7 +8,7 @@ using System.Data.Entity;
 
 namespace ScheduleComputerCenter.Repository
 {
-    public class SubjectRepository : Repository<Classroom>
+    public class SubjectRepository : Repository<Subject>
     {
         public SubjectRepository(DbContext context) : base(context)
         {

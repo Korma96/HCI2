@@ -8,10 +8,11 @@ using System.Data.Entity;
 
 namespace ScheduleComputerCenter.Repository
 {
-    public class SoftwareRepository : Repository<Classroom>
+    public class SoftwareRepository : Repository<Software>
     {
         public SoftwareRepository(DbContext context) : base(context)
         {
+            
         }
     }
 }

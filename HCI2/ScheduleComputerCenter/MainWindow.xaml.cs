@@ -14,6 +14,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Collections.ObjectModel;
+using ScheduleComputerCenter.Model;
+using System.Linq;
 
 namespace ScheduleComputerCenter
 {
@@ -22,6 +25,8 @@ namespace ScheduleComputerCenter
     /// </summary>
     public partial class MainWindow : Window
     {
+        Point startPoint = new Point();
+        public ObservableCollection<Subject> Subjects { get; set;}
 
         private Dictionary<string, int> indeksi;
 
@@ -43,8 +48,13 @@ namespace ScheduleComputerCenter
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = this;
 
             WindowState = WindowState.Maximized;
+
+            List<Subject> s = new List<Subject>();
+            s.Add(new Subject(){ Name="Objektno 2"});
+            Subjects = new ObservableCollection<Subject>(s);
 
             indeksi = new Dictionary<string, int>();
 
@@ -377,6 +387,106 @@ namespace ScheduleComputerCenter
 
             return newTextBlock;
         }
+
+        private void ListView_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            startPoint = e.GetPosition(null);
+        }
+
+        private void ListView_MouseMove(object sender, MouseEventArgs e)
+        {
+            Point mousePos = e.GetPosition(null);
+            Vector diff = startPoint - mousePos;
+
+            if (e.LeftButton == MouseButtonState.Pressed &&
+                (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
+                Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance))
+            {
+                // Get the dragged ListViewItem
+                ListView listView = sender as ListView;
+                ListViewItem listViewItem =
+                    FindAncestor<ListViewItem>((DependencyObject)e.OriginalSource);
+
+                // Find the data behind the ListViewItem
+                Subject subject = (Subject)listView.ItemContainerGenerator.
+                    ItemFromContainer(listViewItem);
+
+                // Initialize the drag & drop operation
+                DataObject dragData = new DataObject("myFormat", subject);
+                DragDrop.DoDragDrop(listViewItem, dragData, DragDropEffects.Move);
+            }
+        }
+
+        private static T FindAncestor<T>(DependencyObject current) where T : DependencyObject
+        {
+            do
+            {
+                if (current is T)
+                {
+                    return (T)current;
+                }
+                current = VisualTreeHelper.GetParent(current);
+            }
+            while (current != null);
+            return null;
+        }
+
+        private void ListView_DragEnter(object sender, DragEventArgs e)
+        {
+            if (!e.Data.GetDataPresent("myFormat") || sender == e.Source)
+            {
+                e.Effects = DragDropEffects.None;
+            }
+        }
+
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            List<Subject> s = new List<Subject>();
+            s.Add(new Subject() { Name = "Objektno 2" });
+            s.Add(new Subject() { Name = "SNUS" });
+            s.Add(new Subject() { Name = "LPRS" });
+            s.Add(new Subject() { Name = "ISA" });
+
+            String text = this.autoComplete.Text;
+            foreach(var sub in s)
+            {
+                if(sub.Name.Equals(text))
+                {
+                    foreach(var subj in Subjects)
+                    {
+                        if(text.Equals(subj.Name))
+                        {
+                            return;
+                        }
+                    }
+                    Subjects.Add(sub);
+                }
+            }
+
+        }
+
+        private void RemoveButton_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedItem = SubjectsListView.SelectedItem;
+            for(int i=0; i<Subjects.Count; i++)
+            {
+                if(Subjects[i].Name.Equals(((Subject)selectedItem).Name))
+                {
+                    Subjects.RemoveAt(i);
+                    break;
+                }
+            }
+        }
+
+        //private void ListView_Drop(object sender, DragEventArgs e)
+        //{
+        //    if (e.Data.GetDataPresent("myFormat"))
+        //    {
+        //        Student student = e.Data.GetData("myFormat") as Student;
+        //        Studenti.Remove(student);
+        //        Studenti2.Add(student);
+        //    }
+        //}
 
     }
 }
