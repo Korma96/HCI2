@@ -30,7 +30,7 @@ namespace ScheduleComputerCenter.View
         //TextBlock TempVisual { get { return this.Template.FindName("PART_TempVisual", this) as TextBlock; } }
         ScrollViewer Host { get { return this.Template.FindName("PART_ContentHost", this) as ScrollViewer; } }
         UIElement TextBoxView { get { foreach (object o in LogicalTreeHelper.GetChildren(Host)) return o as UIElement; return null; } }
-        ObservableCollection<Subject> collection;
+        public ObservableCollection<Subject> collection;
 
         private bool _loaded = false;
         private bool key_down_clicked = false;
@@ -47,11 +47,7 @@ namespace ScheduleComputerCenter.View
         /// <param name="fileType"></param>
         public void AddData()
         {
-            List<Subject> s = new List<Subject>();
-            s.Add(new Subject() { Name = "Objektno 2" });
-            s.Add(new Subject() { Name = "SNUS" });
-            s.Add(new Subject() { Name = "LPRS" });
-            s.Add(new Subject() { Name = "ISA" });
+            List<Subject> s = ComputerCentre.SubjectRepository.GetAll().ToList();
             collection = new ObservableCollection<Subject>(s);
         }
 
@@ -222,12 +218,14 @@ namespace ScheduleComputerCenter.View
 
         private List<string> Lookup(string text)
         {
+            // da bi uvek bili svezi podaci iz baze
+            AddData();
             List<string> returnList = new List<string>();
             foreach (Subject c in collection)
             {
                 if (c.Name.ToUpper().Contains(text.ToUpper()))
                 {
-                    returnList.Add(c.ToString());
+                    returnList.Add(c.Name);
                 }
             }
             return returnList;

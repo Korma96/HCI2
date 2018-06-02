@@ -49,13 +49,11 @@ namespace ScheduleComputerCenter
             InitializeComponent();
             this.DataContext = this;
 
-            ComputerCentre.AddDummyData();
+            //ComputerCentre.AddDummyData();
 
             WindowState = WindowState.Maximized;
 
-            List<Subject> s = new List<Subject>();
-            s.Add(new Subject(){ Name="Objektno 2"});
-            Subjects = new ObservableCollection<Subject>(s);
+            Subjects = new ObservableCollection<Subject>();
 
             indeksi = new Dictionary<string, int>();
 
@@ -442,17 +440,14 @@ namespace ScheduleComputerCenter
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            List<Subject> s = new List<Subject>();
-            s.Add(new Subject() { Name = "Objektno 2" });
-            s.Add(new Subject() { Name = "SNUS" });
-            s.Add(new Subject() { Name = "LPRS" });
-            s.Add(new Subject() { Name = "ISA" });
+            List<Subject> s = autoComplete.collection.ToList();
 
             String text = this.autoComplete.Text;
             foreach(var sub in s)
             {
                 if(sub.Name.Equals(text))
                 {
+                    // check if subject already exists on ListView
                     foreach(var subj in Subjects)
                     {
                         if(text.Equals(subj.Name))
