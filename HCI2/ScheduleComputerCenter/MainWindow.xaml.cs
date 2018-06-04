@@ -94,6 +94,37 @@ namespace ScheduleComputerCenter
             this.Focus(); // ovo smo stavili jer je na pocetku new command-a bila uvek disable-ovana
         }
 
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+        {
+            var w = new View.classrooms();
+            w.ShowDialog();
+        }
+
+        private void MenuItem_Click_2(object sender, RoutedEventArgs e)
+        {
+            var w = new View.SubjectsWindow();
+            w.ShowDialog();
+        }
+
+        private void MenuItem_Click_3(object sender, RoutedEventArgs e)
+        {
+            var w = new View.softwares();
+            w.ShowDialog();
+        }
+
+        private void MenuItem_Click_4(object sender, RoutedEventArgs e)
+        {
+            var w = new View.courses();
+            w.ShowDialog();
+        }
+
+        private void MenuItem_Click_5(object sender, RoutedEventArgs e)
+        {
+            var w = new View.classrooms();
+            w.ShowDialog();
+        }
+
+
         private void dodajTextBlockTimes(Grid grid, int rows)
         {
             TextBlock newTextBlock;

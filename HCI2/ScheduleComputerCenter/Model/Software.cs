@@ -14,7 +14,7 @@ namespace ScheduleComputerCenter.Model
         public String Manufacturer { get; set; }
         public String Website { get; set; }
         public int YearOfFounding { get; set; }
-        public int price { get; set; }
+        public int Price { get; set; }
         public string Description { get; set; }
 
         public Software()
@@ -29,7 +29,7 @@ namespace ScheduleComputerCenter.Model
             Manufacturer = manufacturer;
             Website = website;
             YearOfFounding = yearOfFounding;
-            this.price = price;
+            Price = price;
             Description = description;
         }
     }

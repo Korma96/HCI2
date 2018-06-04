@@ -9,6 +9,7 @@ namespace ScheduleComputerCenter.Model
     public class Classroom
     {
         public int Id { get; set; }
+        public String Name { get; set; }
         public string Description { get; set; }
         public int NumOfSeats { get; set; }
         public Boolean Projector { get; set; }

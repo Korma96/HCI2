@@ -70,9 +70,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\RoutedCommands.cs" />
-    <Compile Include="Migrations\201806021925360_Ajmoo.cs" />
-    <Compile Include="Migrations\201806021925360_Ajmoo.Designer.cs">
-      <DependentUpon>201806021925360_Ajmoo.cs</DependentUpon>
+    <Compile Include="Migrations\201806031444283_NewMigration.cs" />
+    <Compile Include="Migrations\201806031444283_NewMigration.Designer.cs">
+      <DependentUpon>201806031444283_NewMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\ComputerCentre.cs" />
@@ -90,6 +90,18 @@
     </Compile>
     <Compile Include="View\AutoCompleteTextBox.xaml.cs">
       <DependentUpon>AutoCompleteTextBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\classrooms.xaml.cs">
+      <DependentUpon>classrooms.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\courses.xaml.cs">
+      <DependentUpon>courses.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\softwares.xaml.cs">
+      <DependentUpon>softwares.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\subjects.xaml.cs">
+      <DependentUpon>subjects.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\TimePicker.xaml.cs">
       <DependentUpon>TimePicker.xaml</DependentUpon>
@@ -118,6 +130,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\classrooms.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\courses.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\softwares.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\subjects.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\TimePicker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -143,8 +171,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Migrations\201806021925360_Ajmoo.resx">
-      <DependentUpon>201806021925360_Ajmoo.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201806031444283_NewMigration.resx">
+      <DependentUpon>201806031444283_NewMigration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

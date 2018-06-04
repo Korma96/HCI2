@@ -11,6 +11,16 @@
     <DockPanel>
         <ScrollViewer DockPanel.Dock="Top" Width="Auto" Height="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
             <DockPanel>
+                <Menu DockPanel.Dock ="Top" Background="Gray" Height="25">
+                    <MenuItem Header="Data" FontWeight="Heavy"  Height="25">
+                        <MenuItem Header="Classrooms" Click="MenuItem_Click_1"></MenuItem>
+                        <MenuItem Header="Courses" Click="MenuItem_Click_2"></MenuItem>
+                        <MenuItem Header="Softwares" Click="MenuItem_Click_3"></MenuItem>
+                        <MenuItem Header="Subjects" Click="MenuItem_Click_4"></MenuItem>
+                    </MenuItem>
+                    <MenuItem Header="Schedule" FontWeight="Heavy" Height="25">
+                    </MenuItem>
+                </Menu>
                 <DockPanel DockPanel.Dock="Left">
                     <DockPanel DockPanel.Dock="Top">
                         <Grid DockPanel.Dock="Left">

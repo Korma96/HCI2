@@ -7,13 +7,13 @@ namespace ScheduleComputerCenter.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class Ajmoo : IMigrationMetadata
+    public sealed partial class NewMigration : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Ajmoo));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(NewMigration));
         
         string IMigrationMetadata.Id
         {
-            get { return "201806021925360_Ajmoo"; }
+            get { return "201806031444283_NewMigration"; }
         }
         
         string IMigrationMetadata.Source
