@@ -78,6 +78,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\ComputerCentre.cs" />
+    <Compile Include="Model\InvertSign.cs" />
     <Compile Include="Model\Day.cs" />
     <Compile Include="Repository\ClassroomRepository.cs" />
     <Compile Include="Repository\ComputerCentreContext.cs" />
@@ -90,6 +91,9 @@
     <Compile Include="Repository\TermRepository.cs" />
     <Compile Include="View\AddNewOrUpdateTermDialog.xaml.cs">
       <DependentUpon>AddNewOrUpdateTermDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\AutoCompleteTextBox.xaml.cs">
+      <DependentUpon>AutoCompleteTextBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\TimePicker.xaml.cs">
       <DependentUpon>TimePicker.xaml</DependentUpon>
@@ -109,6 +113,14 @@
     <Page Include="View\AddNewOrUpdateTermDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\AutoCompleteTextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Brushes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\TimePicker.xaml">
       <SubType>Designer</SubType>
@@ -135,8 +147,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Migrations\201806032307440_FirstMigrations.resx">
-      <DependentUpon>201806032307440_FirstMigrations.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201805232214505_FirstMigration.resx">
+      <DependentUpon>201805232214505_FirstMigration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

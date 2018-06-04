@@ -12,6 +12,7 @@ namespace ScheduleComputerCenter.Repository
     {
         public SoftwareRepository(DbContext context) : base(context)
         {
+            
         }
 
     }

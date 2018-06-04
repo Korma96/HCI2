@@ -12,6 +12,7 @@ namespace ScheduleComputerCenter.Model
         public string Name { get; set; }
         public String DateOfFounding { get; set; }
         public String Description { get; set; }
+        public String Mark { get; set; }
 
         public Course()
         {
@@ -22,6 +23,7 @@ namespace ScheduleComputerCenter.Model
             Name = name;
             DateOfFounding = dateOfFounding;
             Description = description;
+            Mark = mark;
         }
     }
 }

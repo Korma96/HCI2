@@ -15,7 +15,7 @@ namespace ScheduleComputerCenter.Model
         public Boolean Table { get; set; }
         public Boolean SmartTable { get; set; }
         public OsType OsType { get; set; }
-        public Software Software { get; set; }
+        public List<Software> Softwares { get; set; }
 
         public Classroom()
         {
@@ -29,7 +29,7 @@ namespace ScheduleComputerCenter.Model
             Table = table;
             SmartTable = smartTable;
             OsType = osType;
-            Software = software;
+            Softwares = softwares;
         }
 
     

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ScheduleComputerCenter"
         mc:Ignorable="d"
+        xmlns:V="clr-namespace:ScheduleComputerCenter.View"
         Title="Schedule for a Computer Center" Height="750" Width="1288">
     <!--
     <Window.Resources>
@@ -17,8 +18,23 @@
     <DockPanel>
         <ScrollViewer DockPanel.Dock="Top" Width="Auto" Height="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
             <DockPanel>
-                <DockPanel DockPanel.Dock="Top">
-                    <Grid DockPanel.Dock="Left">
+                <DockPanel DockPanel.Dock="Left">
+                    <DockPanel DockPanel.Dock="Top">
+                        <Grid DockPanel.Dock="Left">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="40" />
+                                <RowDefinition Height="40" />
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
+
+                            <Rectangle Margin="2" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Fill="Gray" />
+
+                        </Grid>
+
+                        <Grid DockPanel.Dock="Right">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="40" />
                             <RowDefinition Height="40" />
@@ -32,39 +48,58 @@
 
                     </Grid>
 
-                    <Grid DockPanel.Dock="Right">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="40" />
-                            <RowDefinition Height="40" />
-                        </Grid.RowDefinitions>
+                        <Grid DockPanel.Dock="Top" Name="TopTopGrid">
+                        </Grid>
 
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100" />
-                        </Grid.ColumnDefinitions>
+                        <Grid DockPanel.Dock="Bottom" Name="TopBottomGrid">
+                        </Grid>
+                    </DockPanel>
 
-                        <Rectangle Margin="2" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Fill="Gray" />
-
+                    <Grid DockPanel.Dock="Left" Name="LeftGrid">
                     </Grid>
 
-                    <Grid DockPanel.Dock="Top" Name="TopTopGrid">
+                    <Grid DockPanel.Dock="Right" Name="RightGrid">
                     </Grid>
 
-                    <Grid DockPanel.Dock="Bottom" Name="TopBottomGrid">
-                    </Grid>
-                </DockPanel>
-
-                <Grid DockPanel.Dock="Left" Name="LeftGrid">
-                </Grid>
-
-                <Grid DockPanel.Dock="Right" Name="RightGrid">
-                </Grid>
-
-                <Grid DockPanel.Dock="Bottom" Name="MainGrid" HorizontalAlignment="Stretch" AllowDrop="True" Drop="Grid_Drop" DragOver="Grid_DragOver">
-                    <!--<Grid.LayoutTransform>
+                    <Grid DockPanel.Dock="Bottom" Name="MainGrid" HorizontalAlignment="Stretch" AllowDrop="True" Drop="Grid_Drop" DragOver="Grid_DragOver">
+                        <!--<Grid.LayoutTransform>
                         <RotateTransform Angle="270"/>
                     </Grid.LayoutTransform>
                     -->
-                </Grid>
+                    </Grid>
+                </DockPanel>
+                <DockPanel DockPanel.Dock="Right">
+                    <Grid DockPanel.Dock="Right" Name="RightGridTable">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition MinHeight="50" Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition MinWidth="100" Width="Auto" />
+                            <ColumnDefinition MinWidth="50" Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <V:AutoCompleteTextBox Grid.Column="0" Grid.Row="0" x:Name="autoComplete" Width="150">
+                            <V:AutoCompleteTextBox.Text>
+                                <Binding Path="Text" UpdateSourceTrigger="PropertyChanged">
+                                </Binding>
+                            </V:AutoCompleteTextBox.Text>
+                        </V:AutoCompleteTextBox>
+                        <Button Grid.Column="1" Grid.Row="0" Name="AddButton" Click="AddButton_Click">Add</Button>
+                        <TextBlock Grid.Column="0" Grid.Row="2">Subjects</TextBlock>
+                        <Button Grid.Column="1" Grid.Row="2" Name="RemoveButton" Click="RemoveButton_Click">Remove</Button>
+                        <ListView Name="SubjectsListView" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" ItemsSource="{Binding Subjects}" SelectionMode="Single" PreviewMouseLeftButtonDown="ListView_PreviewMouseLeftButtonDown" MouseMove="ListView_MouseMove">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+                </DockPanel>
             </DockPanel>
         </ScrollViewer>
     </DockPanel>
