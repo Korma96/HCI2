@@ -75,9 +75,9 @@ namespace ScheduleComputerCenter.View
         public void loadCourses(object sender, RoutedEventArgs e)
         {
             List<Course> courses = new List<Course>();
-            courses.Add(new Course(1, "pe", "he","1996", "ll"));
-            courses.Add(new Course(2, "ss", "he","1996", "ll"));
-            courses.Add(new Course(3, "sx", "he","1996", "ll"));
+            courses.Add(new Course("pe", "he","1996"));
+            courses.Add(new Course("ss", "he","1996"));
+            courses.Add(new Course("sx", "he","1996"));
             var combo = sender as ComboBox;
             combo.ItemsSource = courses;
             combo.SelectedIndex = 0;
@@ -102,7 +102,7 @@ namespace ScheduleComputerCenter.View
                         if (projector.Text.Equals("YES")) subject.Projector = true;
                         else subject.Projector = false;
                         subject.OsType = getOsType(osType.Text);
-                        subject.Software = new Software(1, "1", OsType.Any, "1", "mm", 18, 200, "14");
+                        subject.Software = new Software("1", OsType.Any, "1", "mm", 18, 200, "14");
                         subject.Id = 1;
                         subjectsList.Add(subject);
                         MessageBox.Show("Successfully added subject");
@@ -148,9 +148,9 @@ namespace ScheduleComputerCenter.View
         public void loadSoftwares(object sender, RoutedEventArgs e)
         {
             List<Software> softwares = new List<Software>();
-            softwares.Add(new Software(1, "1", OsType.Any, "1", "mm", 18, 200, "14"));
-            softwares.Add(new Software(2, "2", OsType.Any, "1", "mm", 18, 200, "14"));
-            softwares.Add(new Software(3, "3", OsType.Any, "1", "mm", 18, 200, "14"));
+            softwares.Add(new Software("1", OsType.Any, "1", "mm", 18, 200, "14"));
+            softwares.Add(new Software("2", OsType.Any, "1", "mm", 18, 200, "14"));
+            softwares.Add(new Software("3", OsType.Any, "1", "mm", 18, 200, "14"));
             var combo = sender as ComboBox;
             combo.ItemsSource = softwares;
             combo.SelectedIndex = 0;

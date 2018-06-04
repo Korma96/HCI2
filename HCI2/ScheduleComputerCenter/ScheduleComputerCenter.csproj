@@ -70,16 +70,19 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\RoutedCommands.cs" />
-    <Compile Include="Migrations\201806031444283_NewMigration.cs" />
-    <Compile Include="Migrations\201806031444283_NewMigration.Designer.cs">
-      <DependentUpon>201806031444283_NewMigration.cs</DependentUpon>
+    <Compile Include="Controller\MyConverter.cs" />
+    <Compile Include="Migrations\201806040742561_NewMigration.cs" />
+    <Compile Include="Migrations\201806040742561_NewMigration.Designer.cs">
+      <DependentUpon>201806040742561_NewMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\ComputerCentre.cs" />
+    <Compile Include="Model\Day.cs" />
     <Compile Include="Model\InvertSign.cs" />
     <Compile Include="Repository\ClassroomRepository.cs" />
     <Compile Include="Repository\ComputerCentreContext.cs" />
     <Compile Include="Repository\CourseRepository.cs" />
+    <Compile Include="Repository\DayRepository.cs" />
     <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Repository\Repository.cs" />
     <Compile Include="Repository\SoftwareRepository.cs" />
@@ -171,8 +174,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Migrations\201806031444283_NewMigration.resx">
-      <DependentUpon>201806031444283_NewMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201806040742561_NewMigration.resx">
+      <DependentUpon>201806040742561_NewMigration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -189,9 +192,7 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controller\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Images\add_new.png" />
   </ItemGroup>

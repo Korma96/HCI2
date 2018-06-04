@@ -76,9 +76,9 @@ namespace ScheduleComputerCenter.View
         public void loadSoftwares(object sender, RoutedEventArgs e)
         {
             List<Software> softwares = new List<Software>();
-            softwares.Add(new Software(1, "1", OsType.Any, "1", "mm", 18, 200, "14"));
-            softwares.Add(new Software(2, "2", OsType.Any, "1", "mm", 18, 200, "14"));
-            softwares.Add(new Software(3, "3", OsType.Any, "1", "mm", 18, 200, "14"));
+            softwares.Add(new Software("1", OsType.Any, "1", "mm", 18, 200, "14"));
+            softwares.Add(new Software("2", OsType.Any, "1", "mm", 18, 200, "14"));
+            softwares.Add(new Software("3", OsType.Any, "1", "mm", 18, 200, "14"));
             var combo = sender as ComboBox;
             combo.ItemsSource = softwares;
             combo.SelectedIndex = 0;
@@ -103,7 +103,7 @@ namespace ScheduleComputerCenter.View
                     if (projector.Text.Equals("YES")) classroom.Projector = true;
                     else classroom.Projector = false;
                     classroom.OsType = getOsType(osType.Text);
-                    classroom.Softwares = new List<Software>() { new Software(1, "1", OsType.Any, "1", "mm", 18, 200, "14") };
+                    classroom.Softwares = new List<Software>() { new Software("1", OsType.Any, "1", "mm", 18, 200, "14") };
                     classroom.Id = 1;
 
                     if (UniqueName(name.Text))
