@@ -21,9 +21,8 @@ namespace ScheduleComputerCenter.Model
         {
         }
 
-        public Classroom(int id, string description, int numOfSeats, bool projector, bool table, bool smartTable, OsType osType, Software software)
+        public Classroom(string description, int numOfSeats, bool projector, bool table, bool smartTable, OsType osType, Software software)
         {
-            Id = id;
             Description = description;
             NumOfSeats = numOfSeats;
             Projector = projector;

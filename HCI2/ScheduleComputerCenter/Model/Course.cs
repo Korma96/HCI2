@@ -17,9 +17,8 @@ namespace ScheduleComputerCenter.Model
         {
         }
 
-        public Course(int id, string name, string dateOfFounding, string description)
+        public Course(string name, string dateOfFounding, string description)
         {
-            Id = id;
             Name = name;
             DateOfFounding = dateOfFounding;
             Description = description;

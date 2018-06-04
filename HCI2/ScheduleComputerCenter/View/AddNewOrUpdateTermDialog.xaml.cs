@@ -256,7 +256,7 @@ namespace ScheduleComputerCenter.View
 
         private void obrisiRectanglove(List<int[]> indexesForNewTerm)
         {
-            int index, row, col;
+            int index;
 
             for (int i = 1; i < indexesForNewTerm.Count; i++)
             {

@@ -16,5 +16,6 @@ namespace ScheduleComputerCenter.Model
         public static SoftwareRepository SoftwareRepository = new SoftwareRepository(context);
         public static SubjectRepository SubjectRepository = new SubjectRepository(context);
         public static TermRepository TermRepository = new TermRepository(context);
+        public static DayRepository DayRepository = new DayRepository(context);
     }
 }

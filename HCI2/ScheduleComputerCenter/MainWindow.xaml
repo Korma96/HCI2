@@ -6,6 +6,13 @@
         xmlns:local="clr-namespace:ScheduleComputerCenter"
         mc:Ignorable="d"
         Title="Schedule for a Computer Center" Height="750" Width="1288">
+    <!--
+    <Window.Resources>
+        <Style TargetType="{x:Type ListViewItem}">
+            <Setter Property="Height" Value="35" />
+        </Style>
+    </Window.Resources>
+    -->
 
     <DockPanel>
         <ScrollViewer DockPanel.Dock="Top" Width="Auto" Height="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
