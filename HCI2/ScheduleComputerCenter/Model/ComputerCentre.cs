@@ -20,6 +20,7 @@ namespace ScheduleComputerCenter.Model
 
         public static void AddDummyData()
         {
+            /*
             List<Software> softwares = new List<Software>()
             {
                 new Software("Matlab", OsType.Windows, "Matlab doo", @"http://www.matlab.org", 2005, 200, "Software for science"),
@@ -27,15 +28,27 @@ namespace ScheduleComputerCenter.Model
                 new Software("PyCharm", OsType.Linux, "Python", @"http://www.pycharm.com", 2008, 300, "Software for python app development")
             };
             SoftwareRepository.AddRange(softwares);
+            */
 
+            List<Day> days = new List<Day>()
+            {
+                new Day("PONEDELJAK"),
+                new Day("UTORAK"),
+                new Day("SREDA"),
+                new Day("CETVRTAK"),
+                new Day("PETAK"),
+                new Day("SUBOTA")
+            };
+            DayRepository.AddRange(days);
+            /*
             List<Classroom> classrooms = new List<Classroom>()
             {
-                new Classroom("L1", 16, true, true, false, OsType.Any, new List<Software>(){ softwares[1]}),
-                new Classroom("L2", 32, false, true, false, OsType.Windows, new List<Software>(){ softwares[0]}),
-                new Classroom("L3", 16, true, false, false, OsType.Linux, new List<Software>(){ softwares[2]}),
-                new Classroom("L4", 32, true, true, false, OsType.Any, new List<Software>(){ softwares[0], softwares[1], softwares[2]}),
-                new Classroom("L5", 64, false, true, false, OsType.Any, new List<Software>(){ softwares[0], softwares[1]}),
-                new Classroom("L6", 32, true, true, true, OsType.Any, new List<Software>(){ softwares[1], softwares[2]})
+                new Classroom("ucionica1","L1", 16, true, true, false, OsType.Any, softwares[1]),
+                new Classroom("ucionica1","L2", 32, false, true, false, OsType.Windows, softwares[0]),
+                new Classroom("ucionica1","L3", 16, true, false, false, OsType.Linux, softwares[1]),
+                new Classroom("ucionica1","L4", 32, true, true, false, OsType.Any, softwares[2]),
+                new Classroom("ucionica1","L5", 64, false, true, false, OsType.Any, softwares[0]),
+                new Classroom("ucionica1","L6", 32, true, true, true, OsType.Any, softwares[1])
             };
             ClassroomRepository.AddRange(classrooms);
 
@@ -48,15 +61,16 @@ namespace ScheduleComputerCenter.Model
 
             List<Subject> subjects = new List<Subject>()
             {
-                new Subject("HCI", courses[0], "Najbolji predmet na svetu xD", 16, 2, 2, true, false, false, OsType.Windows, softwares[0]),
-                new Subject("Internet softverske arhitekture", courses[1], "Spring", 32, 2, 2, false, true, false, OsType.Any, softwares[1]),
-                new Subject("Android", courses[0], "Android programiranje", 16, 2, 2, true, true, false, OsType.Linux, softwares[2]),
-                new Subject("PIGKUT", courses[1], "Izrada seminarskog rada i jos svasta nesto", 32, 2, 2, true, false, true, OsType.Windows, softwares[0])
+                new Subject("HCI","2", courses[0], "Najbolji predmet na svetu xD", 16, 2, 2, true, false, false, OsType.Windows, softwares[0]),
+                new Subject("Internet softverske arhitekture","2", courses[1], "Spring", 32, 2, 2, false, true, false, OsType.Any, softwares[1]),
+                new Subject("Android", "2",courses[0], "Android programiranje", 16, 2, 2, true, true, false, OsType.Linux, softwares[2]),
+                new Subject("PIGKUT","2", courses[1], "Izrada seminarskog rada i jos svasta nesto", 32, 2, 2, true, false, true, OsType.Windows, softwares[0])
             };
             SubjectRepository.AddRange(subjects);
 
             context.SaveChanges();
         }
-
+        */
+        }
     }
 }

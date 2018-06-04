@@ -10,6 +10,7 @@ namespace ScheduleComputerCenter.Model
     {
 
         public int Id { get; set; }
+        public string Code { get; set; }
         public string Name { get; set; }
         public Course Course { get; set; }
         public String Description { get; set; }
@@ -26,8 +27,9 @@ namespace ScheduleComputerCenter.Model
         {
         }
 
-        public Subject(string name, Course course, string description, int numOfStudents, int minNumOfClassesPerTerm, int numOfClasses, bool projector, bool table, bool smartTable, OsType osType, Software software)
+        public Subject(string name,string code, Course course, string description, int numOfStudents, int minNumOfClassesPerTerm, int numOfClasses, bool projector, bool table, bool smartTable, OsType osType, Software software)
         {
+            Code = code;
             Name = name;
             Course = course;
             Description = description;

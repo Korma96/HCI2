@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using ScheduleComputerCenter.Model;
+using ScheduleComputerCenter.Repository;
 
 namespace ScheduleComputerCenter.View
 {
@@ -32,6 +33,7 @@ namespace ScheduleComputerCenter.View
         }
         public void view()
         {
+            subjectsList = ComputerCentre.SubjectRepository.GetAll().ToList();
             dt = new DataTable();
             dt.Columns.Add("Description");
             dt.Columns.Add("Name");
@@ -41,6 +43,7 @@ namespace ScheduleComputerCenter.View
             dt.Columns.Add("NumOfClasses");
             dt.Columns.Add("Table");
             dt.Columns.Add("SmartTable");
+            dt.Columns.Add("Projector");
             dt.Columns.Add("OsType");
             dt.Columns.Add("Software");
             foreach (Subject s in subjectsList)
@@ -74,10 +77,7 @@ namespace ScheduleComputerCenter.View
         }
         public void loadCourses(object sender, RoutedEventArgs e)
         {
-            List<Course> courses = new List<Course>();
-            courses.Add(new Course("pe", "he","1996"));
-            courses.Add(new Course("ss", "he","1996"));
-            courses.Add(new Course("sx", "he","1996"));
+            List<Course> courses = ComputerCentre.CourseRepository.GetAll().ToList();
             var combo = sender as ComboBox;
             combo.ItemsSource = courses;
             combo.SelectedIndex = 0;
@@ -102,9 +102,12 @@ namespace ScheduleComputerCenter.View
                         if (projector.Text.Equals("YES")) subject.Projector = true;
                         else subject.Projector = false;
                         subject.OsType = getOsType(osType.Text);
-                        subject.Software = new Software("1", OsType.Any, "1", "mm", 18, 200, "14");
-                        subject.Id = 1;
-                        subjectsList.Add(subject);
+                        subject.Software = (Software)software.SelectedItem;
+                        subject.Course = (Course)Course.SelectedItem;
+                        subject.MinNumOfClassesPerTerm = Int32.Parse(minNumOfClasses.Text);
+                        subject.NumOfClasses = Int32.Parse(numOF.Text);
+                        ComputerCentre.SubjectRepository.Add(subject);
+                        ComputerCentre.SubjectRepository.Context.SaveChanges();
                         MessageBox.Show("Successfully added subject");
                         btnAdd.Content = "Add";
                         view();
@@ -138,6 +141,7 @@ namespace ScheduleComputerCenter.View
                 osType.Text = dataRowView["OsType"].ToString();
                 software.Text = dataRowView["Software"].ToString();
                 numOfStudents.Text = dataRowView["NumOfSeats"].ToString();
+                Course.Text = dataRowView["Course"].ToString();
                 btnAdd.Content = "Update";
             }
             else
@@ -147,10 +151,7 @@ namespace ScheduleComputerCenter.View
         }
         public void loadSoftwares(object sender, RoutedEventArgs e)
         {
-            List<Software> softwares = new List<Software>();
-            softwares.Add(new Software("1", OsType.Any, "1", "mm", 18, 200, "14"));
-            softwares.Add(new Software("2", OsType.Any, "1", "mm", 18, 200, "14"));
-            softwares.Add(new Software("3", OsType.Any, "1", "mm", 18, 200, "14"));
+            List<Software> softwares = ComputerCentre.SoftwareRepository.GetAll().ToList();
             var combo = sender as ComboBox;
             combo.ItemsSource = softwares;
             combo.SelectedIndex = 0;
@@ -166,7 +167,9 @@ namespace ScheduleComputerCenter.View
                 {
                     if (name.Equals(s.Name))
                     {
-                        subjectsList.Remove(s);
+                        ComputerCentre.SubjectRepository.Remove(s);
+                        ComputerCentre.SubjectRepository.Context.SaveChanges();
+                        MessageBox.Show("Successfully deleted subject");
                         view();
                         break;
                     }

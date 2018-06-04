@@ -77,7 +77,7 @@
             </WrapPanel>
             <WrapPanel>
                 <TextBlock Text="Description : " Width="212" Height="40"/>
-                <TextBox Name="desc" />
+                <TextBox Name="desc" Height="54" />
             </WrapPanel>
             <WrapPanel>
                 <TextBlock Text="Software : " Width="210"/>

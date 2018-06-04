@@ -20,7 +20,7 @@ namespace ScheduleComputerCenter
     public partial class MainWindow : Window
     {
         Point startPoint = new Point();
-        public ObservableCollection<Subject> Subjects { get; set;}
+        public ObservableCollection<Subject> Subjects { get; set; }
         public ObservableCollection<ObservableCollection<Term>> ObservableList { get; set; }
 
         private const int NUM_OF_DAYS = 6;
@@ -68,7 +68,7 @@ namespace ScheduleComputerCenter
 
 
             List<Day> days = ComputerCentre.DayRepository.GetAll().ToList();
- 
+
             if (days.Count > 0)
             {
                 //ComputerCentre.DayRepository.RemoveRange(days);
@@ -103,7 +103,8 @@ namespace ScheduleComputerCenter
                     }
                 }
 
-                NumOfClassrooms = totalNumOfTerms / (60 * NUM_OF_DAYS);
+                //NumOfClassrooms = totalNumOfTerms / (60 * NUM_OF_DAYS);
+                NumOfClassrooms = 6;
                 if (NumOfClassrooms > 0)
                 {
                     definisiRedove(TopTopGrid, 1, 40);
@@ -184,13 +185,13 @@ namespace ScheduleComputerCenter
                 {
                     MessageBox.Show("Ne postoji nijedna ucionica!");
                 }
-                
+
             }
             else
             {
                 MessageBox.Show("Ne postoji nijedan dan!");
             }
-            
+
         }
 
         private DataTemplate makeDataTemplate()
@@ -255,14 +256,32 @@ namespace ScheduleComputerCenter
 
         private void MenuItem_Click_1(object sender, RoutedEventArgs e)
         {
-            var w = new View.classrooms();
-            w.ShowDialog();
+            if (!ComputerCentre.SoftwareRepository.GetAll().ToList().Any())
+            {
+                MessageBox.Show("No softwares available, please add software first!");
+            }
+            else
+            {
+                var w = new View.classrooms();
+                w.ShowDialog();
+            }
         }
 
         private void MenuItem_Click_2(object sender, RoutedEventArgs e)
         {
-            var w = new View.SubjectsWindow();
-            w.ShowDialog();
+            if (!ComputerCentre.SoftwareRepository.GetAll().ToList().Any())
+            {
+                MessageBox.Show("No softwares available,\nplease add at least one software first!");
+            }
+            else if (!ComputerCentre.CourseRepository.GetAll().ToList().Any())
+            {
+                MessageBox.Show("No courses available,\nplease add at least one course first!");
+            }
+            else
+            {
+                var w = new View.SubjectsWindow();
+                w.ShowDialog();
+            }
         }
 
         private void MenuItem_Click_3(object sender, RoutedEventArgs e)
