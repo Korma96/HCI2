@@ -1,21 +1,16 @@
 ﻿using ScheduleComputerCenter.View;
 using ScheduleComputerCenter.Commands;
+using ScheduleComputerCenter.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Collections.ObjectModel;
-using ScheduleComputerCenter.Model;
 
 namespace ScheduleComputerCenter
 {
@@ -26,36 +21,36 @@ namespace ScheduleComputerCenter
     {
         Point startPoint = new Point();
         public ObservableCollection<Subject> Subjects { get; set;}
-
-        private Dictionary<string, int> indeksi;
+        public ObservableCollection<ObservableCollection<Term>> ObservableList { get; set; }
 
         private const int NUM_OF_DAYS = 6;
-        private const int NUM_OF_CLASSROOMS = 6;
+        public int NumOfClassrooms { get; set; }
 
         private const int NUM_OF_ROWS_IN_MAIN_GRID = 60;
         private const int NUM_OF_COLS_IN_MAIN_GRID = 36;
 
-        private const int HEIGHT_OF_ROWS_IN_MAIN_GRID = 25;
-        private const int WIDTH_OF_COLS_IN_MAIN_GRID = 32;
+        public static double HEIGHT_OF_ROWS_IN_MAIN_GRID = 50.0;
+        private const double WIDTH_OF_COLS_IN_MAIN_GRID = 32.0;
 
         private string[] days = { "PONEDELJAK", "UTORAK", "SREDA", "ČETVRTAK", "PETAK", "SUBOTA" };
         private string[] classrooms = { "L1", "L2", "L3", "L4", "L5", "L6" };
         private string[] times = { "07:00", "07:15", "07:30", "07:45", "08:00", "08:15", "08:30", "08:45", "09:00", "09:15", "09:30", "09:45", "10:00", "10:15", "10:30", "10:45", "11:00", "11:15", "11:30", "11:45", "12:00", "12:15", "12:30", "12:45", "13:00", "13:15", "13:30", "13:45", "14:00", "14:15", "14:30", "14:45", "15:00", "15:15", "15:30", "15:45", "16:00", "16:15", "16:30", "16:45", "17:00", "17:15", "17:30", "17:45", "18:00", "18:15", "18:30", "18:45", "19:00", "19:15", "19:30", "19:45", "20:00", "20:15", "20:30", "20:45", "21:00", "21:15", "21:30", "21:45", "22:00" };
 
-        public TextBlock SelectedElement { get; set; }
+        public ListViewItem SelectedElement { get; set; }
+
 
         public MainWindow()
         {
             InitializeComponent();
             this.DataContext = this;
 
-            //ComputerCentre.AddDummyData();
-
             WindowState = WindowState.Maximized;
 
             Subjects = new ObservableCollection<Subject>();
+            ObservableList = new ObservableCollection<ObservableCollection<Term>>();
 
-            indeksi = new Dictionary<string, int>();
+            // popunjavanje baze
+            //ComputerCentre.AddDummyData();
 
             CommandBinding AddNewTermCommandBinding = new CommandBinding(RoutedCommands.AddNewTermCommand, AddNewTermCommand_Executed, AddNewTermCommand_CanExecute);
             CommandBinding UpdateTermCommandBinding = new CommandBinding(RoutedCommands.UpdateTermCommand, UpdateTermCommand_Executed, UpdateTermCommand_CanExecute);
@@ -71,27 +66,191 @@ namespace ScheduleComputerCenter
             contextMenu.Items.Add(menuItemUpdate);
             MainGrid.ContextMenu = contextMenu;
 
-            definisiRedove(TopTopGrid, 1, 40);
-            definisiKolone(TopTopGrid, NUM_OF_DAYS * NUM_OF_CLASSROOMS, WIDTH_OF_COLS_IN_MAIN_GRID);
-            dodajTextBlockDays(NUM_OF_DAYS);
 
-            definisiRedove(TopBottomGrid, 1, 40);
-            definisiKolone(TopBottomGrid, NUM_OF_DAYS * NUM_OF_CLASSROOMS, WIDTH_OF_COLS_IN_MAIN_GRID);
-            dodajTextBlockClassrooms(NUM_OF_CLASSROOMS);
+            List<Day> days = ComputerCentre.DayRepository.GetAll().ToList();
+ 
+            if (days.Count > 0)
+            {
+                //ComputerCentre.DayRepository.RemoveRange(days);
+                //ComputerCentre.context.SaveChanges();
 
-            definisiRedove(LeftGrid, NUM_OF_ROWS_IN_MAIN_GRID, HEIGHT_OF_ROWS_IN_MAIN_GRID);
-            definisiKolone(LeftGrid, 1, 100);
-            dodajTextBlockTimes(LeftGrid, NUM_OF_ROWS_IN_MAIN_GRID);
+                //if (days.Count > 0) NumOfClassrooms = days[0].Terms.Count / 60;
+                //else NumOfClassrooms = 0;
 
-            definisiRedove(RightGrid, NUM_OF_ROWS_IN_MAIN_GRID, HEIGHT_OF_ROWS_IN_MAIN_GRID);
-            definisiKolone(RightGrid, 1, 100);
-            dodajTextBlockTimes(RightGrid, NUM_OF_ROWS_IN_MAIN_GRID);
+                List<Term> termsForClassroom = new List<Term>(); ;
 
-            definisiRedove(MainGrid, NUM_OF_ROWS_IN_MAIN_GRID, HEIGHT_OF_ROWS_IN_MAIN_GRID);
-            definisiKolone(MainGrid, NUM_OF_COLS_IN_MAIN_GRID, WIDTH_OF_COLS_IN_MAIN_GRID);
-            dodajTextBlockove(NUM_OF_ROWS_IN_MAIN_GRID, NUM_OF_COLS_IN_MAIN_GRID);
+                Term term;
+                int numOfTermsByClassroom = 0;
+                int totalNumOfTerms = 0;
 
-            this.Focus(); // ovo smo stavili jer je na pocetku new command-a bila uvek disable-ovana
+                foreach (Day day in days)
+                {
+                    for (int i = 1; i <= day.Terms.Count; i++)
+                    {
+                        term = day.Terms[i - 1];
+                        numOfTermsByClassroom += term.RowSpan;
+                        termsForClassroom.Add(term);
+
+                        if (numOfTermsByClassroom % 60 == 0)
+                        {
+                            ObservableList.Add(new ObservableCollection<Term>(termsForClassroom));
+
+                            totalNumOfTerms += numOfTermsByClassroom;
+                            numOfTermsByClassroom = 0;
+                            termsForClassroom = new List<Term>();
+                        }
+
+                    }
+                }
+
+                NumOfClassrooms = totalNumOfTerms / (60 * NUM_OF_DAYS);
+                if (NumOfClassrooms > 0)
+                {
+                    definisiRedove(TopTopGrid, 1, 40);
+                    definisiKolone(TopTopGrid, NUM_OF_DAYS * NumOfClassrooms, WIDTH_OF_COLS_IN_MAIN_GRID);
+                    dodajTextBlockDays(NUM_OF_DAYS, NumOfClassrooms);
+
+                    definisiRedove(TopBottomGrid, 1, 40);
+                    definisiKolone(TopBottomGrid, NUM_OF_DAYS * NumOfClassrooms, WIDTH_OF_COLS_IN_MAIN_GRID);
+                    dodajTextBlockClassrooms(NumOfClassrooms);
+
+                    definisiRedove(LeftGrid, NUM_OF_ROWS_IN_MAIN_GRID, HEIGHT_OF_ROWS_IN_MAIN_GRID);
+                    definisiKolone(LeftGrid, 1, 100);
+                    dodajTextBlockTimes(LeftGrid, NUM_OF_ROWS_IN_MAIN_GRID);
+
+                    definisiRedove(RightGrid, NUM_OF_ROWS_IN_MAIN_GRID, HEIGHT_OF_ROWS_IN_MAIN_GRID);
+                    definisiKolone(RightGrid, 1, 100);
+                    dodajTextBlockTimes(RightGrid, NUM_OF_ROWS_IN_MAIN_GRID);
+
+
+                    //definisiRedove(MainGrid, NUM_OF_ROWS_IN_MAIN_GRID, HEIGHT_OF_ROWS_IN_MAIN_GRID);
+                    //definisiKolone(MainGrid, NUM_OF_COLS_IN_MAIN_GRID, WIDTH_OF_COLS_IN_MAIN_GRID);
+                    //dodajTextBlockove(NUM_OF_ROWS_IN_MAIN_GRID, NUM_OF_COLS_IN_MAIN_GRID);
+
+
+
+                    MainGrid.RowDefinitions.Add(new RowDefinition());
+                    for (int i = 0; i < NUM_OF_DAYS * NumOfClassrooms; i++) MainGrid.ColumnDefinitions.Add(new ColumnDefinition());
+
+
+                    DataTemplate dataTemplate = makeDataTemplate();
+
+                    ListView listView;
+                    //GridView gridView;
+                    //GridViewColumn gridViewColumn;
+                    Style style;
+
+                    for (int i = 0; i < NUM_OF_DAYS * NumOfClassrooms; i++)
+                    {
+
+                        listView = new ListView() { ItemsSource = ObservableList[i], Height = 60 * HEIGHT_OF_ROWS_IN_MAIN_GRID + 4 };
+                        //gridView = new GridView();
+                        //gridViewColumn = new GridViewColumn() { Header = "L1", Width = WIDTH_OF_COLS_IN_MAIN_GRID };
+                        //gridViewColumn.CellTemplate = dataTemplate;
+                        //gridViewColumn.DisplayMemberBinding = new Binding("Id");
+                        //gridView.Columns.Add(gridViewColumn);
+
+                        // listView.View = gridView;
+
+                        style = new Style(typeof(ListViewItem));
+
+                        /*Trigger trigger = new Trigger() { Property = ListViewItem.IsSelectedProperty, Value = true };
+                        trigger.Setters.Add(new Setter(ListViewItem.ForegroundProperty, Brushes.Red));
+                        trigger.Setters.Add(new Setter(ListViewItem.BackgroundProperty, Brushes.Blue));
+                        style.Triggers.Add(trigger);*/
+
+                        style.Setters.Add(new Setter(ListViewItem.HeightProperty, new Binding("RowSpan") { Converter = new Controller.MyConverter() }));
+                        //style.Setters.Add(new Setter(ListViewItem.HeightProperty, HEIGHT_OF_ROWS_IN_MAIN_GRID));
+                        style.Setters.Add(new Setter(ListViewItem.BackgroundProperty, Brushes.LightGray));
+                        //style.Setters.Add(new EventSetter(ListViewItem.MouseLeftButtonUpEvent, new MouseButtonEventHandler(Cell_MouseLeftButtonUp)));
+                        //style.Setters.Add(new EventSetter(ListViewItem.MouseRightButtonUpEvent, new MouseButtonEventHandler(Cell_MouseRightButtonUp)));
+                        listView.ItemContainerStyle = style;
+                        listView.AllowDrop = true;
+                        listView.DragEnter += Subjects_DragEnter;
+                        listView.Drop += Subjects_Drop;
+
+                        //listView = new ListView();
+                        //listView.SetBinding(ListView.ItemsSourceProperty, new Binding { Source = NekaLista });
+                        listView.ItemTemplate = dataTemplate;
+                        Grid.SetRow(listView, 0);
+                        Grid.SetColumn(listView, i);
+                        MainGrid.Children.Add(listView);
+                    }
+
+
+                    this.Focus(); // ovo smo stavili jer je na pocetku new command-a bila uvek disable-ovana
+                }
+                else
+                {
+                    MessageBox.Show("Ne postoji nijedna ucionica!");
+                }
+                
+            }
+            else
+            {
+                MessageBox.Show("Ne postoji nijedan dan!");
+            }
+            
+        }
+
+        private DataTemplate makeDataTemplate()
+        {
+            FrameworkElementFactory textBlockName = new FrameworkElementFactory(typeof(TextBlock));
+            //textBlockName.SetValue(TextBlock.NameProperty, "SubjectName");
+            textBlockName.SetValue(TextBlock.TextWrappingProperty, TextWrapping.Wrap);
+            textBlockName.SetValue(LayoutTransformProperty, new RotateTransform(270));
+            //textBlockName.SetValue(WidthProperty, HEIGHT_OF_ROWS_IN_MAIN_GRID);
+            //textBlockName.SetBinding(TextBlock.TextProperty, new Binding("Id") {TargetNullValue = "***" });
+            textBlockName.SetBinding(TextBlock.TextProperty, new Binding("Subject.Name"));
+
+            FrameworkElementFactory textBlock1 = new FrameworkElementFactory(typeof(TextBlock));
+            textBlock1.SetValue(TextBlock.TextProperty, " ");
+            textBlock1.SetValue(LayoutTransformProperty, new RotateTransform(270));
+
+            FrameworkElementFactory textBlockMark = new FrameworkElementFactory(typeof(TextBlock));
+            //textBlockName.SetValue(TextBlock.NameProperty, "SubjectMark");
+            textBlockMark.SetValue(TextBlock.TextWrappingProperty, TextWrapping.Wrap);
+            textBlockMark.SetValue(LayoutTransformProperty, new RotateTransform(270));
+            //textBlockMark.SetValue(WidthProperty, HEIGHT_OF_ROWS_IN_MAIN_GRID);
+            //textBlockMark.SetBinding(TextBlock.TextProperty, new Binding("Id") { TargetNullValue = "***"});
+            textBlockMark.SetBinding(TextBlock.TextProperty, new Binding("Subject.Course.Mark"));
+
+            //FrameworkElementFactory textBlock2 = new FrameworkElementFactory(typeof(TextBlock));
+            //textBlock2.SetValue(TextBlock.TextProperty, ")");
+            //textBlock2.SetValue(LayoutTransformProperty, new RotateTransform(270));
+
+            FrameworkElementFactory stackPanel = new FrameworkElementFactory(typeof(StackPanel));
+            stackPanel.SetValue(StackPanel.OrientationProperty, Orientation.Vertical);
+            //stackPanel.SetBinding(StackPanel.HeightProperty, new Binding("RowSpan"));
+            //stackPanel.SetValue(StackPanel.BackgroundProperty, Brushes.Aqua);
+            //wrapPanel.SetValue(WrapPanel.HeightProperty, new GridLength(HEIGHT_OF_ROWS_IN_MAIN_GRID));
+            stackPanel.AppendChild(textBlockName);
+            stackPanel.AppendChild(textBlock1);
+            stackPanel.AppendChild(textBlockMark);
+            //stackPanel.AppendChild(textBlock2);
+
+            DataTemplate dataTemplate = null;
+            try
+            {
+                dataTemplate = new DataTemplate();
+                dataTemplate.VisualTree = stackPanel;
+            }
+            catch { }
+
+            /*DataTrigger dataTriggerName = new DataTrigger();
+            dataTriggerName.Binding = new Binding("Subject.Name");
+            dataTriggerName.Value = null;
+            dataTriggerName.Setters.Add(new Setter(TextBlock.TextProperty, "***"));
+
+            DataTrigger dataTriggerMark = new DataTrigger();
+            dataTriggerMark.Binding = new Binding("Subject.Mark");
+            dataTriggerMark.Value = null;
+            dataTriggerMark.Setters.Add(new Setter(TextBlock.TextProperty, "***"));
+
+            dataTemplate.Triggers.Add(dataTriggerName);
+            dataTemplate.Triggers.Add(dataTriggerMark);*/
+
+            return dataTemplate;
         }
 
         private void MenuItem_Click_1(object sender, RoutedEventArgs e)
@@ -138,16 +297,16 @@ namespace ScheduleComputerCenter
             }
         }
 
-        private void dodajTextBlockDays(int rows)
+        private void dodajTextBlockDays(int rows, int numOfClassrooms)
         {
             TextBlock newTextBlock;
 
             for (int i = 0; i < rows; i++)
             {
                 newTextBlock = new TextBlock() { Margin = new Thickness(2), Text = days[i], Background = Brushes.Gray };
-                Grid.SetColumnSpan(newTextBlock, NUM_OF_CLASSROOMS);
+                Grid.SetColumnSpan(newTextBlock, numOfClassrooms);
                 Grid.SetRow(newTextBlock, 0);
-                Grid.SetColumn(newTextBlock, i*NUM_OF_CLASSROOMS);
+                Grid.SetColumn(newTextBlock, i* numOfClassrooms);
                 TopTopGrid.Children.Add(newTextBlock);
             }
         }
@@ -167,7 +326,7 @@ namespace ScheduleComputerCenter
             }
         }
 
-        private void dodajTextBlockove(int rows, int cols)
+        /*private void dodajTextBlockove(int rows, int cols)
         {
             TextBlock newTextBlock;
 
@@ -175,28 +334,18 @@ namespace ScheduleComputerCenter
             {
                 for (int j = 0; j < cols; j++)
                 {
-                    newTextBlock = new TextBlock() { Margin = new Thickness(2), Text = "", LayoutTransform = new RotateTransform(270), Background = Brushes.LightGray/*, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center*/ };
+                    newTextBlock = new TextBlock() { Margin = new Thickness(2), Text = "", LayoutTransform = new RotateTransform(270), Background = Brushes.LightGray, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
                     newTextBlock.MouseLeftButtonUp += Cell_MouseLeftButtonUp;
                     newTextBlock.MouseRightButtonUp += Cell_MouseRightButtonUp;
                     Grid.SetRow(newTextBlock, i);
                     Grid.SetColumn(newTextBlock, j);
                     MainGrid.Children.Add(newTextBlock);
-                    //addNewIndex(i * rows + j, i, j);
+                   
                 }
             }
-        }
+        }*/
 
-        public void addNewIndex(int index, int row, int col)
-        {
-            indeksi.Add(row + "_" + col, index);
-        }
-
-        public void removeIndex(int row, int col)
-        {
-            indeksi.Remove(row + "_" + col);
-        }
-
-        public static void definisiRedove(Grid grid, int rows, int height)
+        public static void definisiRedove(Grid grid, double rows, double height)
         {
             for(int i = 0; i < rows; i++)
             {
@@ -204,7 +353,7 @@ namespace ScheduleComputerCenter
             }
         }
 
-        public static void definisiKolone(Grid grid, int cols, int width)
+        public static void definisiKolone(Grid grid, int cols, double width)
         {
             for (int i = 0; i < cols; i++)
             {
@@ -212,6 +361,7 @@ namespace ScheduleComputerCenter
             }
         }
 
+        /*
         private void Grid_Drop(object sender, DragEventArgs e)
         {
             if (null != e.Data && e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -231,12 +381,12 @@ namespace ScheduleComputerCenter
             {
                 e.Effects = DragDropEffects.None;
             }
-        }
+        }*/
 
         private void Cell_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
-            TextBlock oldSelectedElement = SelectedElement;
-            SelectedElement = sender as TextBlock;
+            ListViewItem oldSelectedElement = SelectedElement;
+            SelectedElement = sender as ListViewItem;
 
             if (oldSelectedElement != null) // prethodno je bio neki element selektovan
             {
@@ -252,14 +402,14 @@ namespace ScheduleComputerCenter
 
         private void Cell_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            TextBlock oldSelectedElement = SelectedElement;
+            ListViewItem oldSelectedElement = SelectedElement;
 
             if (oldSelectedElement != null) // prethodno je bio neki element selektovan
             {
-                oldSelectedElement.Background = Brushes.LightGray;
+                //oldSelectedElement.Background = Brushes.LightGray;
             }
 
-            SelectedElement = sender as TextBlock;
+            SelectedElement = sender as ListViewItem;
 
             if (oldSelectedElement != null)
             {
@@ -270,13 +420,13 @@ namespace ScheduleComputerCenter
                 }
             }
 
-            SelectedElement.Background = Brushes.Blue;
+            //SelectedElement.Background = Brushes.Blue;
 
         }
 
         private void AddNewTermCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = SelectedElement.Text.Equals("");
+            e.CanExecute = SelectedElement.Template.VisualTree.FirstChild.Text.Trim().Equals("");
             e.Handled = true;
         }
 
@@ -290,7 +440,7 @@ namespace ScheduleComputerCenter
 
         private void UpdateTermCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = !SelectedElement.Text.Equals("");
+            e.CanExecute = SelectedElement.Template.VisualTree.FirstChild.Text.Trim().Equals("");
             e.Handled = true;
         }
 
@@ -313,7 +463,7 @@ namespace ScheduleComputerCenter
                 (SelectedElement as Rectangle).Fill = brush;
             }
             else MessageBox.Show("Selektovan element neocekivanog tipa!");
-        }*/
+        }
 
 
         public UIElement GetMainGridElement(Grid grid, int r, int c, int numOfClassroom)
@@ -324,7 +474,7 @@ namespace ScheduleComputerCenter
                 if (Grid.GetRow(e) == r && Grid.GetColumn(e) == c)
                     return e;
             }
-            return null;*/
+            return null;
 
             int index = GetIndexOfMainGridElement(grid, r, c);
             
@@ -347,15 +497,15 @@ namespace ScheduleComputerCenter
             //int index = r * NUM_OF_DAYS * numOfClassroom + c;
             //return index;
 
-            /*string key = r + "_" + c;
+            string key = r + "_" + c;
 
             if(indeksi.ContainsKey(key))
             {
                 return indeksi[key];
             }
 
-            return -1;*/
-        }
+            return -1;
+        }*/
 
         public static int GetRowForTime(Grid grid, string time)
         {
@@ -409,21 +559,21 @@ namespace ScheduleComputerCenter
             return -1;
         }
 
-       public TextBlock createNewTextBlock(string comboSubject)
+       /*public TextBlock createNewTextBlock(string comboSubject)
         {
-            TextBlock newTextBlock = new TextBlock() { Margin = new Thickness(2), Text = comboSubject, LayoutTransform = new RotateTransform(270), Background = Brushes.Aqua, Foreground = Brushes.Red/*, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center*/ };
+            TextBlock newTextBlock = new TextBlock() { Margin = new Thickness(2), Text = comboSubject, LayoutTransform = new RotateTransform(270), Background = Brushes.Aqua, Foreground = Brushes.Red, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
             newTextBlock.MouseLeftButtonUp += Cell_MouseLeftButtonUp;
             newTextBlock.MouseRightButtonUp += Cell_MouseRightButtonUp;
 
             return newTextBlock;
-        }
+        }*/
 
-        private void ListView_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void Subjects_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             startPoint = e.GetPosition(null);
         }
 
-        private void ListView_MouseMove(object sender, MouseEventArgs e)
+        private void Subjects_MouseMove(object sender, MouseEventArgs e)
         {
             Point mousePos = e.GetPosition(null);
             Vector diff = startPoint - mousePos;
@@ -434,16 +584,23 @@ namespace ScheduleComputerCenter
             {
                 // Get the dragged ListViewItem
                 ListView listView = sender as ListView;
-                ListViewItem listViewItem =
-                    FindAncestor<ListViewItem>((DependencyObject)e.OriginalSource);
+                ListViewItem listViewItem = FindAncestor<ListViewItem>((DependencyObject)e.OriginalSource);
 
-                // Find the data behind the ListViewItem
-                Subject subject = (Subject)listView.ItemContainerGenerator.
-                    ItemFromContainer(listViewItem);
+                if(listViewItem != null)
+                {
+                    try
+                    {
+                        // Find the data behind the ListViewItem
+                        Subject subject = (Subject)listView.ItemContainerGenerator.ItemFromContainer(listViewItem);
 
-                // Initialize the drag & drop operation
-                DataObject dragData = new DataObject("myFormat", subject);
-                DragDrop.DoDragDrop(listViewItem, dragData, DragDropEffects.Move);
+                        // Initialize the drag & drop operation
+                        DataObject dragData = new DataObject("myFormat", subject);
+                        DragDrop.DoDragDrop(listViewItem, dragData, DragDropEffects.Move);
+                    }
+                    catch { }
+                   
+                }
+                
             }
         }
 
@@ -461,35 +618,12 @@ namespace ScheduleComputerCenter
             return null;
         }
 
-        private void ListView_DragEnter(object sender, DragEventArgs e)
+        private void Subjects_DragEnter(object sender, DragEventArgs e)
         {
             if (!e.Data.GetDataPresent("myFormat") || sender == e.Source)
             {
                 e.Effects = DragDropEffects.None;
             }
-        }
-
-        private void AddButton_Click(object sender, RoutedEventArgs e)
-        {
-            List<Subject> s = autoComplete.collection.ToList();
-
-            String text = this.autoComplete.Text;
-            foreach(var sub in s)
-            {
-                if(sub.Name.Equals(text))
-                {
-                    // check if subject already exists on ListView
-                    foreach(var subj in Subjects)
-                    {
-                        if(text.Equals(subj.Name))
-                        {
-                            return;
-                        }
-                    }
-                    Subjects.Add(sub);
-                }
-            }
-
         }
 
         private void RemoveButton_Click(object sender, RoutedEventArgs e)
@@ -505,15 +639,51 @@ namespace ScheduleComputerCenter
             }
         }
 
-        //private void ListView_Drop(object sender, DragEventArgs e)
-        //{
-        //    if (e.Data.GetDataPresent("myFormat"))
-        //    {
-        //        Student student = e.Data.GetData("myFormat") as Student;
-        //        Studenti.Remove(student);
-        //        Studenti2.Add(student);
-        //    }
-        //}
+        private void Subjects_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent("myFormat"))
+            {
+                Subject subject = e.Data.GetData("myFormat") as Subject;
+                //Subjects.Remove(subject);
+
+
+                ListView listView = sender as ListView;
+                ListViewItem listViewItem = FindAncestor<ListViewItem>((DependencyObject)e.OriginalSource);
+                //ListView listView = ItemsControl.ItemsControlFromItemContainer(listViewItem) as ListView;
+
+                int indexOfClassroom = Grid.GetColumn(listView);
+                int indexOfTerm = listView.ItemContainerGenerator.IndexFromContainer(listViewItem);
+
+                // Ovo radim jer ne osvezi raspored ako bih samo set-ovao subject za odabrani termin 
+                Term newTerm = ObservableList[indexOfClassroom][indexOfTerm];
+                newTerm.Subject = subject;
+                ObservableList[indexOfClassroom].Insert(indexOfTerm, newTerm);
+                ObservableList[indexOfClassroom].RemoveAt(indexOfTerm + 1);
+            }
+        }
+
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            List<Subject> s = autoComplete.collection.ToList();
+
+            String text = this.autoComplete.Text;
+            foreach (var sub in s)
+            {
+                if (sub.Name.Equals(text))
+                {
+                    // check if subject already exists on ListView
+                    foreach (var subj in Subjects)
+                    {
+                        if (text.Equals(subj.Name))
+                        {
+                            return;
+                        }
+                    }
+                    Subjects.Add(sub);
+                }
+            }
+
+        }
 
     }
 }

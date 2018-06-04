@@ -192,7 +192,7 @@ namespace ScheduleComputerCenter.View
 
                     for (int row = startRow; row <= endRow; row++)
                     {
-                        index = MWindow.GetIndexOfMainGridElement(MWindow.MainGrid, row, columnClassRoom);
+                        index = 0; //MWindow.GetIndexOfMainGridElement(MWindow.MainGrid, row, columnClassRoom);
                         //rect = MainGrid.Children[index] as Rectangle;
 
                         if (index == -1/*rect == null*/)
@@ -256,7 +256,7 @@ namespace ScheduleComputerCenter.View
 
         private void obrisiRectanglove(List<int[]> indexesForNewTerm)
         {
-            int index, row, col;
+            int index;
 
             for (int i = 1; i < indexesForNewTerm.Count; i++)
             {

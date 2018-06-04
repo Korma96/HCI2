@@ -21,5 +21,16 @@ namespace ScheduleComputerCenter.Repository
         DbSet<Software> Softwares {get; set;}
         DbSet<Subject> Subjects {get; set;}
         DbSet<Term> Terms {get; set;}
+        DbSet<Day> Days { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+
+            // configures one-to-many relationship
+            modelBuilder.Entity<Term>()
+                .HasRequired<Day>(t => t.Day)
+                .WithMany(d => d.Terms)
+                .HasForeignKey<int>(t => t.DayId);
+        }
     }
 }

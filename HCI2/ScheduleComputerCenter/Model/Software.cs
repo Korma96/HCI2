@@ -21,9 +21,8 @@ namespace ScheduleComputerCenter.Model
         {
         }
 
-        public Software(int id, string name, OsType osType, string manufacturer, string website, int yearOfFounding, int price, string description)
+        public Software(string name, OsType osType, string manufacturer, string website, int yearOfFounding, int price, string description)
         {
-            Id = id;
             Name = name;
             OsType = osType;
             Manufacturer = manufacturer;

@@ -26,9 +26,8 @@ namespace ScheduleComputerCenter.Model
         {
         }
 
-        public Subject(int id, string name, Course course, string description, int numOfStudents, int minNumOfClassesPerTerm, int numOfClasses, bool projector, bool table, bool smartTable, OsType osType, Software software)
+        public Subject(string name, Course course, string description, int numOfStudents, int minNumOfClassesPerTerm, int numOfClasses, bool projector, bool table, bool smartTable, OsType osType, Software software)
         {
-            Id = id;
             Name = name;
             Course = course;
             Description = description;
@@ -41,5 +40,7 @@ namespace ScheduleComputerCenter.Model
             OsType = osType;
             Software = software;
         }
+
+        
     }
 }
