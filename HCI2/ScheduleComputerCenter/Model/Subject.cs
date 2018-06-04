@@ -11,7 +11,6 @@ namespace ScheduleComputerCenter.Model
 
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Mark { get; set; }
         public Course Course { get; set; }
         public String Description { get; set; }
         public int NumOfStudents { get; set; }
@@ -31,7 +30,6 @@ namespace ScheduleComputerCenter.Model
         {
             Name = name;
             Course = course;
-            Mark = makeMark(course.Name);
             Description = description;
             NumOfStudents = numOfStudents;
             MinNumOfClassesPerTerm = minNumOfClassesPerTerm;
@@ -43,17 +41,6 @@ namespace ScheduleComputerCenter.Model
             Software = software;
         }
 
-        private string makeMark(string courseName)
-        {
-            string[] tokens = System.Text.RegularExpressions.Regex.Split(courseName, @"\s{2,}");
-           switch(tokens.Length)
-            {
-                case 0: return "***";
-                case 1: return tokens[0].Substring(0, 3);
-                case 2: return tokens[0][0] + tokens[1].Substring(0, 2);
-                case 3: return "" + tokens[0][0] + tokens[1][0] + tokens[2][0];
-                default: return "" + tokens[0][0] + tokens[1][0] + tokens[2][0];
-            }
-        }
+        
     }
 }
