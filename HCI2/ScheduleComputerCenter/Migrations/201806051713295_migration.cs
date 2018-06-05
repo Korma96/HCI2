@@ -3,7 +3,7 @@ namespace ScheduleComputerCenter.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class FirstMigrations : DbMigration
+    public partial class migration : DbMigration
     {
         public override void Up()
         {

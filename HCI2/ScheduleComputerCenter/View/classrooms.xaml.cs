@@ -103,7 +103,7 @@ namespace ScheduleComputerCenter.View
                     classroom.OsType = getOsType(osType.Text);
                     List<Software> softwares = new List<Software>();
                     softwares.Add((Software) software.SelectedItem);
-                    classroom.Softwares = softwares;
+                    classroom.Softwares = softwares ;
 
                     if (UniqueName(name.Text))
                     {

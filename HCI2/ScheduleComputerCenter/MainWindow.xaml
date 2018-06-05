@@ -8,6 +8,7 @@
         xmlns:V="clr-namespace:ScheduleComputerCenter.View"
         Title="Schedule for a Computer Center" Height="750" Width="1288">
 
+
     <DockPanel>
         <ScrollViewer DockPanel.Dock="Top" Width="Auto" Height="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
             <DockPanel>
@@ -65,14 +66,45 @@
                         <Grid DockPanel.Dock="Right" Name="RightGrid">
                         </Grid>
 
-                    <!--<Grid DockPanel.Dock="Bottom" Name="MainGrid" HorizontalAlignment="Stretch" AllowDrop="True" Drop="Grid_Drop" DragOver="Grid_DragOver"> -->
-                      
-                    <Grid DockPanel.Dock="Bottom" Name="MainGrid" HorizontalAlignment="Stretch">
-                        <!--<Grid.LayoutTransform>
-                        <RotateTransform Angle="270"/>
-                    </Grid.LayoutTransform>
-                    -->
-                    </Grid>
+                        <!--<Grid DockPanel.Dock="Bottom" Name="MainGrid" HorizontalAlignment="Stretch" AllowDrop="True" Drop="Grid_Drop" DragOver="Grid_DragOver"> -->
+
+                        <Grid DockPanel.Dock="Bottom" Name="MainGrid" HorizontalAlignment="Stretch">
+
+                        </Grid>
+                    </DockPanel>
+                    <DockPanel DockPanel.Dock="Bottom">
+                        <Grid DockPanel.Dock="Left">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="40" />
+                                <RowDefinition Height="40" />
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
+
+                            <Rectangle Margin="2" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Fill="Gray" />
+                        </Grid>
+
+                        <Grid DockPanel.Dock="Right">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="40" />
+                                <RowDefinition Height="40" />
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
+
+                            <Rectangle Margin="2" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Fill="Gray" />
+                        </Grid>
+
+                        <Grid DockPanel.Dock="Top" Name="BottomTopGrid">
+                        </Grid>
+
+                        <Grid DockPanel.Dock="Bottom" Name="BottomBottomGrid">
+                        </Grid>
+                    </DockPanel>
                 </DockPanel>
                 <DockPanel DockPanel.Dock="Left">
                     <Expander Name="SubjectExpander" Header="">

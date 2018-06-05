@@ -70,10 +70,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\RoutedCommands.cs" />
-    <Compile Include="Controller\MyConverter.cs" />
-    <Compile Include="Migrations\201806041812250_MyMigration.cs" />
-    <Compile Include="Migrations\201806041812250_MyMigration.Designer.cs">
-      <DependentUpon>201806041812250_MyMigration.cs</DependentUpon>
+    <Compile Include="Converters\BackgroundConverter.cs" />
+    <Compile Include="Converters\HeightConverter.cs" />
+    <Compile Include="Migrations\201806051713295_migration.cs" />
+    <Compile Include="Migrations\201806051713295_migration.Designer.cs">
+      <DependentUpon>201806051713295_migration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\ComputerCentre.cs" />
@@ -174,8 +175,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Migrations\201806041812250_MyMigration.resx">
-      <DependentUpon>201806041812250_MyMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201806051713295_migration.resx">
+      <DependentUpon>201806051713295_migration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

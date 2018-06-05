@@ -33,12 +33,12 @@ namespace ScheduleComputerCenter.Model
             
             List<Classroom> classrooms = new List<Classroom>()
             {
-                new Classroom("L1", "Description 1", 16, true, true, false, OsType.Any, new List<Software>(){ softwares[1]}),
-                new Classroom("L2", "Description 2", 32, false, true, false, OsType.Windows, new List<Software>(){ softwares[0]}),
-                new Classroom("L3", "Description 3", 16, true, false, false, OsType.Linux, new List<Software>(){ softwares[2]}),
-                new Classroom("L4", "Description 4", 32, true, true, false, OsType.Any, new List<Software>(){ softwares[0], softwares[1], softwares[2]}),
-                new Classroom("L5", "Description 5", 64, false, true, false, OsType.Any, new List<Software>(){ softwares[0], softwares[1]}),
-                new Classroom("L6", "Description 6", 32, true, true, true, OsType.Any, new List<Software>(){ softwares[1], softwares[2]})
+                new Classroom("L1", "Description 1", 16, true, true, false, OsType.Any, new List<Software>(){ softwares[1] }),
+                new Classroom("L2", "Description 2", 32, false, true, false, OsType.Windows, new List<Software>(){ softwares[0] }),
+                new Classroom("L3", "Description 3", 16, true, false, false, OsType.Linux, new List<Software>(){ softwares[2] }),
+                new Classroom("L4", "Description 4", 32, true, true, false, OsType.Any, new List<Software>(){ softwares[0], softwares[1] }),
+                new Classroom("L5", "Description 5", 64, false, true, false, OsType.Any, new List<Software>(){ softwares[1] }),
+                new Classroom("L6", "Description 6", 32, true, true, true, OsType.Any, new List<Software>(){ softwares[1], softwares[2] })
             };
 
             ClassroomRepository.AddRange(classrooms);
