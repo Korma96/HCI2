@@ -55,7 +55,7 @@ namespace ScheduleComputerCenter.View
                 dr["Table"] = cr.Table;
                 dr["OsType"] = cr.OsType;
                 dr["SmartTable"] = cr.SmartTable;
-                dr["Software"] = cr.Softwares.First().Name;
+                dr["Software"] = cr.Softwares.Name;
                 dt.Rows.Add(dr);
             }
             gvData.ItemsSource = dt.AsDataView();
@@ -103,7 +103,7 @@ namespace ScheduleComputerCenter.View
                     if (projector.Text.Equals("YES")) classroom.Projector = true;
                     else classroom.Projector = false;
                     classroom.OsType = getOsType(osType.Text);
-                    classroom.Softwares = new List<Software>() { new Software("1", OsType.Any, "1", "mm", 18, 200, "14") };
+                    classroom.Softwares = new Software("1", OsType.Any, "1", "mm", 18, 200, "14");
                     classroom.Id = 1;
 
                     if (UniqueName(name.Text))

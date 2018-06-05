@@ -16,14 +16,15 @@ namespace ScheduleComputerCenter.Model
         public Boolean Table { get; set; }
         public Boolean SmartTable { get; set; }
         public OsType OsType { get; set; }
-        public List<Software> Softwares { get; set; }
+        public Software Softwares { get; set; }
 
         public Classroom()
         {
         }
 
-        public Classroom(string description, int numOfSeats, bool projector, bool table, bool smartTable, OsType osType, List<Software> softwares)
+        public Classroom(string name, string description, int numOfSeats, bool projector, bool table, bool smartTable, OsType osType, Software softwares)
         {
+            Name = name;
             Description = description;
             NumOfSeats = numOfSeats;
             Projector = projector;

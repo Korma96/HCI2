@@ -47,7 +47,15 @@ namespace ScheduleComputerCenter.View
         /// <param name="fileType"></param>
         public void AddData()
         {
-            List<Subject> s = ComputerCentre.SubjectRepository.GetAll().ToList();
+            List<Subject> s;
+            try
+            {
+                s = ComputerCentre.SubjectRepository.GetAll().ToList();
+            }
+            catch
+            {
+                s = new List<Subject>();
+            }
             collection = new ObservableCollection<Subject>(s);
         }
 

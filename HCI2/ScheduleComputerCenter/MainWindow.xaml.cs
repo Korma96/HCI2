@@ -47,10 +47,11 @@ namespace ScheduleComputerCenter
             WindowState = WindowState.Maximized;
 
             Subjects = new ObservableCollection<Subject>();
+            FilterSubjectsForListView("");
             ObservableList = new ObservableCollection<ObservableCollection<Term>>();
 
             // popunjavanje baze
-            ComputerCentre.AddDummyData();
+            // ComputerCentre.AddDummyData();
 
             CommandBinding AddNewTermCommandBinding = new CommandBinding(RoutedCommands.AddNewTermCommand, AddNewTermCommand_Executed, AddNewTermCommand_CanExecute);
             CommandBinding UpdateTermCommandBinding = new CommandBinding(RoutedCommands.UpdateTermCommand, UpdateTermCommand_Executed, UpdateTermCommand_CanExecute);
@@ -626,18 +627,18 @@ namespace ScheduleComputerCenter
             }
         }
 
-        private void RemoveButton_Click(object sender, RoutedEventArgs e)
-        {
-            var selectedItem = SubjectsListView.SelectedItem;
-            for(int i=0; i<Subjects.Count; i++)
-            {
-                if(Subjects[i].Name.Equals(((Subject)selectedItem).Name))
-                {
-                    Subjects.RemoveAt(i);
-                    break;
-                }
-            }
-        }
+        //private void RemoveButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    var selectedItem = SubjectsListView.SelectedItem;
+        //    for(int i=0; i<Subjects.Count; i++)
+        //    {
+        //        if(Subjects[i].Name.Equals(((Subject)selectedItem).Name))
+        //        {
+        //            Subjects.RemoveAt(i);
+        //            break;
+        //        }
+        //    }
+        //}
 
         private void Subjects_Drop(object sender, DragEventArgs e)
         {
@@ -662,28 +663,56 @@ namespace ScheduleComputerCenter
             }
         }
 
-        private void AddButton_Click(object sender, RoutedEventArgs e)
-        {
-            List<Subject> s = autoComplete.collection.ToList();
+        //private void AddButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    List<Subject> s = autoComplete.collection.ToList();
 
-            String text = this.autoComplete.Text;
-            foreach (var sub in s)
+        //    String text = this.autoComplete.Text;
+        //    foreach (var sub in s)
+        //    {
+        //        if (sub.Name.Equals(text))
+        //        {
+        //            // check if subject already exists on ListView
+        //            foreach (var subj in Subjects)
+        //            {
+        //                if (text.Equals(subj.Name))
+        //                {
+        //                    return;
+        //                }
+        //            }
+        //            Subjects.Add(sub);
+        //        }
+        //    }
+
+        //}
+
+        public void FilterSubjectsForListView(string text)
+        {
+            List<Subject> subjects;
+            try
             {
-                if (sub.Name.Equals(text))
+                subjects = ComputerCentre.SubjectRepository.GetAll().ToList();
+            }
+            catch
+            {
+                subjects = new List<Subject>();
+            }
+            Subjects = new ObservableCollection<Subject>();
+            subjects = subjects.OrderBy(o => o.Name).ToList(); ;
+            foreach(var s in subjects)
+            {
+                if (s.Name.ToUpper().Contains(text.ToUpper()))
                 {
-                    // check if subject already exists on ListView
-                    foreach (var subj in Subjects)
-                    {
-                        if (text.Equals(subj.Name))
-                        {
-                            return;
-                        }
-                    }
-                    Subjects.Add(sub);
+                    Subjects.Add(s);
                 }
             }
-
+            SubjectsListView.ItemsSource = Subjects;
         }
 
+        private void FilterTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            String text = FilterTextBox.Text;
+            FilterSubjectsForListView(text);
+        }
     }
 }

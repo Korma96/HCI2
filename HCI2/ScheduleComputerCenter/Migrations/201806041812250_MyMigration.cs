@@ -3,7 +3,7 @@ namespace ScheduleComputerCenter.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class NewMigration : DbMigration
+    public partial class MyMigration : DbMigration
     {
         public override void Up()
         {
@@ -19,8 +19,11 @@ namespace ScheduleComputerCenter.Migrations
                         Table = c.Boolean(nullable: false),
                         SmartTable = c.Boolean(nullable: false),
                         OsType = c.Int(nullable: false),
+                        Softwares_Id = c.Int(),
                     })
-                .PrimaryKey(t => t.Id);
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Softwares", t => t.Softwares_Id)
+                .Index(t => t.Softwares_Id);
             
             CreateTable(
                 "dbo.Softwares",
@@ -34,11 +37,8 @@ namespace ScheduleComputerCenter.Migrations
                         YearOfFounding = c.Int(nullable: false),
                         Price = c.Int(nullable: false),
                         Description = c.String(),
-                        Classroom_Id = c.Int(),
                     })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Classrooms", t => t.Classroom_Id)
-                .Index(t => t.Classroom_Id);
+                .PrimaryKey(t => t.Id);
             
             CreateTable(
                 "dbo.Courses",
@@ -109,12 +109,12 @@ namespace ScheduleComputerCenter.Migrations
             DropForeignKey("dbo.Subjects", "Software_Id", "dbo.Softwares");
             DropForeignKey("dbo.Subjects", "Course_Id", "dbo.Courses");
             DropForeignKey("dbo.Terms", "DayId", "dbo.Days");
-            DropForeignKey("dbo.Softwares", "Classroom_Id", "dbo.Classrooms");
+            DropForeignKey("dbo.Classrooms", "Softwares_Id", "dbo.Softwares");
             DropIndex("dbo.Subjects", new[] { "Software_Id" });
             DropIndex("dbo.Subjects", new[] { "Course_Id" });
             DropIndex("dbo.Terms", new[] { "Subject_Id" });
             DropIndex("dbo.Terms", new[] { "DayId" });
-            DropIndex("dbo.Softwares", new[] { "Classroom_Id" });
+            DropIndex("dbo.Classrooms", new[] { "Softwares_Id" });
             DropTable("dbo.Subjects");
             DropTable("dbo.Terms");
             DropTable("dbo.Days");
