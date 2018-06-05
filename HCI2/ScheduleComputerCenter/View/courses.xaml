@@ -29,7 +29,7 @@
                 </WrapPanel>
                 <WrapPanel>
                     <TextBlock Text="Year of founding : "/>
-                    <TextBox x:Name="yearOfFounding" PreviewTextInput="TextBoxYear" />
+                    <TextBox x:Name="yearOfFounding" />
                 </WrapPanel>
                 <WrapPanel>
                     <TextBlock Text="Description : "/>
@@ -43,7 +43,7 @@
                 </WrapPanel>
             </StackPanel>
             <StackPanel>
-                <Label Content="No records found." Name="lblCount" HorizontalAlignment="Center" FontSize="16" FontWeight="Bold" Foreground="#FFE10000"></Label>
+                <Label Content="No records found." Name="noCourses" HorizontalAlignment="Center" FontSize="16" FontWeight="Bold" Foreground="#FFE10000"></Label>
                 <WrapPanel Margin="20" HorizontalAlignment="Center">
                     <DataGrid AutoGenerateColumns="True" Name="gvData" SelectionMode="Single" FontSize="15" Padding="5" Background="Black" />
                 </WrapPanel>

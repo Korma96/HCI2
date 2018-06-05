@@ -47,11 +47,11 @@
                 </WrapPanel>
                 <WrapPanel>
                     <TextBlock Text="Year of funding : "/>
-                    <TextBox x:Name="yearOfFunding" PreviewTextInput="textBoxYear" />
+                    <TextBox x:Name="yearOfFunding" PreviewTextInput="TextBoxYear" />
                 </WrapPanel>
                 <WrapPanel>
                     <TextBlock Text="Price : "/>
-                    <TextBox Name="price" PreviewTextInput="textBoxYear" />
+                    <TextBox Name="price" PreviewTextInput="TextBoxYear" />
                 </WrapPanel>
                 <WrapPanel>
                     <TextBlock Text="Description : "/>

@@ -31,5 +31,11 @@ namespace ScheduleComputerCenter.Model
             Price = price;
             Description = description;
         }
+    
+    public override string ToString()
+    {
+        return Name;
     }
+}
+
 }

@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using ScheduleComputerCenter.Model;
+using ScheduleComputerCenter.Repository;
 
 namespace ScheduleComputerCenter.View
 {
@@ -25,17 +26,16 @@ namespace ScheduleComputerCenter.View
         DataTable dt;
         List<Classroom> classroomsList = new List<Classroom>();
 
-
-
         public classrooms()
         {
-            
+        
             InitializeComponent();
             view();
         }
 
         public void view()
         {
+            classroomsList = ComputerCentre.ClassroomRepository.GetAll().ToList();
             dt = new DataTable();
             dt.Columns.Add("Description");
             dt.Columns.Add("Name");
@@ -55,7 +55,7 @@ namespace ScheduleComputerCenter.View
                 dr["Table"] = cr.Table;
                 dr["OsType"] = cr.OsType;
                 dr["SmartTable"] = cr.SmartTable;
-                dr["Software"] = cr.Softwares.First().Name;
+                dr["Software"] = cr.Software;
                 dt.Rows.Add(dr);
             }
             gvData.ItemsSource = dt.AsDataView();
@@ -75,14 +75,12 @@ namespace ScheduleComputerCenter.View
 
         public void loadSoftwares(object sender, RoutedEventArgs e)
         {
-            List<Software> softwares = new List<Software>();
-            softwares.Add(new Software("1", OsType.Any, "1", "mm", 18, 200, "14"));
-            softwares.Add(new Software("2", OsType.Any, "1", "mm", 18, 200, "14"));
-            softwares.Add(new Software("3", OsType.Any, "1", "mm", 18, 200, "14"));
+
+            List<Software> softwares = ComputerCentre.SoftwareRepository.GetAll().ToList();
             var combo = sender as ComboBox;
             combo.ItemsSource = softwares;
             combo.SelectedIndex = 0;
-            
+
         }
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
@@ -103,12 +101,12 @@ namespace ScheduleComputerCenter.View
                     if (projector.Text.Equals("YES")) classroom.Projector = true;
                     else classroom.Projector = false;
                     classroom.OsType = getOsType(osType.Text);
-                    classroom.Softwares = new List<Software>() { new Software("1", OsType.Any, "1", "mm", 18, 200, "14") };
-                    classroom.Id = 1;
+                    classroom.Software = (Software) software.SelectedItem;
 
                     if (UniqueName(name.Text))
                     {
-                        classroomsList.Add(classroom);
+                        ComputerCentre.ClassroomRepository.Add(classroom);
+                        ComputerCentre.ClassroomRepository.Context.SaveChanges();
                         MessageBox.Show("Successfully added classroom");
                         btnAdd.Content = "Add";
                         view();
@@ -147,7 +145,6 @@ namespace ScheduleComputerCenter.View
                 projector.Text = dataRowView["Projector"].ToString();
                 osType.Text = dataRowView["OsType"].ToString();
                 software.Text = dataRowView["Software"].ToString();
-                Console.WriteLine(dataRowView["OsType"].ToString());
                 numOfSeats.Text = dataRowView["NumOfSeats"].ToString();
                 btnAdd.Content = "Update";
             }
@@ -166,7 +163,8 @@ namespace ScheduleComputerCenter.View
                 {
                     if (name.Equals(cr.Name))
                     {
-                        classroomsList.Remove(cr);
+                        ComputerCentre.ClassroomRepository.Remove(cr);
+                        ComputerCentre.ClassroomRepository.Context.SaveChanges();
                         view();
                         break;
                     }
@@ -189,5 +187,6 @@ namespace ScheduleComputerCenter.View
         {
             Application.Current.Shutdown();
         }
+
     }
 }

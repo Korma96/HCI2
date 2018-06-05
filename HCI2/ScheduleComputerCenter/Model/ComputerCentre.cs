@@ -29,7 +29,19 @@ namespace ScheduleComputerCenter.Model
             };
 
             SoftwareRepository.AddRange(softwares);
+            */
 
+            List<Day> days = new List<Day>()
+            {
+                new Day("PONEDELJAK"),
+                new Day("UTORAK"),
+                new Day("SREDA"),
+                new Day("CETVRTAK"),
+                new Day("PETAK"),
+                new Day("SUBOTA")
+            };
+            DayRepository.AddRange(days);
+            /*
             List<Classroom> classrooms = new List<Classroom>()
             {
                 new Classroom("L1", "Description 1", 16, true, true, false, OsType.Any, new List<Software>(){ softwares[1]}),
@@ -52,10 +64,10 @@ namespace ScheduleComputerCenter.Model
 
             List<Subject> subjects = new List<Subject>()
             {
-                new Subject("HCI", courses[0], "Najbolji predmet na svetu xD", 16, 2, 2, true, false, false, OsType.Windows, softwares[0]),
-                new Subject("Internet softverske arhitekture", courses[1], "Spring", 32, 2, 2, false, true, false, OsType.Any, softwares[1]),
-                new Subject("Android", courses[0], "Android programiranje", 16, 2, 2, true, true, false, OsType.Linux, softwares[2]),
-                new Subject("PIGKUT", courses[1], "Izrada seminarskog rada i jos svasta nesto", 32, 2, 2, true, false, true, OsType.Windows, softwares[0])
+                new Subject("HCI","2", courses[0], "Najbolji predmet na svetu xD", 16, 2, 2, true, false, false, OsType.Windows, softwares[0]),
+                new Subject("Internet softverske arhitekture","2", courses[1], "Spring", 32, 2, 2, false, true, false, OsType.Any, softwares[1]),
+                new Subject("Android", "2",courses[0], "Android programiranje", 16, 2, 2, true, true, false, OsType.Linux, softwares[2]),
+                new Subject("PIGKUT","2", courses[1], "Izrada seminarskog rada i jos svasta nesto", 32, 2, 2, true, false, true, OsType.Windows, softwares[0])
             };
 
             SubjectRepository.AddRange(subjects);
@@ -74,6 +86,7 @@ namespace ScheduleComputerCenter.Model
 
             context.SaveChanges();
         }
-
+        */
+        }
     }
 }
