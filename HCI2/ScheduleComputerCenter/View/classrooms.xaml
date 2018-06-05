@@ -20,7 +20,7 @@
     </Window.Resources>
     <DockPanel Name="dockMain" VerticalAlignment="top" HorizontalAlignment="Left" LastChildFill="False">
         <StackPanel>
-            <Label Content="Clasrooms" HorizontalAlignment="Center" FontSize="36" FontWeight="Bold"></Label>
+            <Label Content="Classrooms" HorizontalAlignment="Center" FontSize="36" FontWeight="Bold"></Label>
             <DockPanel>
                 <StackPanel DockPanel.Dock="Left">
                     <WrapPanel>

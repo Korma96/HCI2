@@ -7,69 +7,63 @@
         mc:Ignorable="d"
         xmlns:V="clr-namespace:ScheduleComputerCenter.View"
         Title="Schedule for a Computer Center" Height="750" Width="1288">
-    <!--
-    <Window.Resources>
-        <Style TargetType="{x:Type ListViewItem}">
-            <Setter Property="Height" Value="35" />
-        </Style>
-    </Window.Resources>
-    -->
 
     <DockPanel>
         <ScrollViewer DockPanel.Dock="Top" Width="Auto" Height="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
             <DockPanel>
                 <Menu DockPanel.Dock ="Top" Background="Gray" Height="25">
                     <MenuItem Header="Data" FontWeight="Heavy"  Height="25">
-                        <MenuItem Header="Classrooms" Click="MenuItem_Click_1"></MenuItem>
-                        <MenuItem Header="Courses" Click="MenuItem_Click_2"></MenuItem>
-                        <MenuItem Header="Softwares" Click="MenuItem_Click_3"></MenuItem>
-                        <MenuItem Header="Subjects" Click="MenuItem_Click_4"></MenuItem>
+                        <MenuItem Header="Classrooms..." Click="MenuItem_Click_1"></MenuItem>
+                        <MenuItem Header="Courses..." Click="MenuItem_Click_2"></MenuItem>
+                        <MenuItem Header="Softwares..." Click="MenuItem_Click_3"></MenuItem>
+                        <MenuItem Header="Subjects..." Click="MenuItem_Click_4"></MenuItem>
                     </MenuItem>
                     <MenuItem Header="Schedule" FontWeight="Heavy" Height="25">
                     </MenuItem>
                 </Menu>
                 <DockPanel DockPanel.Dock="Right">
                     <DockPanel DockPanel.Dock="Top">
-                        <Grid DockPanel.Dock="Left">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="40" />
-                                <RowDefinition Height="40" />
-                            </Grid.RowDefinitions>
+                        <DockPanel DockPanel.Dock="Top">
+                            <Grid DockPanel.Dock="Left">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="40" />
+                                    <RowDefinition Height="40" />
+                                </Grid.RowDefinitions>
 
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="100" />
-                            </Grid.ColumnDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100" />
+                                </Grid.ColumnDefinitions>
 
-                            <Rectangle Margin="2" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Fill="Gray" />
+                                <Rectangle Margin="2" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Fill="Gray" />
 
+                            </Grid>
+
+                            <Grid DockPanel.Dock="Right">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="40" />
+                                    <RowDefinition Height="40" />
+                                </Grid.RowDefinitions>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100" />
+                                </Grid.ColumnDefinitions>
+
+                                <Rectangle Margin="2" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Fill="Gray" />
+
+                            </Grid>
+
+                            <Grid DockPanel.Dock="Top" Name="TopTopGrid">
+                            </Grid>
+
+                            <Grid DockPanel.Dock="Bottom" Name="TopBottomGrid">
+                            </Grid>
+                        </DockPanel>
+
+                        <Grid DockPanel.Dock="Left" Name="LeftGrid">
                         </Grid>
 
-                        <Grid DockPanel.Dock="Right">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="40" />
-                            <RowDefinition Height="40" />
-                        </Grid.RowDefinitions>
-
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100" />
-                        </Grid.ColumnDefinitions>
-
-                        <Rectangle Margin="2" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Fill="Gray" />
-
-                    </Grid>
-
-                        <Grid DockPanel.Dock="Top" Name="TopTopGrid">
+                        <Grid DockPanel.Dock="Right" Name="RightGrid">
                         </Grid>
-
-                        <Grid DockPanel.Dock="Bottom" Name="TopBottomGrid">
-                        </Grid>
-                    </DockPanel>
-
-                    <Grid DockPanel.Dock="Left" Name="LeftGrid">
-                    </Grid>
-
-                    <Grid DockPanel.Dock="Right" Name="RightGrid">
-                    </Grid>
 
                     <!--<Grid DockPanel.Dock="Bottom" Name="MainGrid" HorizontalAlignment="Stretch" AllowDrop="True" Drop="Grid_Drop" DragOver="Grid_DragOver"> -->
                       

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using ScheduleComputerCenter.Model;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,12 +22,6 @@ namespace ScheduleComputerCenter.View
     public partial class AddNewOrUpdateTermDialog : Window
     {
         public MainWindow MWindow;
-        /*public Grid MainGrid { get; set; }
-        public Grid LeftGrid { get; set; }
-        public Grid TopTopGrid { get; set; }
-        public Grid TopBottomGrid { get; set; }
-
-        public TextBlock SelectedElement { get; set; }*/
 
         public TimePicker StartTimePicker { get; set; }
         public TimePicker EndTimePicker { get; set; }
@@ -34,8 +30,14 @@ namespace ScheduleComputerCenter.View
         public ComboBox ComboDay { get; set; }
         public ComboBox ComboClassRoom { get; set; }
 
-        private const int NUM_OF_CLASSROOMS = 6;
+        public int NumOfClassRooms { get; set; }
+
         private const int NUM_OF_DAYS = 6;
+
+        private TimeSpan sevenHours = TimeSpan.Parse("07:00");
+        private TimeSpan twentyTwoHours = TimeSpan.Parse("22:00");
+
+        public List<Subject> ListSubjects { get; set; }
 
         public AddNewOrUpdateTermDialog(MainWindow mainWindow, string title)
         {
@@ -45,6 +47,8 @@ namespace ScheduleComputerCenter.View
 
             MWindow = mainWindow;
 
+            this.Closed += new EventHandler(Dialog_Closed);
+
             /*MainGrid = mainWindow.MainGrid;
             LeftGrid = mainWindow.LeftGrid;
             TopTopGrid = mainWindow.TopTopGrid;
@@ -52,17 +56,21 @@ namespace ScheduleComputerCenter.View
 
             SelectedElement = mainWindow.SelectedElement;*/
 
-            TextBlock subject = new TextBlock() { HorizontalAlignment = HorizontalAlignment.Center, Text = "Subject:" };
-            Grid.SetRow(subject, 1);
-            Grid.SetColumn(subject, 0);
-            DialogGrid.Children.Add(subject);
+            TextBlock subjectTextBlock = new TextBlock() { HorizontalAlignment = HorizontalAlignment.Center, Text = "Subject:" };
+            Grid.SetRow(subjectTextBlock, 1);
+            Grid.SetColumn(subjectTextBlock, 0);
+            DialogGrid.Children.Add(subjectTextBlock);
 
             ComboSubject = new ComboBox() { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, IsEditable = false, Height = 30 };
-            ComboSubject.Items.Add(new ComboBoxItem() { IsSelected = true, Content = "OOP" });
-            ComboSubject.Items.Add(new ComboBoxItem() { Content = "USI" });
-            ComboSubject.Items.Add(new ComboBoxItem() { Content = "ORI" });
-            ComboSubject.Items.Add(new ComboBoxItem() { Content = "PIGKUT" });
-            ComboSubject.Items.Add(new ComboBoxItem() { Content = "ISA" });
+            ListSubjects = ComputerCentre.SubjectRepository.GetAll().ToList();
+            string subjectName;
+            foreach (Subject subject in ListSubjects)
+            {
+                subjectName = subject.Name;
+                if (subject.Course != null) subjectName += " " + subject.Course.Name;
+                ComboSubject.Items.Add(new ComboBoxItem() { Content = subjectName });
+            }
+
             Grid.SetRow(ComboSubject, 1);
             Grid.SetColumn(ComboSubject, 1);
             DialogGrid.Children.Add(ComboSubject);
@@ -93,28 +101,19 @@ namespace ScheduleComputerCenter.View
             DialogGrid.Children.Add(day);
 
             ComboDay = new ComboBox() { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, IsEditable = false, Height = 30 };
-            ComboDay.Items.Add(new ComboBoxItem() { Content = "PONEDELJAK" });
-            ComboDay.Items.Add(new ComboBoxItem() { Content = "UTORAK" });
-            ComboDay.Items.Add(new ComboBoxItem() { Content = "SREDA" });
-            ComboDay.Items.Add(new ComboBoxItem() { Content = "ČETVRTAK" });
-            ComboDay.Items.Add(new ComboBoxItem() { Content = "PETAK" });
-            ComboDay.Items.Add(new ComboBoxItem() { Content = "SUBOTA" });
+            foreach(string dayStr in MWindow.days) ComboDay.Items.Add(new ComboBoxItem() { Content = dayStr });
             Grid.SetRow(ComboDay, 4);
             Grid.SetColumn(ComboDay, 1);
             DialogGrid.Children.Add(ComboDay);
 
-            TextBlock classRoom = new TextBlock() { HorizontalAlignment = HorizontalAlignment.Center, Text = "Class room:" };
-            Grid.SetRow(classRoom, 5);
-            Grid.SetColumn(classRoom, 0);
-            DialogGrid.Children.Add(classRoom);
+            TextBlock classRoomTxtBlock = new TextBlock() { HorizontalAlignment = HorizontalAlignment.Center, Text = "Class room:" };
+            Grid.SetRow(classRoomTxtBlock, 5);
+            Grid.SetColumn(classRoomTxtBlock, 0);
+            DialogGrid.Children.Add(classRoomTxtBlock);
 
             ComboClassRoom = new ComboBox() { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, IsEditable = false, Height = 30 };
-            ComboClassRoom.Items.Add(new ComboBoxItem() { Content = "L1" });
-            ComboClassRoom.Items.Add(new ComboBoxItem() { Content = "L2" });
-            ComboClassRoom.Items.Add(new ComboBoxItem() { Content = "L3" });
-            ComboClassRoom.Items.Add(new ComboBoxItem() { Content = "L4" });
-            ComboClassRoom.Items.Add(new ComboBoxItem() { Content = "L5" });
-            ComboClassRoom.Items.Add(new ComboBoxItem() { Content = "L6" });
+            NumOfClassRooms = MWindow.Classrooms.Count;
+            foreach(Classroom classroom in MWindow.Classrooms) ComboClassRoom.Items.Add(new ComboBoxItem() { Content = classroom.Name });
             Grid.SetRow(ComboClassRoom, 5);
             Grid.SetColumn(ComboClassRoom, 1);
             DialogGrid.Children.Add(ComboClassRoom);
@@ -132,19 +131,21 @@ namespace ScheduleComputerCenter.View
             DialogGrid.Children.Add(btnCancel);
         }
 
-        public void inicijalizacijaDialoga()
+        public void inicijalizacijaDialoga(string subjectName)
         {
-            int rowSpan = Grid.GetRowSpan(MWindow.SelectedElement);
-            int rowIndex = Grid.GetRow(MWindow.SelectedElement);
+            int rowIndex = MWindow.SelectedElement.SelectedIndex;
             int columnIndex = Grid.GetColumn(MWindow.SelectedElement);
+            int rowSpan = MWindow.ObservableList[columnIndex][rowIndex].RowSpan;
 
             string startTime = (MWindow.LeftGrid.Children[rowIndex] as TextBlock).Text.Split('-')[0].Trim();
             string endTime = (MWindow.LeftGrid.Children[rowIndex + rowSpan - 1] as TextBlock).Text.Split('-')[1].Trim();
 
-            int classRoomSelectedIndex = columnIndex % NUM_OF_CLASSROOMS;
+            int classRoomSelectedIndex = columnIndex % NumOfClassRooms;
 
-            double a = columnIndex / NUM_OF_CLASSROOMS;
+            double a = columnIndex / NumOfClassRooms;
             int daySelectedIndex = Convert.ToInt32(Math.Floor(a)); // floor zaokruzuje na najblizi manji broj
+
+            selectSubject(subjectName);
 
             StartTimePicker.setHoursAndMinutes(startTime);
 
@@ -152,14 +153,46 @@ namespace ScheduleComputerCenter.View
 
             (ComboDay.Items[daySelectedIndex] as ComboBoxItem).IsSelected = true;
 
-            (ComboClassRoom.Items[classRoomSelectedIndex] as ComboBoxItem).IsSelected = true;
+            selectClassRoom(classRoomSelectedIndex);
 
+        }
+
+        private void selectSubject(string subjectName)
+        {
+            if(subjectName != null)
+            {
+                foreach (ComboBoxItem cbi in ComboSubject.Items)
+                {
+                    if (cbi.Content.Equals(subjectName))
+                    {
+                        cbi.IsSelected = true;
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                (ComboSubject.Items[0] as ComboBoxItem).IsSelected = true;
+            }
+        }
+
+        private void selectClassRoom(int classRoomSelectedIndex)
+        {
+            string classroomName =  (MWindow.TopBottomGrid.Children[classRoomSelectedIndex] as TextBlock).Text;
+            foreach (ComboBoxItem cbi in ComboClassRoom.Items)
+            {
+                if (cbi.Content.Equals(classroomName))
+                {
+                    cbi.IsSelected = true;
+                    return;
+                }
+            }
         }
 
         private void saveClick(object sender, RoutedEventArgs e)
         {
-            MWindow.SelectedElement.Background = Brushes.LightGray;
-            MWindow.SelectedElement = null;
+            //MWindow.SelectedElement.SelectedItems.Clear();
+            //MWindow.SelectedElement = null;
 
             string time1Str = StartTimePicker.getTime();
             string time2Str = EndTimePicker.getTime();
@@ -173,74 +206,57 @@ namespace ScheduleComputerCenter.View
             {
                 if (time1 >= time2)
                 {
-                    MessageBox.Show("Start time must greater than end time!");
+                    MessageBox.Show("End time must greater than start time!");
+                }
+                else if(time1 < sevenHours)
+                {
+                    MessageBox.Show("Start time must equal or greater than 7 o'clock!");
+                }
+                else if(time2 > twentyTwoHours)
+                {
+                    MessageBox.Show("End time must equal or less than 22 o'clock!");
                 }
                 else
                 {
                     int columnDay = MainWindow.GetColumnForDay(MWindow.TopTopGrid, ComboDay.Text);
-                    int columnClassRoom = MainWindow.GetColumnForClassRoom(MWindow.TopBottomGrid, ComboClassRoom.Text, columnDay, NUM_OF_CLASSROOMS);
-
-
-                    List<int[]> indexesForNewTerm = new List<int[]>();
+                    int columnClassRoom = MainWindow.GetColumnForClassRoom(MWindow.TopBottomGrid, ComboClassRoom.Text, columnDay, NumOfClassRooms);
 
                     // ovo dodavanje crtica smo uveli da bismo znali da razlikujemo da li se radi o pocetku ili kraju termina
                     int startRow = MainWindow.GetRowForTime(MWindow.LeftGrid, time1Str + " -");
                     int endRow = MainWindow.GetRowForTime(MWindow.LeftGrid, "- " + time2Str);
-                    int index;
-                    int rowSpan = 0;
-                    TextBlock block;
+                    int rowSpan = endRow - startRow + 1;
+                    int preracunatStartRow = perarcunajStartRowNaListviewStartRow(startRow, columnClassRoom);
+                    int preracunatEndRow = preracunatStartRow + rowSpan - 1;
 
-                    for (int row = startRow; row <= endRow; row++)
+                    List<int> columnAndRowsForRemove = new List<int>();
+                    columnAndRowsForRemove.Add(columnClassRoom);
+
+
+                    for (int row = preracunatStartRow; row <= preracunatEndRow; row++)
                     {
-                        index = 0; //MWindow.GetIndexOfMainGridElement(MWindow.MainGrid, row, columnClassRoom);
-                        //rect = MainGrid.Children[index] as Rectangle;
-
-                        if (index == -1/*rect == null*/)
+                        if (MWindow.ObservableList[columnClassRoom][row].Subject != null)
                         {
-                            //MessageBox.Show("Zauzet neki deo termina!");
-                            //return;
-                            continue;
+                            MessageBox.Show("Zauzet neki deo termina!");
+                            return;
                         }
                         else
                         {
-                            block = MWindow.MainGrid.Children[index] as TextBlock;
-                            if (!block.Text.Equals(""))
-                            {
-                                MessageBox.Show("Zauzet neki deo termina!");
-                                return;
-                            }
-                            else
-                            {
-                                indexesForNewTerm.Add(new int[3] { index, row, columnClassRoom });
-                                rowSpan = Grid.GetRowSpan(block);
-                                if (rowSpan > 1)
-                                {
-                                    row += rowSpan - 1;
-                                }
-                                //if (row + rowSpan - 1 >= endRow) break;
-                            }
+                            columnAndRowsForRemove.Add(row);
                         }
                     }
 
-                    int indexOfFirst = indexesForNewTerm[0][0];
-                    int rowOfFirst = indexesForNewTerm[0][1];
-                    int colOfFirst = indexesForNewTerm[0][2];
+                    Subject subject = ListSubjects[ComboSubject.SelectedIndex];
+                    Term oldTerm = MWindow.ObservableList[columnClassRoom][preracunatStartRow];
+                    oldTerm.StartTime = time1;
+                    oldTerm.EndTime = time2;
+                    oldTerm.Subject = subject;
+                    oldTerm.RowSpan = rowSpan;
+                    MWindow.ObservableList[columnClassRoom].Insert(preracunatStartRow, oldTerm);
+                    obrisiPrazneTermine(columnAndRowsForRemove);
 
-                    /*UIElement oldElement = MainGrid.Children[indexOfFirst];
-                    int oldRow = Grid.GetRow(oldElement);
-                    int oldColumn = Grid.GetColumn(oldElement);*/
+                    ComputerCentre.context.Entry(oldTerm.Day).State = EntityState.Modified;
 
-                    obrisiRectanglove(indexesForNewTerm);
-
-                    TextBlock newTextBlock = MWindow.MainGrid.Children[indexOfFirst] as TextBlock;   //MWindow.createNewTextBlock(ComboSubject.Text);
-                    newTextBlock.Text = ComboSubject.Text;
-                    newTextBlock.Background = Brushes.Aqua;
-                    newTextBlock.Foreground = Brushes.Red;
-                    Grid.SetRowSpan(newTextBlock, endRow - startRow + 1/*indexesForNewTerm.Count*/);
-                    //Grid.SetRow(newTextBlock, rowOfFirst);
-                    //Grid.SetColumn(newTextBlock, colOfFirst);
-                    //MainGrid.Children.Insert(indexOfFirst, newTextBlock);
-                    //MWindow.addNewIndex(indexOfFirst, rowOfFirst, colOfFirst);
+                    ComputerCentre.context.SaveChanges();
 
                     this.Close();
                 }
@@ -249,28 +265,43 @@ namespace ScheduleComputerCenter.View
             else MessageBox.Show("Problem with time!");
         }
 
+        private int perarcunajStartRowNaListviewStartRow(int startRow, int columnClassRoom)
+        {
+            int preracunatStartRow = -1;
+            int i = 0;
+
+            while(i <= startRow)
+            {
+                i += MWindow.ObservableList[columnClassRoom][i].RowSpan;
+                preracunatStartRow++;
+            }
+
+            return preracunatStartRow;
+        }
+
         private void cancelClick(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
 
-        private void obrisiRectanglove(List<int[]> indexesForNewTerm)
+        private void obrisiPrazneTermine(List<int> columnAndRowsForRemove)
         {
-            int index;
+            int column = columnAndRowsForRemove[0];
+            int indexOfTerm;
 
-            for (int i = 1; i < indexesForNewTerm.Count; i++)
+            for (int i = 1; i < columnAndRowsForRemove.Count; i++)
             {
-                //MainGrid.Children.RemoveAt(indexesForNewTerm[i] - i);
-                index = indexesForNewTerm[i][0];
-                //row = indexesForNewTerm[i][1];
-                //col = indexesForNewTerm[i][2];
-
-                //(MWindow.MainGrid.Children[index] as TextBlock).Text = "";
-                MWindow.MainGrid.Children.RemoveAt(index - i + 1);
-
-                //MWindow.removeIndex(row, col);
+                indexOfTerm = columnAndRowsForRemove[i] + 1; // plus 1 sam dodao jer smo prethodno dodali novi element
+                                                             // i sve se transiralo za 1
+                MWindow.ObservableList[column].RemoveAt(indexOfTerm);
             }
 
+        }
+
+        void Dialog_Closed(object sender, EventArgs e)
+        {
+            MWindow.SelectedElement.SelectedItems.Clear();
+            MWindow.SelectedElement = null;
         }
     }
 }

@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace ScheduleComputerCenter.Controller
+namespace ScheduleComputerCenter.Converters
 {
-    public class MyConverter : IValueConverter
+    public class HeightConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
