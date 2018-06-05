@@ -13,7 +13,7 @@ namespace ScheduleComputerCenter.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201806042200419_FirstMigrations"; }
+            get { return "201806050312499_FirstMigrations"; }
         }
         
         string IMigrationMetadata.Source

@@ -29,19 +29,8 @@ namespace ScheduleComputerCenter.Model
             };
 
             SoftwareRepository.AddRange(softwares);
-            */
-
-            List<Day> days = new List<Day>()
-            {
-                new Day("PONEDELJAK"),
-                new Day("UTORAK"),
-                new Day("SREDA"),
-                new Day("CETVRTAK"),
-                new Day("PETAK"),
-                new Day("SUBOTA")
-            };
-            DayRepository.AddRange(days);
-            /*
+  
+            
             List<Classroom> classrooms = new List<Classroom>()
             {
                 new Classroom("L1", "Description 1", 16, true, true, false, OsType.Any, new List<Software>(){ softwares[1]}),
@@ -85,8 +74,8 @@ namespace ScheduleComputerCenter.Model
             DayRepository.AddRange(days);
 
             context.SaveChanges();
-        }
-        */
+        
+        
         }
     }
 }
