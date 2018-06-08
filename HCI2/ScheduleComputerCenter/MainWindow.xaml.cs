@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Collections.ObjectModel;
+using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 
 namespace ScheduleComputerCenter
 {
@@ -725,6 +727,16 @@ namespace ScheduleComputerCenter
                 //Subjects.Remove(subject);
 
                 ListView listView = sender as ListView;
+                int indexOfClassroom = Grid.GetColumn(listView);
+                List<Classroom> classrooms = ComputerCentre.context.Classrooms.Include(s => s.Softwares).ToList();
+                int numOfClassrooms = classrooms.Count();
+                indexOfClassroom = indexOfClassroom % numOfClassrooms;
+
+                Classroom classroom = classrooms[indexOfClassroom];
+                if(!ClassroomMatchSubjectNeeds(classroom, subject))
+                {
+                    return;
+                }
                 ListViewItem listViewItem = FindAncestor<ListViewItem>((DependencyObject)e.OriginalSource);
                 int indexOfTerm = listView.ItemContainerGenerator.IndexFromContainer(listViewItem);
                 //listView.SelectedItem = listViewItem;
@@ -734,7 +746,6 @@ namespace ScheduleComputerCenter
                 AddNewOrUpdateTermDialog anoutd = new AddNewOrUpdateTermDialog(this, "Add new term");
                 anoutd.inicijalizacijaDialoga(subject.Name);
                 anoutd.ShowDialog();
-
                 
                 //ListView listView = ItemsControl.ItemsControlFromItemContainer(listViewItem) as ListView;
 
@@ -747,6 +758,40 @@ namespace ScheduleComputerCenter
                 ObservableList[indexOfClassroom].Insert(indexOfTerm, newTerm);
                 ObservableList[indexOfClassroom].RemoveAt(indexOfTerm + 1);*/
             }
+        }
+
+        private bool ClassroomMatchSubjectNeeds(Classroom classroom, Subject subject)
+        {
+            if(subject.Projector)
+            {
+                if(!classroom.Projector)
+                {
+                    MessageBox.Show("Projector doesn`t exist in classroom!");
+                    return false;
+                }
+            }
+            if(subject.SmartTable)
+            {
+                if(!classroom.SmartTable)
+                {
+                    MessageBox.Show("Smart table doesn`t exist in classroom!");
+                    return false;
+                }
+            }
+            if(subject.Table)
+            {
+                if(!classroom.Table)
+                {
+                    MessageBox.Show("Table doesn`t exist in classroom!");
+                    return false;
+                }
+            }
+            if (!classroom.Softwares.Contains(subject.Software))
+            {
+                MessageBox.Show("Software doesn`t exist in classroom!");
+                return false;
+            }
+            return true;
         }
 
         //private void AddButton_Click(object sender, RoutedEventArgs e)
@@ -777,7 +822,7 @@ namespace ScheduleComputerCenter
             List<Subject> subjects;
             try
             {
-                subjects = ComputerCentre.SubjectRepository.GetAll().ToList();
+                subjects = ComputerCentre.SubjectRepository.GetAll().AsQueryable().Include(x => x.Software).ToList();
             }
             catch
             {

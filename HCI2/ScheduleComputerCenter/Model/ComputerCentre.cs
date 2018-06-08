@@ -10,7 +10,7 @@ namespace ScheduleComputerCenter.Model
 {
     public class ComputerCentre
     {
-        public static DbContext context = new ComputerCentreContext();
+        public static ComputerCentreContext context = new ComputerCentreContext();
         public static ClassroomRepository ClassroomRepository = new ClassroomRepository(context);
         public static CourseRepository CourseRepository = new CourseRepository(context);
         public static SoftwareRepository SoftwareRepository = new SoftwareRepository(context);
@@ -27,9 +27,6 @@ namespace ScheduleComputerCenter.Model
                 new Software("Eclipse", OsType.Any, "Oracle", @"http://www.eclipse.com", 2001, 0, "Software for java app development"),
                 new Software("PyCharm", OsType.Linux, "Python", @"http://www.pycharm.com", 2008, 300, "Software for python app development")
             };
-
-            SoftwareRepository.AddRange(softwares);
-  
             
             List<Classroom> classrooms = new List<Classroom>()
             {
@@ -40,15 +37,18 @@ namespace ScheduleComputerCenter.Model
                 new Classroom("L5", "Description 5", 64, false, true, false, OsType.Any, new List<Software>(){ softwares[1] }),
                 new Classroom("L6", "Description 6", 32, true, true, true, OsType.Any, new List<Software>(){ softwares[1], softwares[2] })
             };
-
             ClassroomRepository.AddRange(classrooms);
+
+            softwares[0].Classrooms.AddRange(new List<Classroom>() { classrooms[1], classrooms[3] });
+            softwares[1].Classrooms.AddRange(new List<Classroom>() { classrooms[0], classrooms[3], classrooms[4], classrooms[5] });
+            softwares[2].Classrooms.AddRange(new List<Classroom>() { classrooms[2], classrooms[5] });
+            SoftwareRepository.AddRange(softwares);
 
             List<Course> courses = new List<Course>()
             {
                 new Course("Racunarstvo i Automatika", "05-9-2000", "Smer za obucavanje inzenjera racunarstva"),
                 new Course("Softversko inzenjerstvo i informacione tehnologije", "12-09-2013", "Najbolji softverski smer FTN-a")
             };
-
             CourseRepository.AddRange(courses);
 
             List<Subject> subjects = new List<Subject>()
@@ -58,7 +58,6 @@ namespace ScheduleComputerCenter.Model
                 new Subject("Android", "2",courses[0], "Android programiranje", 16, 2, 2, true, true, false, OsType.Linux, softwares[2]),
                 new Subject("PIGKUT","2", courses[1], "Izrada seminarskog rada i jos svasta nesto", 32, 2, 2, true, false, true, OsType.Windows, softwares[0])
             };
-
             SubjectRepository.AddRange(subjects);
 
             List<Day> days = new List<Day>()
@@ -70,12 +69,9 @@ namespace ScheduleComputerCenter.Model
                 new Day("PETAK"),
                 new Day("SUBOTA")
             };
-
             DayRepository.AddRange(days);
 
-            context.SaveChanges();
-        
-        
+            context.SaveChanges();        
         }
     }
 }

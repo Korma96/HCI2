@@ -16,12 +16,12 @@ namespace ScheduleComputerCenter.Repository
 
         }
 
-        DbSet<Classroom> Classrooms { get; set; }
-        DbSet<Course> Courses {get; set;}
-        DbSet<Software> Softwares {get; set;}
-        DbSet<Subject> Subjects {get; set;}
-        DbSet<Term> Terms {get; set;}
-        DbSet<Day> Days { get; set; }
+        public DbSet<Classroom> Classrooms { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Software> Softwares {get; set;}
+        public DbSet<Subject> Subjects {get; set;}
+        public DbSet<Term> Terms {get; set;}
+        public DbSet<Day> Days { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
