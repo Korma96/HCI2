@@ -8,6 +8,7 @@
         xmlns:V="clr-namespace:ScheduleComputerCenter.View"
         Title="Schedule for a Computer Center" Height="750" Width="1288">
 
+
     <DockPanel>
         <ScrollViewer DockPanel.Dock="Top" Width="Auto" Height="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
             <DockPanel>
@@ -105,37 +106,43 @@
                         </Grid>
                     </DockPanel>
                 </DockPanel>
-                <Grid DockPanel.Dock="Left" Name="LeftGridTable">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition MinHeight="50" Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="22" />
-                        <ColumnDefinition Width="129"/>
-                        <ColumnDefinition MinWidth="50" Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <V:AutoCompleteTextBox Grid.Column="0" Grid.Row="0" x:Name="autoComplete" Width="150">
-                        <V:AutoCompleteTextBox.Text>
-                            <Binding Path="Text" UpdateSourceTrigger="PropertyChanged">
-                            </Binding>
-                        </V:AutoCompleteTextBox.Text>
-                    </V:AutoCompleteTextBox>
-                    <Button Grid.Column="1" Grid.Row="0" Name="AddButton" Click="AddButton_Click">Add</Button>
-                    <TextBlock Grid.Column="0" Grid.Row="2">Subjects</TextBlock>
-                    <Button Grid.Column="1" Grid.Row="2" Name="RemoveButton" Click="RemoveButton_Click">Remove</Button>
-                    <ListView Name="SubjectsListView" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" ItemsSource="{Binding Subjects}" SelectionMode="Single" PreviewMouseLeftButtonDown="Subjects_PreviewMouseLeftButtonDown" MouseMove="Subjects_MouseMove">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <TextBlock Text="{Binding Name}" FontWeight="Bold" />
-                                </Grid>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </Grid>
+                <DockPanel DockPanel.Dock="Left">
+                    <Expander Name="SubjectExpander" Header="">
+                        <Grid DockPanel.Dock="Right" Name="RightGridTable">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <!--<RowDefinition MinHeight="50" Height="Auto" />
+                                <RowDefinition Height="Auto" />-->
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition MinWidth="100" Width="Auto" />
+                                <!--<ColumnDefinition MinWidth="50" Width="Auto" />-->
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">Filter Subjects</TextBlock>
+                            <!--<V:AutoCompleteTextBox Grid.Column="0" Grid.Row="1" x:Name="autoComplete" Width="150">
+                                <V:AutoCompleteTextBox.Text>
+                                    <Binding Path="Text" UpdateSourceTrigger="PropertyChanged">
+                                    </Binding>
+                                </V:AutoCompleteTextBox.Text>
+                            </V:AutoCompleteTextBox>-->
+                            <TextBox Name="FilterTextBox" Grid.Column="0" Grid.Row="1" TextChanged="FilterTextBox_TextChanged"></TextBox>
+                            <!--<Button Grid.Column="1" Grid.Row="1" Name="AddButton" Click="AddButton_Click">Add</Button>-->
+                            <!--<TextBlock Grid.Column="0" Grid.Row="3">Subjects</TextBlock>-->
+                            <!--<Button Grid.Column="1" Grid.Row="3" Name="RemoveButton" Click="RemoveButton_Click">Remove</Button>-->
+                            <ListView Name="SubjectsListView" Grid.Column="0" Grid.Row="2" ItemsSource="{Binding Subjects, UpdateSourceTrigger=PropertyChanged}" SelectionMode="Single" PreviewMouseLeftButtonDown="Subjects_PreviewMouseLeftButtonDown" MouseMove="Subjects_MouseMove">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
+                    </Expander>
+                </DockPanel>
             </DockPanel>
         </ScrollViewer>
     </DockPanel>
