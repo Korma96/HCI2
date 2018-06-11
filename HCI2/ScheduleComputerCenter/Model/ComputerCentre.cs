@@ -10,7 +10,7 @@ namespace ScheduleComputerCenter.Model
 {
     public class ComputerCentre
     {
-        public static DbContext context = new ComputerCentreContext();
+        public static ComputerCentreContext context = new ComputerCentreContext();
         public static ClassroomRepository ClassroomRepository = new ClassroomRepository(context);
         public static CourseRepository CourseRepository = new CourseRepository(context);
         public static SoftwareRepository SoftwareRepository = new SoftwareRepository(context);
