@@ -22,14 +22,18 @@
         <StackPanel>
             <Label Content="Courses" HorizontalAlignment="Center" FontSize="36" FontWeight="Bold"></Label>
             <DockPanel>
-                <StackPanel>
+                <StackPanel DockPanel.Dock="Right">
                     <WrapPanel>
-                    <TextBlock Text="Name of Course : "/>
-                    <TextBox Name="nameCourse" />
-                </WrapPanel>
+                        <TextBlock Text="Name of Course : "/>
+                        <TextBox Name="nameCourse" />
+                    </WrapPanel>
+                    <WrapPanel>
+                        <TextBlock Text="Code : "/>
+                        <TextBox Name="code" />
+                    </WrapPanel>
                 <WrapPanel>
                     <TextBlock Text="Year of founding : "/>
-                    <TextBox x:Name="yearOfFounding" />
+                    <TextBox PreviewTextInput="NumberValidationTextBox" x:Name="yearOfFounding" />
                 </WrapPanel>
                 <WrapPanel>
                     <TextBlock Text="Description : "/>
@@ -39,13 +43,13 @@
                     <Button Name="btnAdd" Content="Add" FontSize="25" Width="120" Margin="5" Click="btnAdd_Click" />
                     <Button Name="btnEdit" Content="Edit" FontSize="25" Width="120" Margin="5" Click="btnEdit_Click" />
                     <Button Name="btnDelete" Content="Delete" FontSize="25" Width="120" Margin="5" Click="btnDelete_Click" />
-                    <Button Name="btnExit" Content="Exit" FontSize="25" Width="120" Margin="5" Background="#400000" Foreground="Bisque" Click="btnExit_Click" />
+                    <Button Name="btnExit" Content="Cancel" FontSize="25" Width="120" Margin="5" Background="#400000" Foreground="Bisque" Click="btnExit_Click" />
                 </WrapPanel>
             </StackPanel>
             <StackPanel>
                 <Label Content="No records found." Name="noCourses" HorizontalAlignment="Center" FontSize="16" FontWeight="Bold" Foreground="#FFE10000"></Label>
                 <WrapPanel Margin="20" HorizontalAlignment="Center">
-                    <DataGrid AutoGenerateColumns="True" Name="gvData" SelectionMode="Single" FontSize="15" Padding="5" Background="Black" />
+                        <DataGrid AutoGenerateColumns="True" CanUserAddRows = "False" Name="gvData" SelectionMode="Single" FontSize="15" Padding="5" Background="Black" />
                 </WrapPanel>
             </StackPanel>
              </DockPanel>

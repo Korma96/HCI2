@@ -113,7 +113,8 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition MinWidth="100" Width="Auto" />
+                        <ColumnDefinition Width="22" />
+                        <ColumnDefinition Width="129"/>
                         <ColumnDefinition MinWidth="50" Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <V:AutoCompleteTextBox Grid.Column="0" Grid.Row="0" x:Name="autoComplete" Width="150">

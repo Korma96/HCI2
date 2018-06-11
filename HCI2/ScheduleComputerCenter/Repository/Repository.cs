@@ -21,6 +21,10 @@ namespace ScheduleComputerCenter.Repository
         {
             return Context.Set<TEntity>().Find(id);
         }
+        public TEntity Get(string code)
+        {
+            return Context.Set<TEntity>().Find(code);
+        }
 
         public IEnumerable<TEntity> GetAll()
         {

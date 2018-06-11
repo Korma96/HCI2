@@ -307,6 +307,18 @@ namespace ScheduleComputerCenter
 
         private void MenuItem_Click_2(object sender, RoutedEventArgs e)
         {
+            var w = new View.courses();
+            w.ShowDialog();
+        }
+
+        private void MenuItem_Click_3(object sender, RoutedEventArgs e)
+        {
+            var w = new View.softwares();
+            w.ShowDialog();
+        }
+
+        private void MenuItem_Click_4(object sender, RoutedEventArgs e)
+        { 
             if (!ComputerCentre.SoftwareRepository.GetAll().ToList().Any())
             {
                 MessageBox.Show("No softwares available,\nplease add at least one software first!");
@@ -320,18 +332,6 @@ namespace ScheduleComputerCenter
                 var w = new View.SubjectsWindow();
                 w.ShowDialog();
             }
-        }
-
-        private void MenuItem_Click_3(object sender, RoutedEventArgs e)
-        {
-            var w = new View.softwares();
-            w.ShowDialog();
-        }
-
-        private void MenuItem_Click_4(object sender, RoutedEventArgs e)
-        {
-            var w = new View.courses();
-            w.ShowDialog();
         }
 
         private void MenuItem_Click_5(object sender, RoutedEventArgs e)

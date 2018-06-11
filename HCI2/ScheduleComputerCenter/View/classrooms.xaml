@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ScheduleComputerCenter.View"
         mc:Ignorable="d"
-        Title="classrooms" Height="532.5" Width="800" Background="YellowGreen">
+        Title="classrooms" Height="690.5" Width="992" Background="Firebrick">
     <Window.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="20"/>
@@ -19,71 +19,71 @@
         </Style>
     </Window.Resources>
     <DockPanel Name="dockMain" VerticalAlignment="top" HorizontalAlignment="Left" LastChildFill="False">
-        <StackPanel>
+        <StackPanel Height="645" Width="938">
             <Label Content="Classrooms" HorizontalAlignment="Center" FontSize="36" FontWeight="Bold"></Label>
             <DockPanel>
-                <StackPanel DockPanel.Dock="Left">
+                <StackPanel DockPanel.Dock="Right">
                     <WrapPanel>
                         <TextBlock Text="Name : "/>
                         <TextBox Name="name" />
                     </WrapPanel>
                     <WrapPanel>
-                    <TextBlock Text="Description : "/>
-                    <TextBox Name="desc" />
-                </WrapPanel>
-                <WrapPanel>
-                    <TextBlock Text="Number of seats : "/>
-                    <TextBox Name="numOfSeats" />
-                </WrapPanel>
-                <WrapPanel>
-                    <TextBlock Text="Projector : "/>
-                    <ComboBox FontSize="20" Name="projector" Width="250" Margin="10">
-                        <ComboBoxItem Content="Projector in classroom" Selector.IsSelected="True" />
-                        <ComboBoxItem Content="YES" />
-                        <ComboBoxItem Content="NO" />
-                    </ComboBox>
-                </WrapPanel>
-                <WrapPanel>
-                    <TextBlock Text="Table : "/>
-                    <ComboBox FontSize="20" Name="table" Width="250" Margin="10">
-                        <ComboBoxItem Content="Table in classroom" Selector.IsSelected="True" />
-                        <ComboBoxItem Content="YES" />
-                        <ComboBoxItem Content="NO" />
-                    </ComboBox>
-                </WrapPanel>
-                <WrapPanel>
-                    <TextBlock Text="Smart table : "/>
-                    <ComboBox FontSize="20" Name="smartTable" Width="250" Margin="10">
-                        <ComboBoxItem Content="Smart table in classroom" Selector.IsSelected="True" />
-                        <ComboBoxItem Content="YES" />
-                        <ComboBoxItem Content="NO" />
-                    </ComboBox>
-                </WrapPanel>
-                <WrapPanel>
-                    <TextBlock Text="OS type : "/>
-                    <ComboBox FontSize="20" Name="osType" Width="250" Margin="10">
-                        <ComboBoxItem Content="OS in classroom" Selector.IsSelected="True" />
-                        <ComboBoxItem Content="WINDOWS" />
-                        <ComboBoxItem Content="LINUX" />
-                        <ComboBoxItem Content="Both" />
-                    </ComboBox>
-                </WrapPanel>
-                <WrapPanel>
-                    <TextBlock Text="Software : "/>
-                    <ComboBox Loaded="loadSoftwares"  FontSize="20" Name="software" Width="250" Margin="10">
-                    </ComboBox>
-                </WrapPanel>
-                <WrapPanel Margin="0" HorizontalAlignment="Center" Height="59">
-                    <Button Name="btnAdd" Content="Add" FontSize="25" Width="120" Margin="5" Click="btnAdd_Click" />
-                    <Button Name="btnEdit" Content="Edit" FontSize="25" Width="120" Margin="5" Click="btnEdit_Click" />
-                    <Button Name="btnDelete" Content="Delete" FontSize="25" Width="120" Margin="5" Click="btnDelete_Click" />
-                    <Button Name="btnExit" Content="Exit" FontSize="25" Width="120" Margin="5" Background="#400000" Foreground="Bisque" Click="btnExit_Click" />
-                </WrapPanel>
+                        <TextBlock Text="Code : "/>
+                        <TextBox Name="code" />
+                    </WrapPanel>
+                    <WrapPanel>
+                        <TextBlock Text="Number of seats : "/>
+                        <TextBox Name="numOfSeats"  PreviewTextInput="NumberValidationTextBox" />
+                    </WrapPanel>
+                    <WrapPanel>
+                        <TextBlock Text="Projector : "/>
+                        <ComboBox FontSize="20" Name="projector" Width="250" Margin="10">
+                            <ComboBoxItem Content="YES" />
+                            <ComboBoxItem Content="NO" />
+                        </ComboBox>
+                    </WrapPanel>
+                    <WrapPanel>
+                        <TextBlock Text="Table : "/>
+                        <ComboBox FontSize="20" Name="table" Width="250" Margin="10">
+                            <ComboBoxItem Content="YES" />
+                            <ComboBoxItem Content="NO" />
+                        </ComboBox>
+                    </WrapPanel>
+                    <WrapPanel>
+                        <TextBlock Text="Smart table : "/>
+                        <ComboBox FontSize="20" Name="smartTable" Width="250" Margin="10">
+                            <ComboBoxItem Content="YES" />
+                            <ComboBoxItem Content="NO" />
+                        </ComboBox>
+                    </WrapPanel>
+                    <WrapPanel>
+                        <TextBlock Text="OS type : "/>
+                        <ComboBox FontSize="20" Name="osType" Width="250" Margin="10">
+                            <ComboBoxItem Content="WINDOWS" />
+                            <ComboBoxItem Content="LINUX" />
+                            <ComboBoxItem Content="Both" />
+                        </ComboBox>
+                    </WrapPanel>
+                    <WrapPanel>
+                        <TextBlock Text="Software : "/>
+                        <ComboBox Loaded="loadSoftwares"  FontSize="20" Name="software" Width="250" Margin="10">
+                        </ComboBox>
+                    </WrapPanel>
+                    <WrapPanel>
+                        <TextBlock Text="Description : "/>
+                        <TextBox Name="desc" Height="43" />
+                    </WrapPanel>
+                    <WrapPanel Margin="0" HorizontalAlignment="Center" Height="59">
+                        <Button Name="btnAdd" Content="Add" FontSize="25" Width="120" Margin="5" Click="btnAdd_Click" />
+                        <Button Name="btnEdit" Content="Edit" FontSize="25" Width="120" Margin="5" Click="btnEdit_Click" />
+                        <Button Name="btnDelete" Content="Delete" FontSize="25" Width="120" Margin="5" Click="btnDelete_Click" />
+                        <Button Name="btnExit" Content="Cancel" FontSize="25" Width="120" Margin="5" Background="#400000" Foreground="Bisque" Click="btnExit_Click" />
+                    </WrapPanel>
                 </StackPanel>
-                <StackPanel DockPanel.Dock="Right">
-                    <Label Content="No records found." Name="noClassrooms" HorizontalAlignment="Center" FontSize="16" FontWeight="Bold" Foreground="#FFE10000"></Label>
+                <StackPanel DockPanel.Dock="Left" Width="400">
+                    <Label Content="No records found." Name="noClassrooms" HorizontalAlignment="Center" FontSize="16" FontWeight="Bold" Foreground="FloralWhite"></Label>
                     <WrapPanel Margin="20" HorizontalAlignment="Center" >
-                        <DataGrid AutoGenerateColumns="True" Name="gvData" SelectionMode="Single" FontSize="15" Padding="5" Background="Black" />
+                        <DataGrid AutoGenerateColumns="True" CanUserAddRows = "False" Name="gvData" SelectionMode="Single" FontSize="15" Padding="5" Background="Black" />
                     </WrapPanel>
                 </StackPanel>
             </DockPanel>
