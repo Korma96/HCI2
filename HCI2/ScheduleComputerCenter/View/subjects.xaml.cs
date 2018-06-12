@@ -253,7 +253,6 @@ namespace ScheduleComputerCenter.View
                         break;
                     }
                 }
-            MessageBox.Show("Error occurred, no data has been found..");
             }
             else
                 MessageBox.Show("Please Select Any Subject From The list...");
