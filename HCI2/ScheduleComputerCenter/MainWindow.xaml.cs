@@ -54,8 +54,10 @@ namespace ScheduleComputerCenter
 
             CommandBinding AddNewTermCommandBinding = new CommandBinding(RoutedCommands.AddNewTermCommand, AddNewTermCommand_Executed, AddNewTermCommand_CanExecute);
             CommandBinding UpdateTermCommandBinding = new CommandBinding(RoutedCommands.UpdateTermCommand, UpdateTermCommand_Executed, UpdateTermCommand_CanExecute);
+            CommandBinding RemoveTermCommandBinding = new CommandBinding(RoutedCommands.RemoveTermCommand, RemoveTermCommand_Executed, RemoveTermCommand_CanExecute);
             this.CommandBindings.Add(AddNewTermCommandBinding);
             this.CommandBindings.Add(UpdateTermCommandBinding);
+            this.CommandBindings.Add(RemoveTermCommandBinding);
 
             ContextMenu contextMenu = new ContextMenu();
             MenuItem menuItemNew = new MenuItem() { Header = "Add New Term...", Command = RoutedCommands.AddNewTermCommand };
@@ -64,6 +66,9 @@ namespace ScheduleComputerCenter
             MenuItem menuItemUpdate = new MenuItem() { Header = "Update Term...", Command = RoutedCommands.UpdateTermCommand };
             menuItemUpdate.Icon = new Image() { Source = new BitmapImage(new Uri("/ScheduleComputerCenter;component/Images/update.png", UriKind.RelativeOrAbsolute)) };
             contextMenu.Items.Add(menuItemUpdate);
+            MenuItem menuItemRemove = new MenuItem() { Header = "Remove Term...", Command = RoutedCommands.RemoveTermCommand };
+            menuItemRemove.Icon = new Image() { Source = new BitmapImage(new Uri("/ScheduleComputerCenter;component/Images/remove.png", UriKind.RelativeOrAbsolute)) };
+            contextMenu.Items.Add(menuItemRemove);
             MainGrid.ContextMenu = contextMenu;
 
             definisiRedove(LeftGrid, NUM_OF_ROWS_IN_MAIN_GRID, HEIGHT_OF_ROWS_IN_MAIN_GRID);
@@ -200,7 +205,10 @@ namespace ScheduleComputerCenter
 
                             listView.AllowDrop = true;
                             listView.DragEnter += Subjects_DragEnter;
-                            listView.Drop += Subjects_Drop;
+                            listView.DragEnter += Terms_DragEnter;
+                            listView.Drop += SubjectsOrTerms_Drop;
+                            listView.PreviewMouseLeftButtonDown += SubjectsOrTerms_PreviewMouseLeftButtonDown;
+                            listView.MouseMove += Terms_MouseMove;
 
                             listView.ItemTemplate = dataTemplate;
 
@@ -524,60 +532,41 @@ namespace ScheduleComputerCenter
 
         }
 
-        /*public void promeniBoju(object selectedElement, Brush brush)
+        private void RemoveTermCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (SelectedElement is TextBlock)
+            if (SelectedElement == null) e.CanExecute = false;
+            else
             {
-                (SelectedElement as TextBlock).Background = brush;
+                int indexOfClassroom = Grid.GetColumn(SelectedElement);
+                int indexOfTerm = SelectedElement.SelectedIndex;
+
+                e.CanExecute = (ObservableList[indexOfClassroom][indexOfTerm].Subject != null);
             }
-            else if (SelectedElement is Rectangle)
-            {
-                (SelectedElement as Rectangle).Fill = brush;
-            }
-            else MessageBox.Show("Selektovan element neocekivanog tipa!");
+
+            e.Handled = true;
         }
 
-
-        public UIElement GetMainGridElement(Grid grid, int r, int c, int numOfClassroom)
+        private void RemoveTermCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            /*for (int i = 0; i < grid.Children.Count; i++)
-            {
-                UIElement e = grid.Children[i];
-                if (Grid.GetRow(e) == r && Grid.GetColumn(e) == c)
-                    return e;
-            }
-            return null;
+            int indexOfClassroom = Grid.GetColumn(SelectedElement);
+            int indexOfTerm = SelectedElement.SelectedIndex;
 
-            int index = GetIndexOfMainGridElement(grid, r, c);
-            
-            try { return grid.Children[index];  }
-            catch { return null; }
+            Term term = ObservableList[indexOfClassroom][indexOfTerm];
+
+            string removeMessageBoxText = "Are you sure you want to remove selected term?";
+            string removeCaption = "Remove Term";
+
+           
+            MessageBoxResult rsltMessageBox = MessageBox.Show(removeMessageBoxText, removeCaption, MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if(rsltMessageBox == MessageBoxResult.Yes)
+            {
+                obrisiTerminiUbaciPrazneTermine(term);
+                SelectedElement.SelectedItems.Clear();
+                SelectedElement = null;
+            }
+
         }
-
-        public int GetIndexOfMainGridElement(Grid grid, int r, int c)
-        {
-            for (int i = 0; i < grid.Children.Count; i++)
-            {
-                UIElement element = grid.Children[i];
-               
-                if (Grid.GetRow(element) == r && Grid.GetColumn(element) == c)
-                    return i;
-                
-                
-            }
-            return -1;
-            //int index = r * NUM_OF_DAYS * numOfClassroom + c;
-            //return index;
-
-            string key = r + "_" + c;
-
-            if(indeksi.ContainsKey(key))
-            {
-                return indeksi[key];
-            }
-
-            return -1;
-        }*/
 
         public static int GetRowForTime(Grid grid, string time)
         {
@@ -631,18 +620,45 @@ namespace ScheduleComputerCenter
             return -1;
         }
 
-       /*public TextBlock createNewTextBlock(string comboSubject)
-        {
-            TextBlock newTextBlock = new TextBlock() { Margin = new Thickness(2), Text = comboSubject, LayoutTransform = new RotateTransform(270), Background = Brushes.Aqua, Foreground = Brushes.Red, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
-            newTextBlock.MouseLeftButtonUp += Cell_MouseLeftButtonUp;
-            newTextBlock.MouseRightButtonUp += Cell_MouseRightButtonUp;
 
-            return newTextBlock;
-        }*/
-
-        private void Subjects_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void SubjectsOrTerms_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             startPoint = e.GetPosition(null);
+        }
+
+        private void Terms_MouseMove(object sender, MouseEventArgs e)
+        {
+            Point mousePos = e.GetPosition(null);
+            Vector diff = startPoint - mousePos;
+
+            if (e.LeftButton == MouseButtonState.Pressed &&
+                (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
+                Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance))
+            {
+                // Get the dragged ListViewItem
+                ListView listView = sender as ListView;
+                ListViewItem listViewItem = FindAncestor<ListViewItem>((DependencyObject)e.OriginalSource);
+
+                if (listViewItem != null)
+                {
+                    try
+                    {
+                        // Find the data behind the ListViewItem
+                        Term term = (Term)listView.ItemContainerGenerator.ItemFromContainer(listViewItem);
+
+                        if(term.Subject != null)
+                        {
+                            SelectedElement = listView;
+
+                            // Initialize the drag & drop operation
+                            DataObject dragData = new DataObject("myFormatTerm", term);
+                            DragDrop.DoDragDrop(listViewItem, dragData, DragDropEffects.Move);
+                        }
+
+                    }
+                    catch { }
+                }
+            }
         }
 
         private void Subjects_MouseMove(object sender, MouseEventArgs e)
@@ -666,7 +682,7 @@ namespace ScheduleComputerCenter
                         Subject subject = (Subject)listView.ItemContainerGenerator.ItemFromContainer(listViewItem);
 
                         // Initialize the drag & drop operation
-                        DataObject dragData = new DataObject("myFormat", subject);
+                        DataObject dragData = new DataObject("myFormatSubject", subject);
                         DragDrop.DoDragDrop(listViewItem, dragData, DragDropEffects.Move);
                     }
                     catch { }
@@ -692,7 +708,15 @@ namespace ScheduleComputerCenter
 
         private void Subjects_DragEnter(object sender, DragEventArgs e)
         {
-            if (!e.Data.GetDataPresent("myFormat") || sender == e.Source)
+            if (!e.Data.GetDataPresent("myFormatSubject") || sender == e.Source)
+            {
+                e.Effects = DragDropEffects.None;
+            }
+        }
+
+        private void Terms_DragEnter(object sender, DragEventArgs e)
+        {
+            if (!e.Data.GetDataPresent("myFormatTerm") || sender == e.Source)
             {
                 e.Effects = DragDropEffects.None;
             }
@@ -711,16 +735,17 @@ namespace ScheduleComputerCenter
             }
         }
 
-        private void Subjects_Drop(object sender, DragEventArgs e)
+        private void SubjectsOrTerms_Drop(object sender, DragEventArgs e)
         {
-            if(SelectedElement != null)
-            {
-                SelectedElement.SelectedItems.Clear();
-            }
 
-            if (e.Data.GetDataPresent("myFormat"))
+            if (e.Data.GetDataPresent("myFormatSubject"))
             {
-                Subject subject = e.Data.GetData("myFormat") as Subject;
+                if (SelectedElement != null)
+                {
+                    SelectedElement.SelectedItems.Clear();
+                }
+
+                Subject subject = e.Data.GetData("myFormatSubject") as Subject;
                 //Subjects.Remove(subject);
 
                 ListView listView = sender as ListView;
@@ -733,18 +758,46 @@ namespace ScheduleComputerCenter
                 AddNewOrUpdateTermDialog anoutd = new AddNewOrUpdateTermDialog(this, "Add new term");
                 anoutd.inicijalizacijaDialoga(subject.Name);
                 anoutd.ShowDialog();
+            }
+            else if (e.Data.GetDataPresent("myFormatTerm"))
+            {
+                Term term = e.Data.GetData("myFormatTerm") as Term;
 
-                
-                //ListView listView = ItemsControl.ItemsControlFromItemContainer(listViewItem) as ListView;
+                obrisiTerminiUbaciPrazneTermine(term);
 
-                /*int indexOfClassroom = Grid.GetColumn(listView);
+                if (SelectedElement != null)
+                {
+                    SelectedElement.SelectedItems.Clear();
+                }
+
+                ListView listView = sender as ListView;
+                ListViewItem listViewItem = FindAncestor<ListViewItem>((DependencyObject)e.OriginalSource);
                 int indexOfTerm = listView.ItemContainerGenerator.IndexFromContainer(listViewItem);
+                //listView.SelectedItem = listViewItem;
+                listView.SelectedIndex = indexOfTerm;
+                SelectedElement = listView;
 
-                // Ovo radim jer ne osvezi raspored ako bih samo set-ovao subject za odabrani termin 
-                Term newTerm = ObservableList[indexOfClassroom][indexOfTerm];
-                newTerm.Subject = subject;
-                ObservableList[indexOfClassroom].Insert(indexOfTerm, newTerm);
-                ObservableList[indexOfClassroom].RemoveAt(indexOfTerm + 1);*/
+                AddNewOrUpdateTermDialog anoutd = new AddNewOrUpdateTermDialog(this, "Change term");
+                anoutd.inicijalizacijaDialoga(term.Subject.Name);
+                anoutd.ShowDialog();
+            }
+        }
+
+        private void obrisiTerminiUbaciPrazneTermine(Term oldTerm)
+        {
+            int colum = Grid.GetColumn(SelectedElement);
+            int row = SelectedElement.SelectedIndex;
+
+            ObservableList[colum].RemoveAt(row);
+
+            TimeSpan startTime = oldTerm.StartTime;
+            TimeSpan endTime = startTime.Add(new TimeSpan(0, 15, 0));
+
+            for(int i = 0; i < oldTerm.RowSpan; i++)
+            {
+                ObservableList[colum].Insert(row, new Term(startTime, endTime, null, oldTerm.Day));
+                startTime = endTime;
+                endTime = endTime.Add(new TimeSpan(0, 15, 0));
             }
         }
 

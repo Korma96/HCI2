@@ -44,7 +44,7 @@ namespace ScheduleComputerCenter.View
             dt.Columns.Add("Table");
             dt.Columns.Add("SmartTable");
             dt.Columns.Add("OsType");
-            dt.Columns.Add("Software");
+            dt.Columns.Add("Softwares");
             foreach (Classroom cr in classroomsList)
             {
                 DataRow dr = dt.NewRow();

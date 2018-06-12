@@ -21,11 +21,21 @@ namespace ScheduleComputerCenter.Commands
 
         public static readonly RoutedUICommand UpdateTermCommand = new RoutedUICommand(
             "Update Term Command",
-            "UpdateNewTermCommand",
+            "UpdateTermCommand",
             typeof(RoutedCommands),
             new InputGestureCollection()
             {
                 new KeyGesture(Key.U, ModifierKeys.Control),
+            }
+            );
+
+        public static readonly RoutedUICommand RemoveTermCommand = new RoutedUICommand(
+            "Remove Term Command",
+            "RemoveTermCommand",
+            typeof(RoutedCommands),
+            new InputGestureCollection()
+            {
+                new KeyGesture(Key.R, ModifierKeys.Control),
             }
             );
     }

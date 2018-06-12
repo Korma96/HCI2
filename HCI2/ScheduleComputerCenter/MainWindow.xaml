@@ -125,7 +125,7 @@
                     <Button Grid.Column="1" Grid.Row="0" Name="AddButton" Click="AddButton_Click">Add</Button>
                     <TextBlock Grid.Column="0" Grid.Row="2">Subjects</TextBlock>
                     <Button Grid.Column="1" Grid.Row="2" Name="RemoveButton" Click="RemoveButton_Click">Remove</Button>
-                    <ListView Name="SubjectsListView" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" ItemsSource="{Binding Subjects}" SelectionMode="Single" PreviewMouseLeftButtonDown="Subjects_PreviewMouseLeftButtonDown" MouseMove="Subjects_MouseMove">
+                    <ListView Name="SubjectsListView" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" ItemsSource="{Binding Subjects}" SelectionMode="Single" PreviewMouseLeftButtonDown="SubjectsOrTerms_PreviewMouseLeftButtonDown" MouseMove="Subjects_MouseMove">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid>

@@ -38,5 +38,14 @@ namespace ScheduleComputerCenter.Model
             this.Day = day;
             this.RowSpan = rowSpan;
         }
+
+        public Term(TimeSpan startTime, TimeSpan endTime, Subject subject, Day day)
+        {
+            this.StartTime = startTime;
+            this.EndTime = endTime;
+            this.Subject = subject;
+            this.Day = day;
+            this.RowSpan = 1;
+        }
     }
 }
