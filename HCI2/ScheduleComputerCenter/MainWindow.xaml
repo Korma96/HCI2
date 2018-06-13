@@ -21,6 +21,9 @@
                     </MenuItem>
                     <MenuItem Header="Schedule" FontWeight="Heavy" Height="25">
                     </MenuItem>
+                    <MenuItem Header="Tutorial" FontWeight="Heavy" Height="25">
+                        <MenuItem Header="Start" FontWeight="Heavy" Height="25" Click="StartTutorial"/>
+                    </MenuItem>
                 </Menu>
                 <DockPanel DockPanel.Dock="Right">
                     <DockPanel DockPanel.Dock="Top">
