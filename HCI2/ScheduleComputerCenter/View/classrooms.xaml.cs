@@ -61,7 +61,7 @@ namespace ScheduleComputerCenter.View
                 dr["OsType"] = cr.OsType;
                 if (cr.SmartTable) dr["SmartTable"] = "YES";
                 else dr["SmartTable"] = "NO";
-                dr["Softwares"] = cr.Softwares;
+                dr["Softwares"] = SoftwaresToString(cr.Softwares);
                 dt.Rows.Add(dr);
             }
             gvData.ItemsSource = dt.AsDataView();
@@ -89,6 +89,16 @@ namespace ScheduleComputerCenter.View
 
         }
 
+        public string SoftwaresToString(List<Software> soft)
+        {
+            string value = "";
+            foreach (Software s in soft)
+            {
+                value += ", " + s.Name ;
+            }
+            return value.Substring(2);
+        }
+        
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
             if (btnAdd.Content.Equals("Add"))

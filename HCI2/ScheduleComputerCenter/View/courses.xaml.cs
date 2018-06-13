@@ -110,6 +110,15 @@ namespace ScheduleComputerCenter.View
                     }
                     else
                     {
+                        int id = FindID(courseCode);
+                        ComputerCentre.CourseRepository.Get(id).Name = nameCourse.Text;
+                        ComputerCentre.CourseRepository.Get(id).Code = code.Text;
+                        ComputerCentre.CourseRepository.Get(id).Description = desc.Text;
+                        ComputerCentre.CourseRepository.Get(id).DateOfFounding = yearOfFounding.Text;
+                        ComputerCentre.CourseRepository.Context.SaveChanges();
+                        MessageBox.Show("Successfully updated course");
+                        btnAdd.Content = "Add";
+                        view();
 
                     }
                 }
@@ -157,11 +166,19 @@ namespace ScheduleComputerCenter.View
                 {
                     if (code.Equals(c.Code))
                     {
-                        ComputerCentre.CourseRepository.Remove(c);
-                        ComputerCentre.CourseRepository.Context.SaveChanges();
-                        MessageBox.Show("Successfully deleted course");
-                        view();
-                        break;
+                        if (!CourseUseSubject(c))
+                        {
+                            ComputerCentre.CourseRepository.Remove(c);
+                            ComputerCentre.CourseRepository.Context.SaveChanges();
+                            MessageBox.Show("Successfully deleted course");
+                            view();
+                            break;
+                        }
+                        else
+                        {
+                            MessageBox.Show("This course is in use, so it can't be deleted.");
+                            break;
+                        }
                     }
                     
                 }
@@ -193,6 +210,16 @@ namespace ScheduleComputerCenter.View
         Regex regex = new Regex("[^0-9]+");
         e.Handled = regex.IsMatch(e.Text);
     }
-}
+
+    public bool CourseUseSubject(Course c)
+    {
+        foreach (Subject subject in ComputerCentre.SubjectRepository.GetAll().ToList())
+        {
+            if (subject.Course.Equals(c))
+                return true;
+        }
+        return false;
+    }
+    }
         
 }

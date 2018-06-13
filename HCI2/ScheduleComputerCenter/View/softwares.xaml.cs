@@ -205,11 +205,19 @@ namespace ScheduleComputerCenter.View
                 {
                     if (code.Equals(s.Code))
                     {
-                        ComputerCentre.SoftwareRepository.Remove(s);
-                        ComputerCentre.SoftwareRepository.Context.SaveChanges();
-                        MessageBox.Show("Successfully deleted software");
-                        view();
-                        break;
+                        if (!SoftwareUseClassroom(s) && !SoftwareUseSubject(s))
+                        {
+                            ComputerCentre.SoftwareRepository.Remove(s);
+                            ComputerCentre.SoftwareRepository.Context.SaveChanges();
+                            MessageBox.Show("Successfully deleted software");
+                            view();
+                            break;
+                        }
+                        else
+                        {
+                            MessageBox.Show("This software is in use, so it can't be deleted.");
+                            break;
+                        }
                     }
                 }
             }
@@ -231,6 +239,27 @@ namespace ScheduleComputerCenter.View
         {
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
+        }
+
+        public bool SoftwareUseSubject(Software s)
+        {
+            foreach (Subject subject in ComputerCentre.SubjectRepository.GetAll().ToList())
+            {
+                if (subject.Software.Equals(s))
+                    return true;
+            }
+            return false;
+        }
+        public bool SoftwareUseClassroom(Software s)
+        {
+            foreach (Classroom c in ComputerCentre.ClassroomRepository.GetAll().ToList())
+            {
+                if (c.Softwares.Contains(s))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
    
