@@ -893,5 +893,11 @@ namespace ScheduleComputerCenter
             String text = FilterTextBox.Text;
             FilterSubjectsForListView(text);
         }
+
+        private void StartTutorial(object sender, RoutedEventArgs e)
+        {
+            var t = new TutorialWindow();
+            t.ShowDialog();
+        }
     }
 }
