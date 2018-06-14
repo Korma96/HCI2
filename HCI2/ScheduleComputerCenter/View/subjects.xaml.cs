@@ -15,6 +15,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using ScheduleComputerCenter.Model;
 using ScheduleComputerCenter.Repository;
+using System.Data.Entity;
+using System.Collections.ObjectModel;
 
 namespace ScheduleComputerCenter.View
 {
@@ -24,55 +26,28 @@ namespace ScheduleComputerCenter.View
     public partial class SubjectsWindow : Window
     {
         DataTable dt;
-        List<Subject> subjectsList = new List<Subject>();
+        public List<Subject> SubjectsList { get; set; }
+        public ObservableCollection<Subject> ObservableSubjectsList { get; set; }
+        public List<Software> Softwares { get; set; }
         string subjectCode = "";
 
 
         public SubjectsWindow()
         {
             InitializeComponent();
+
+            this.DataContext = this;
+
+            SubjectsList = ComputerCentre.context.Subjects.Include(s => s.Softwares).ToList();
+            ObservableSubjectsList = new ObservableCollection<Subject>(SubjectsList);
+            gvData.ItemsSource = ObservableSubjectsList;
+
             view();
         }
         public void view()
         {
-            subjectsList = ComputerCentre.SubjectRepository.GetAll().ToList();
-            dt = new DataTable();
-            dt.Columns.Add("Name");
-            dt.Columns.Add("Code");
-            dt.Columns.Add("Description");
-            dt.Columns.Add("NumOfStudents");
-            dt.Columns.Add("Course");
-            dt.Columns.Add("MinNumOfClassesPerTerm");
-            dt.Columns.Add("NumOfClasses");
-            dt.Columns.Add("Table");
-            dt.Columns.Add("SmartTable");
-            dt.Columns.Add("Projector");
-            dt.Columns.Add("OsType");
-            dt.Columns.Add("Softwares");
 
-            foreach (Subject s in subjectsList)
-            {
-                DataRow dr = dt.NewRow();
-                dr["Description"] = s.Description;
-                dr["Code"] = s.Code;
-                dr["Name"] = s.Name;
-                dr["NumOfStudents"] = s.NumOfStudents;
-                dr["Course"] = s.Course;
-                dr["MinNumOfClassesPerTerm"] = s.MinNumOfClassesPerTerm;
-                dr["NumOfClasses"] = s.NumOfClasses;
-                if (s.Projector) dr["Projector"] = "YES";
-                else dr["Projector"] = "NO";
-                if (s.Table) dr["Table"] = "YES";
-                else dr["Table"] = "NO";
-                dr["OsType"] = s.OsType;
-                if (s.SmartTable) dr["SmartTable"] = "YES";
-                else dr["SmartTable"] = "NO";
-                dr["Softwares"] = s.Software;
-                dt.Rows.Add(dr);
-            }
-            gvData.ItemsSource = dt.AsDataView();
-
-            if (dt.Rows.Count > 0)
+            if (gvData.Items.Count > 0)
             {
                 noSubjects.Visibility = System.Windows.Visibility.Hidden;
                 gvData.Visibility = System.Windows.Visibility.Visible;
@@ -83,6 +58,29 @@ namespace ScheduleComputerCenter.View
                 gvData.Visibility = System.Windows.Visibility.Hidden;
             }
         }
+
+        public static string SoftwaresToString(List<Software> soft)
+        {
+       
+            if (soft != null)
+            {
+
+                if (soft.Count > 0)
+                {
+                    string value = "";
+
+                    foreach (Software s in soft)
+                    {
+                        value += ", " + s.Code;
+                    }
+
+                    return value.Substring(2);
+                }
+            }
+            return "No softwares";
+            
+        }
+
         public void loadCourses(object sender, RoutedEventArgs e)
         {
             List<Course> courses = ComputerCentre.CourseRepository.GetAll().ToList();
@@ -96,7 +94,7 @@ namespace ScheduleComputerCenter.View
             {
                 if (btnAdd.Content.Equals("Add"))
                 {
-                    if (numOfStudents.Text.Equals("") || numOF.Text.Equals("") || Course.Text.Equals("") || software.Text.Equals("") || minNumOfClasses.Text.Equals("") || osType.Text.Equals("") || name.Text.Equals("") || code.Text.Equals(""))
+                    if (numOfStudents.Text.Equals("") || numOF.Text.Equals("") || Course.Text.Equals("") || softwareCombo.Text.Equals("") || minNumOfClasses.Text.Equals("") || osType.Text.Equals("") || name.Text.Equals("") || code.Text.Equals(""))
                     {
                         MessageBox.Show("Some obligatory fields are empty");
                     }
@@ -115,17 +113,33 @@ namespace ScheduleComputerCenter.View
                         if (projector.Text.Equals("YES")) subject.Projector = true;
                         else subject.Projector = false;
                         subject.OsType = getOsType(osType.Text);
-                        subject.Software = (Software)software.SelectedItem;
                         subject.Course = (Course)Course.SelectedItem;
                         subject.MinNumOfClassesPerTerm = Int32.Parse(minNumOfClasses.Text);
                         subject.NumOfClasses = Int32.Parse(numOF.Text);
+                        List<Software> softwares = new List<Software>();
+                        CheckBox checkBox;
+                        StringBuilder sb = new StringBuilder();
+
+                        for (int i = 0; i < softwareCombo.Items.Count; i++)
+                        {
+                            checkBox = (softwareCombo.Items[i] as ComboBoxItem).Content as CheckBox;
+                            if (checkBox != null)
+                            {
+                                if (checkBox.IsChecked.Value)
+                                {
+                                    softwares.Add(Softwares[i - 1]);
+                                }
+                            }
+
+                        }
+                        subject.Softwares = softwares;
                         if (UniqueCode(code.Text))
                         {
                             ComputerCentre.SubjectRepository.Add(subject);
                             ComputerCentre.SubjectRepository.Context.SaveChanges();
                             MessageBox.Show("Successfully added subject");
                             btnAdd.Content = "Add";
-                            view();
+                            ObservableSubjectsList.Add(subject);
                         }
                         else
                         {
@@ -136,7 +150,7 @@ namespace ScheduleComputerCenter.View
                 else
                 {
                     int id = FindID(subjectCode);
-                    if (numOfStudents.Text.Equals("") || numOF.Text.Equals("") || Course.Text.Equals("") || software.Text.Equals("") || minNumOfClasses.Text.Equals("") || osType.Text.Equals("") || name.Text.Equals("") || code.Text.Equals(""))
+                    if (numOfStudents.Text.Equals("") || numOF.Text.Equals("") || Course.Text.Equals("") || softwareCombo.Text.Equals("") || minNumOfClasses.Text.Equals("") || osType.Text.Equals("") || name.Text.Equals("") || code.Text.Equals(""))
                     {
                         MessageBox.Show("Some obligatory fields are empty");
                     }
@@ -160,14 +174,31 @@ namespace ScheduleComputerCenter.View
                             if (projector.Text.Equals("YES")) ComputerCentre.SubjectRepository.Get(id).Projector = true;
                             else ComputerCentre.SubjectRepository.Get(id).Projector = false;
                             ComputerCentre.SubjectRepository.Get(id).OsType = getOsType(osType.Text);
-                            ComputerCentre.SubjectRepository.Get(id).Software = (Software)software.SelectedItem;
+                            List<Software> softwares = new List<Software>();
+                            CheckBox checkBox;
+                            StringBuilder sb = new StringBuilder();
+
+                            for (int i = 0; i < softwareCombo.Items.Count; i++)
+                            {
+                                checkBox = (softwareCombo.Items[i] as ComboBoxItem).Content as CheckBox;
+                                if (checkBox != null)
+                                {
+                                    if (checkBox.IsChecked.Value)
+                                    {
+                                        softwares.Add(Softwares[i - 1]);
+                                    }
+                                }
+
+                            }
                             ComputerCentre.SubjectRepository.Get(id).Course = (Course)Course.SelectedItem;
                             ComputerCentre.SubjectRepository.Get(id).MinNumOfClassesPerTerm = Int32.Parse(minNumOfClasses.Text);
                             ComputerCentre.SubjectRepository.Get(id).NumOfClasses = Int32.Parse(numOF.Text);
                             ComputerCentre.SubjectRepository.Context.SaveChanges();
+                            ObservableSubjectsList.Clear();
+                            foreach (Subject subject in ComputerCentre.SubjectRepository.GetAll().ToList()) ObservableSubjectsList.Add(subject);
                             MessageBox.Show("Successfully edited subject");
                             btnAdd.Content = "Add";
-                            view();
+                            
                         }
                     }
 
@@ -183,32 +214,93 @@ namespace ScheduleComputerCenter.View
 
         public Boolean UniqueCode(String code)
         {
-            foreach (Subject s in subjectsList)
+            foreach (Subject s in SubjectsList)
             {
                 if (code.Equals(s.Code)) return false;
             }
             return true;
         }
 
+        public void loadSoftwares(object sender, RoutedEventArgs e)
+        {
+            Softwares = ComputerCentre.SoftwareRepository.GetAll().ToList();
+            var combo = sender as ComboBox;
+            combo.Items.Add(new ComboBoxItem() { IsSelected = true, Content = "No softwares selected" });
+
+            CheckBox checkBox;
+
+            foreach (Software s in Softwares)
+            {
+                checkBox = new CheckBox() { Content = s.Code };
+                checkBox.Checked += CheckBox_Checked;
+                checkBox.Unchecked += CheckBox_Checked;
+                combo.Items.Add(new ComboBoxItem() { Content = checkBox });
+            }
+            // combo.ItemTemplate = SubjectsWindow.makeDataTemplate();
+
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkBox;
+            StringBuilder sb = new StringBuilder("");
+
+            bool atLeastOneChecked = false;
+
+            foreach (ComboBoxItem cbi in softwareCombo.Items)
+            {
+                checkBox = cbi.Content as CheckBox;
+                if (checkBox != null)
+                {
+                    if (checkBox.IsChecked.Value)
+                    {
+                        sb.Append(", " + checkBox.Content.ToString());
+                        atLeastOneChecked = true;
+                    }
+                }
+
+            }
+
+            if (atLeastOneChecked) (softwareCombo.Items[0] as ComboBoxItem).Content = sb.ToString().Substring(2);
+            else (softwareCombo.Items[0] as ComboBoxItem).Content = "No softwares selected";
+        }
+
         private void btnEdit_Click(object sender, RoutedEventArgs e)
         {
             if (gvData.SelectedItems.Count > 0)
             {
-                DataRowView dataRowView = (DataRowView)gvData.SelectedItems[0];
-                desc.Text = dataRowView["Description"].ToString();
-                name.Text = dataRowView["Name"].ToString();
-                code.Text = dataRowView["Code"].ToString();
-                table.Text = dataRowView["Table"].ToString();
-                smartTable.Text = dataRowView["SmartTable"].ToString();
-                projector.Text = dataRowView["Projector"].ToString();
-                osType.Text = dataRowView["OsType"].ToString();
-                software.Text = dataRowView["Softwares"].ToString();
-                numOfStudents.Text = dataRowView["NumOfStudents"].ToString();
-                minNumOfClasses.Text = dataRowView["MinNumOfClassesPerTerm"].ToString();
-                numOF.Text = dataRowView["NumOfClasses"].ToString();
-                Course.Text = dataRowView["Course"].ToString();
+                Subject dataRowView = (Subject)gvData.SelectedItems[0];
+                desc.Text = dataRowView.Description;
+                name.Text = dataRowView.Name;
+                code.Text = dataRowView.Code;
+                if (dataRowView.Table) table.Text = "YES";
+                else table.Text = "NO";
+                if (dataRowView.Table) smartTable.Text = "YES";
+                else smartTable.Text = "NO";
+                if (dataRowView.Projector) projector.Text = "YES";
+                else projector.Text = "NO";
+                osType.Text = dataRowView.OsType.ToString();
+
+                CheckBox checkBox;
+                foreach (Software s in dataRowView.Softwares)
+                {
+                    foreach (ComboBoxItem cbi in softwareCombo.Items)
+                    {
+                        checkBox = cbi.Content as CheckBox;
+                        if(checkBox != null)
+                        {
+                            if (s.Code.Equals(checkBox.Content)) checkBox.IsChecked = true;
+                        }
+                        
+                    }
+                }
+                softwareCombo.Text = SoftwaresToString(dataRowView.Softwares);
+                numOfStudents.Text = dataRowView.NumOfStudents.ToString();
+                minNumOfClasses.Text = dataRowView.MinNumOfClassesPerTerm.ToString();
+                numOF.Text = dataRowView.NumOfClasses.ToString();
+                Course.Text = dataRowView.Course.ToString();
                 btnAdd.Content = "Update";
-                subjectCode = code.Text;
+                subjectCode = dataRowView.Code;
             }
             else
             {
@@ -218,7 +310,7 @@ namespace ScheduleComputerCenter.View
 
         public int FindID(string code)
         {
-            foreach (Subject s in subjectsList)
+            foreach (Subject s in SubjectsList)
             {
                 if (code.Equals(s.Code))
                 {
@@ -227,37 +319,35 @@ namespace ScheduleComputerCenter.View
             }
             return 0;
         }
+        
+     
+        
 
-        public void loadSoftwares(object sender, RoutedEventArgs e)
-        {
-            List<Software> softwares = ComputerCentre.SoftwareRepository.GetAll().ToList();
-            var combo = sender as ComboBox;
-            combo.ItemsSource = softwares;
-            combo.SelectedIndex = 0;
-
-        }
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
             if (gvData.SelectedItems.Count > 0)
             {
-                DataRowView dataRowView = (DataRowView)gvData.SelectedItems[0];
-                String code = dataRowView["Code"].ToString();
-                foreach (Subject s in subjectsList)
+                Subject dataRowView = (Subject)gvData.SelectedItems[0];
+                ComputerCentre.SubjectRepository.Remove(dataRowView);
+                ObservableSubjectsList.Remove(dataRowView);
+                ComputerCentre.SubjectRepository.Context.SaveChanges();
+                view();
+                if (btnAdd.Content.Equals("Update")) 
                 {
-                    if (code.Equals(s.Code))
-                    {
-                        ComputerCentre.SubjectRepository.Remove(s);
-                        ComputerCentre.SubjectRepository.Context.SaveChanges();
-                        MessageBox.Show("Successfully deleted subject");
-                        view();
-                        break;
-                    }
+                    Empty();
+                    btnAdd.Content = "Add";
                 }
+                MessageBox.Show("Successfully deleted subject");
+
             }
             else
                 MessageBox.Show("Please Select Any Subject From The list...");
         }
         private void btnExit_Click(object sender, RoutedEventArgs e)
+        {
+            Empty();
+        }
+        private void Empty()
         {
             desc.Text = "";
             name.Text = "";
@@ -266,17 +356,31 @@ namespace ScheduleComputerCenter.View
             smartTable.Text = "";
             projector.Text = "";
             osType.Text = "";
-            software.Text = "";
+            CheckBox checkBox;
+            foreach (ComboBoxItem cbi in softwareCombo.Items)
+            {
+                checkBox = cbi.Content as CheckBox;
+                if (checkBox != null)
+                {
+                    checkBox.IsChecked = false;
+                }
+
+            }
             numOfStudents.Text = "";
             minNumOfClasses.Text = "";
             numOF.Text = "";
             Course.Text = "";
             btnAdd.Content = "Add";
+
         }
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
+        }
+        private void softwareCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            (sender as ComboBox).SelectedIndex = 0;
         }
     }
 }

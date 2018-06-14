@@ -245,7 +245,7 @@ namespace ScheduleComputerCenter.View
         {
             foreach (Subject subject in ComputerCentre.SubjectRepository.GetAll().ToList())
             {
-                if (subject.Software.Equals(s))
+                if (subject.Softwares.Contains(s))
                     return true;
             }
             return false;

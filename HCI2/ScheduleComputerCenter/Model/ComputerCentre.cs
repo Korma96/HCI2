@@ -53,10 +53,10 @@ namespace ScheduleComputerCenter.Model
 
             List<Subject> subjects = new List<Subject>()
             {
-                new Subject("HCI","2", courses[0], "Najbolji predmet na svetu xD", 16, 2, 2, true, false, false, OsType.WINDOWS, softwares[0]),
-                new Subject("Internet softverske arhitekture","1", courses[1], "Spring", 32, 2, 2, false, true, false, OsType.WINDOWS, softwares[1]),
-                new Subject("Android", "3",courses[0], "Android programiranje", 16, 2, 2, true, true, false, OsType.ANY, softwares[2]),
-                new Subject("PIGKUT","4", courses[1], "Izrada seminarskog rada i jos svasta nesto", 32, 2, 2, true, false, true, OsType.WINDOWS, softwares[0])
+                new Subject("HCI","2", courses[0], "Najbolji predmet na svetu xD", 16, 2, 2, true, false, false, OsType.WINDOWS, new List<Software>(){ softwares[1]}),
+                new Subject("Internet softverske arhitekture","1", courses[1], "Spring", 32, 2, 2, false, true, false, OsType.WINDOWS, new List<Software>(){ softwares[1]}),
+                new Subject("Android", "3",courses[0], "Android programiranje", 16, 2, 2, true, true, false, OsType.ANY, new List<Software>(){ softwares[1]}),
+                new Subject("PIGKUT","4", courses[1], "Izrada seminarskog rada i jos svasta nesto", 32, 2, 2, true, false, true, OsType.WINDOWS, new List<Software>(){ softwares[1]})
             };
 
             SubjectRepository.AddRange(subjects);

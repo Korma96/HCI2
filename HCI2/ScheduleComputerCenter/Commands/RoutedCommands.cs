@@ -28,5 +28,43 @@ namespace ScheduleComputerCenter.Commands
                 new KeyGesture(Key.U, ModifierKeys.Control),
             }
             );
+
+        public static readonly RoutedUICommand ClassroomCommand = new RoutedUICommand(
+            "Classroom Command",
+            "ClassroomCommand",
+            typeof(RoutedCommands),
+            new InputGestureCollection()
+            {
+                new KeyGesture(Key.Q, ModifierKeys.Control),
+            }
+            );
+        public static readonly RoutedUICommand SubjectCommand = new RoutedUICommand(
+            "Subject Command",
+            "SubjectCommand",
+            typeof(RoutedCommands),
+            new InputGestureCollection()
+            {
+                new KeyGesture(Key.W, ModifierKeys.Control),
+            }
+            );
+        public static readonly RoutedUICommand SoftwareCommand = new RoutedUICommand(
+            "Software Command",
+            "SoftwareCommand",
+            typeof(RoutedCommands),
+            new InputGestureCollection()
+            {
+                new KeyGesture(Key.A, ModifierKeys.Control),
+            }
+            );
+        public static readonly RoutedUICommand CourseCommand = new RoutedUICommand(
+            "Course Command",
+            "CourseCommand",
+            typeof(RoutedCommands),
+            new InputGestureCollection()
+            {
+                new KeyGesture(Key.Z, ModifierKeys.Control),
+            }
+            );
+
     }
 }

@@ -57,8 +57,33 @@ namespace ScheduleComputerCenter
 
             CommandBinding AddNewTermCommandBinding = new CommandBinding(RoutedCommands.AddNewTermCommand, AddNewTermCommand_Executed, AddNewTermCommand_CanExecute);
             CommandBinding UpdateTermCommandBinding = new CommandBinding(RoutedCommands.UpdateTermCommand, UpdateTermCommand_Executed, UpdateTermCommand_CanExecute);
+            CommandBinding ClassroomCommandBinding = new CommandBinding(RoutedCommands.ClassroomCommand, ClassroomCommand_Executed, ClassroomCommand_CanExecute);
+            CommandBinding SubjectCommandBinding = new CommandBinding(RoutedCommands.SubjectCommand, SubjectCommand_Executed, SubjectCommand_CanExecute);
+            CommandBinding CourseCommandBinding = new CommandBinding(RoutedCommands.CourseCommand, CourseCommand_Executed, CourseCommand_CanExecute);
+            CommandBinding SoftwareCommandBinding = new CommandBinding(RoutedCommands.SoftwareCommand, SoftwareCommand_Executed, SoftwareCommand_CanExecute);
+
             this.CommandBindings.Add(AddNewTermCommandBinding);
             this.CommandBindings.Add(UpdateTermCommandBinding);
+            this.CommandBindings.Add(ClassroomCommandBinding);
+            this.CommandBindings.Add(SubjectCommandBinding);
+            this.CommandBindings.Add(CourseCommandBinding);
+            this.CommandBindings.Add(SoftwareCommandBinding);
+
+            Menu menu = new Menu() { Background = Brushes.Gray, Height = 25 };
+            MenuItem Data = new MenuItem() { Header = "Data", FontWeight = FontWeights.Heavy, Height = 25 };
+            MenuItem classrooms = new MenuItem() { Header = "Classrooms", Command = RoutedCommands.ClassroomCommand };
+            MenuItem courses = new MenuItem() { Header = "Courses", Command = RoutedCommands.CourseCommand };
+            MenuItem softwares = new MenuItem() { Header = "Softwares", Command = RoutedCommands.SoftwareCommand };
+            MenuItem subjects = new MenuItem() { Header = "Subjects", Command = RoutedCommands.SubjectCommand };
+            MenuItem Schedule = new MenuItem() { Header = "Schedule", FontWeight = FontWeights.Heavy, Height = 25 };
+            Data.Items.Add(classrooms);
+            Data.Items.Add(softwares);
+            Data.Items.Add(subjects);
+            Data.Items.Add(courses);
+            menu.Items.Add(Data);
+            menu.Items.Add(Schedule);
+            DockPanel.SetDock(menu, Dock.Top);
+            MainDockPanel.Children.Add(menu);
 
             ContextMenu contextMenu = new ContextMenu();
             MenuItem menuItemNew = new MenuItem() { Header = "Add New Term...", Command = RoutedCommands.AddNewTermCommand };
@@ -211,9 +236,6 @@ namespace ScheduleComputerCenter
                             Grid.SetColumn(listView, i);
                             MainGrid.Children.Add(listView);
                         }
-
-
-                        this.Focus(); // ovo smo stavili jer je na pocetku new command-a bila uvek disable-ovana
                     }
                     else
                     {
@@ -231,6 +253,76 @@ namespace ScheduleComputerCenter
                 MessageBox.Show("Ne postoji nijedan dan!");
             }
 
+            this.Focus(); // ovo smo stavili jer je na pocetku new command-a bila uvek disable-ovana
+
+
+        }
+
+        private void SoftwareCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+            e.Handled = true;
+        }
+
+        private void CourseCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+            e.Handled = true;
+        }
+
+        private void SubjectCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+            e.Handled = true;
+        }
+
+        private void ClassroomCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+            e.Handled = true;
+        }
+
+        private void SoftwareCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            var w = new View.softwares();
+            w.ShowDialog();
+
+        }
+
+        private void CourseCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            var w = new View.courses();
+            w.ShowDialog();
+        }
+
+        private void SubjectCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (!ComputerCentre.SoftwareRepository.GetAll().ToList().Any())
+            {
+                MessageBox.Show("No softwares available,\nplease add at least one software first!");
+            }
+            else if (!ComputerCentre.CourseRepository.GetAll().ToList().Any())
+            {
+                MessageBox.Show("No courses available,\nplease add at least one course first!");
+            }
+            else
+            {
+                var w = new View.SubjectsWindow();
+                w.ShowDialog();
+            }
+        }
+
+        private void ClassroomCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (!ComputerCentre.SoftwareRepository.GetAll().ToList().Any())
+            {
+                MessageBox.Show("No softwares available, please add software first!");
+            }
+            else
+            {
+                var w = new View.classrooms();
+                w.ShowDialog();
+            }
         }
 
         private DataTemplate makeDataTemplate()
@@ -241,8 +333,8 @@ namespace ScheduleComputerCenter
             textBlockName.SetValue(LayoutTransformProperty, new RotateTransform(270));
             //textBlockName.SetValue(WidthProperty, HEIGHT_OF_ROWS_IN_MAIN_GRID);
             //textBlockName.SetBinding(TextBlock.TextProperty, new Binding("Id") {TargetNullValue = "***" });
-            textBlockName.SetBinding(TextBlock.TextProperty, new Binding("Subject.Name"));
-            textBlockName.SetBinding(TextBlock.ToolTipProperty, new Binding("Subject.Name"));
+            textBlockName.SetBinding(TextBlock.TextProperty, new Binding("Subject.Code"));
+            textBlockName.SetBinding(TextBlock.ToolTipProperty, new Binding("Subject.Code"));
 
             FrameworkElementFactory textBlock1 = new FrameworkElementFactory(typeof(TextBlock));
             textBlock1.SetValue(TextBlock.TextProperty, " ");
@@ -254,8 +346,8 @@ namespace ScheduleComputerCenter
             textBlockMark.SetValue(LayoutTransformProperty, new RotateTransform(270));
             //textBlockMark.SetValue(WidthProperty, HEIGHT_OF_ROWS_IN_MAIN_GRID);
             //textBlockMark.SetBinding(TextBlock.TextProperty, new Binding("Id") { TargetNullValue = "***"});
-            textBlockMark.SetBinding(TextBlock.TextProperty, new Binding("Subject.Course.Mark"));
-            textBlockMark.SetBinding(TextBlock.ToolTipProperty, new Binding("Subject.Course.Mark"));
+            textBlockMark.SetBinding(TextBlock.TextProperty, new Binding("Subject.Course.Code"));
+            textBlockMark.SetBinding(TextBlock.ToolTipProperty, new Binding("Subject.Course.Code"));
 
             //FrameworkElementFactory textBlock2 = new FrameworkElementFactory(typeof(TextBlock));
             //textBlock2.SetValue(TextBlock.TextProperty, ")");
@@ -293,55 +385,7 @@ namespace ScheduleComputerCenter
             dataTemplate.Triggers.Add(dataTriggerMark);*/
 
             return dataTemplate;
-        }
-
-        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
-        {
-            if (!ComputerCentre.SoftwareRepository.GetAll().ToList().Any())
-            {
-                MessageBox.Show("No softwares available, please add software first!");
-            }
-            else
-            {
-                var w = new View.classrooms();
-                w.ShowDialog();
-            }
-        }
-
-        private void MenuItem_Click_2(object sender, RoutedEventArgs e)
-        {
-            var w = new View.courses();
-            w.ShowDialog();
-        }
-
-        private void MenuItem_Click_3(object sender, RoutedEventArgs e)
-        {
-            var w = new View.softwares();
-            w.ShowDialog();
-        }
-
-        private void MenuItem_Click_4(object sender, RoutedEventArgs e)
-        { 
-            if (!ComputerCentre.SoftwareRepository.GetAll().ToList().Any())
-            {
-                MessageBox.Show("No softwares available,\nplease add at least one software first!");
-            }
-            else if (!ComputerCentre.CourseRepository.GetAll().ToList().Any())
-            {
-                MessageBox.Show("No courses available,\nplease add at least one course first!");
-            }
-            else
-            {
-                var w = new View.SubjectsWindow();
-                w.ShowDialog();
-            }
-        }
-
-        private void MenuItem_Click_5(object sender, RoutedEventArgs e)
-        {
-            var w = new View.classrooms();
-            w.ShowDialog();
-        }
+         }
 
 
         private void dodajTextBlockTimes(Grid grid, int rows)
@@ -786,11 +830,15 @@ namespace ScheduleComputerCenter
                     return false;
                 }
             }
-            if (!classroom.Softwares.Contains(subject.Software))
+            foreach (Software s in subject.Softwares)
             {
-                MessageBox.Show("Software doesn`t exist in classroom!");
-                return false;
+                if (!classroom.Softwares.Contains(s))
+                {
+                    MessageBox.Show("Software doesn`t exist in classroom!");
+                    return false;
+                }
             }
+
             return true;
         }
 
@@ -822,7 +870,7 @@ namespace ScheduleComputerCenter
             List<Subject> subjects;
             try
             {
-                subjects = ComputerCentre.SubjectRepository.GetAll().AsQueryable().Include(x => x.Software).ToList();
+                subjects = ComputerCentre.SubjectRepository.GetAll().AsQueryable().Include(x => x.Softwares).ToList();
             }
             catch
             {

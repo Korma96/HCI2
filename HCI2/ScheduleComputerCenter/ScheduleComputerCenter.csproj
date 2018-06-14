@@ -72,6 +72,8 @@
     <Compile Include="Commands\RoutedCommands.cs" />
     <Compile Include="Converters\BackgroundConverter.cs" />
     <Compile Include="Converters\HeightConverter.cs" />
+    <Compile Include="Converters\SoftwaresConverter.cs" />
+    <Compile Include="Converters\TrueFalseConverter.cs" />
     <Compile Include="Model\ComputerCentre.cs" />
     <Compile Include="Model\Day.cs" />
     <Compile Include="Model\InvertSign.cs" />
