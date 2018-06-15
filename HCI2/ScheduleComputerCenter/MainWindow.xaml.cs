@@ -61,13 +61,15 @@ namespace ScheduleComputerCenter
             CommandBinding SubjectCommandBinding = new CommandBinding(RoutedCommands.SubjectCommand, SubjectCommand_Executed, SubjectCommand_CanExecute);
             CommandBinding CourseCommandBinding = new CommandBinding(RoutedCommands.CourseCommand, CourseCommand_Executed, CourseCommand_CanExecute);
             CommandBinding SoftwareCommandBinding = new CommandBinding(RoutedCommands.SoftwareCommand, SoftwareCommand_Executed, SoftwareCommand_CanExecute);
-
+            CommandBinding StartTutorialCommandBinding = new CommandBinding(RoutedCommands.StartTutorialCommand, StartTutorialCommand_Executed, StartTutorialCommand_CanExecute);
+            
             this.CommandBindings.Add(AddNewTermCommandBinding);
             this.CommandBindings.Add(UpdateTermCommandBinding);
             this.CommandBindings.Add(ClassroomCommandBinding);
             this.CommandBindings.Add(SubjectCommandBinding);
             this.CommandBindings.Add(CourseCommandBinding);
             this.CommandBindings.Add(SoftwareCommandBinding);
+            this.CommandBindings.Add(StartTutorialCommandBinding);
 
             Menu menu = new Menu() { Background = Brushes.Gray, Height = 25 };
             MenuItem Data = new MenuItem() { Header = "Data", FontWeight = FontWeights.Heavy, Height = 25 };
@@ -76,12 +78,17 @@ namespace ScheduleComputerCenter
             MenuItem softwares = new MenuItem() { Header = "Softwares", Command = RoutedCommands.SoftwareCommand };
             MenuItem subjects = new MenuItem() { Header = "Subjects", Command = RoutedCommands.SubjectCommand };
             MenuItem Schedule = new MenuItem() { Header = "Schedule", FontWeight = FontWeights.Heavy, Height = 25 };
+            MenuItem Tutorial = new MenuItem() { Header = "Tutorial", FontWeight = FontWeights.Heavy, Height = 25 };
+            MenuItem StartTutorial = new MenuItem() { Header = "StartTutorial", Command = RoutedCommands.StartTutorialCommand};
+            Tutorial.Items.Add(StartTutorial);
+
             Data.Items.Add(classrooms);
             Data.Items.Add(softwares);
             Data.Items.Add(subjects);
             Data.Items.Add(courses);
             menu.Items.Add(Data);
             menu.Items.Add(Schedule);
+            menu.Items.Add(Tutorial);
             DockPanel.SetDock(menu, Dock.Top);
             MainDockPanel.Children.Add(menu);
 
@@ -571,6 +578,18 @@ namespace ScheduleComputerCenter
 
         }
 
+        private void StartTutorialCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+            e.Handled = true;
+        }
+
+        private void StartTutorialCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            var t = new TutorialWindow();
+            t.ShowDialog();
+        }
+
         /*public void promeniBoju(object selectedElement, Brush brush)
         {
             if (SelectedElement is TextBlock)
@@ -894,10 +913,5 @@ namespace ScheduleComputerCenter
             FilterSubjectsForListView(text);
         }
 
-        private void StartTutorial(object sender, RoutedEventArgs e)
-        {
-            var t = new TutorialWindow();
-            t.ShowDialog();
-        }
     }
 }

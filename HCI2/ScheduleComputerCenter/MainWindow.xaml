@@ -15,21 +15,6 @@
             <DockPanel Name="MainDockPanel">
                 <DockPanel DockPanel.Dock="Bottom">
                     <DockPanel DockPanel.Dock="Right">
-            <DockPanel>
-                <Menu DockPanel.Dock ="Top" Background="Gray" Height="25">
-                    <MenuItem Header="Data" FontWeight="Heavy"  Height="25">
-                        <MenuItem Header="Classrooms..." Click="MenuItem_Click_1"></MenuItem>
-                        <MenuItem Header="Courses..." Click="MenuItem_Click_2"></MenuItem>
-                        <MenuItem Header="Softwares..." Click="MenuItem_Click_3"></MenuItem>
-                        <MenuItem Header="Subjects..." Click="MenuItem_Click_4"></MenuItem>
-                    </MenuItem>
-                    <MenuItem Header="Schedule" FontWeight="Heavy" Height="25">
-                    </MenuItem>
-                    <MenuItem Header="Tutorial" FontWeight="Heavy" Height="25">
-                        <MenuItem Header="Start" FontWeight="Heavy" Height="25" Click="StartTutorial"/>
-                    </MenuItem>
-                </Menu>
-                <DockPanel DockPanel.Dock="Right">
                     <DockPanel DockPanel.Dock="Top">
                         <DockPanel DockPanel.Dock="Top">
                             <Grid DockPanel.Dock="Left">

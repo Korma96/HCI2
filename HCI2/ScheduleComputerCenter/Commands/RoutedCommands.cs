@@ -66,5 +66,15 @@ namespace ScheduleComputerCenter.Commands
             }
             );
 
+        public static readonly RoutedUICommand StartTutorialCommand = new RoutedUICommand(
+            "Start Tutorial Command",
+            "StartTutorialCommand",
+            typeof(RoutedCommands),
+            new InputGestureCollection()
+            {
+                new KeyGesture(Key.T, ModifierKeys.Control),
+            }
+            );
+
     }
 }
