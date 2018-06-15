@@ -37,15 +37,16 @@ namespace ScheduleComputerCenter.View
             dt = new DataTable();
             dt.Columns.Add("Name");
             dt.Columns.Add("Code");
-            dt.Columns.Add("DateOfFounding");
+            dt.Columns.Add("YearOfFounding");
             dt.Columns.Add("Description");
             foreach (Course c in coursesList)
             {
                 DataRow dr = dt.NewRow();
-                dr["Description"] = c.Description;
+                if (c.Description.Length > 40) dr["Description"] = c.Description.Substring(1, 40) + "...";
+                else dr["Description"] = c.Description;
                 dr["Name"] = c.Name;
                 dr["Code"] = c.Code;
-                dr["DateOfFounding"] = c.DateOfFounding;
+                dr["YearOfFounding"] = c.DateOfFounding;
                 dt.Rows.Add(dr);
             }
             gvData.ItemsSource = dt.AsDataView();
@@ -82,9 +83,10 @@ namespace ScheduleComputerCenter.View
                         Course course = new Course(Name, Code, DateOfFounding, Description);
                         ComputerCentre.CourseRepository.Add(course);
                         ComputerCentre.CourseRepository.Context.SaveChanges();
+                        view();
                         MessageBox.Show("Successfully added course");
                         btnAdd.Content = "Add";
-                        view();
+                        
                     }
 
                     else
@@ -116,9 +118,10 @@ namespace ScheduleComputerCenter.View
                         ComputerCentre.CourseRepository.Get(id).Description = desc.Text;
                         ComputerCentre.CourseRepository.Get(id).DateOfFounding = yearOfFounding.Text;
                         ComputerCentre.CourseRepository.Context.SaveChanges();
-                        MessageBox.Show("Successfully updated course");
-                        btnAdd.Content = "Add";
                         view();
+                        MessageBox.Show("Successfully updated course");
+                        Empty();
+                        
 
                     }
                 }
@@ -146,7 +149,7 @@ namespace ScheduleComputerCenter.View
                 desc.Text = dataRowView["Description"].ToString();
                 code.Text = dataRowView["Code"].ToString();
                 nameCourse.Text = dataRowView["Name"].ToString();
-                yearOfFounding.Text = dataRowView["DateOfFounding"].ToString();
+                yearOfFounding.Text = dataRowView["YearOfFounding"].ToString();
                 btnAdd.Content = "Update";
                 courseCode = code.Text;
             }
@@ -170,8 +173,9 @@ namespace ScheduleComputerCenter.View
                         {
                             ComputerCentre.CourseRepository.Remove(c);
                             ComputerCentre.CourseRepository.Context.SaveChanges();
-                            MessageBox.Show("Successfully deleted course");
                             view();
+                            Empty();
+                            MessageBox.Show("Successfully deleted course");
                             break;
                         }
                         else
@@ -189,6 +193,10 @@ namespace ScheduleComputerCenter.View
             }
         }
         private void btnExit_Click(object sender, RoutedEventArgs e)
+        {
+            Empty();   
+        }
+        private void Empty()
         {
             desc.Text = "";
             code.Text = "";

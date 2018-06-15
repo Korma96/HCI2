@@ -50,7 +50,8 @@ namespace ScheduleComputerCenter.View
             foreach (Software s in softwaresList)
             {
                 DataRow dr = dt.NewRow();
-                dr["Description"] = s.Description;
+                if (s.Description.Length > 40) dr["Description"] = s.Description.Substring(1, 40) + "...";
+                else dr["Description"] = s.Description;
                 dr["Name"] = s.Name;
                 dr["Code"] = s.Code;
                 dr["Manufacturer"] = s.Manufacturer;
@@ -102,9 +103,10 @@ namespace ScheduleComputerCenter.View
                     {
                         ComputerCentre.SoftwareRepository.Add(software);
                         ComputerCentre.SoftwareRepository.Context.SaveChanges();
-                        MessageBox.Show("Successfully added software");
                         btnAdd.Content = "Add";
                         view();
+                        MessageBox.Show("Successfully added software");
+
                     }
                     else
                     {
@@ -137,9 +139,10 @@ namespace ScheduleComputerCenter.View
                         ComputerCentre.SoftwareRepository.Get(id).YearOfFounding = Int32.Parse(yearOfFounding.Text);
                         ComputerCentre.SoftwareRepository.Get(id).Price = Int32.Parse(price.Text);
                         ComputerCentre.SoftwareRepository.Context.SaveChanges();
-                        MessageBox.Show("Successfully edited software");
-                        btnAdd.Content = "Add";
+                        Empty();
                         view();
+                        MessageBox.Show("Successfully updated software");
+
                     }
                 }
 
@@ -209,8 +212,9 @@ namespace ScheduleComputerCenter.View
                         {
                             ComputerCentre.SoftwareRepository.Remove(s);
                             ComputerCentre.SoftwareRepository.Context.SaveChanges();
-                            MessageBox.Show("Successfully deleted software");
                             view();
+                            Empty();
+                            MessageBox.Show("Successfully deleted software");
                             break;
                         }
                         else
@@ -224,6 +228,10 @@ namespace ScheduleComputerCenter.View
             else MessageBox.Show("Please Select Any Software From the list...");
         }
         private void btnExit_Click(object sender, RoutedEventArgs e)
+        {
+            Empty();
+        }
+        private void Empty()
         {
             desc.Text = "";
             nameSoftware.Text = "";
@@ -245,7 +253,7 @@ namespace ScheduleComputerCenter.View
         {
             foreach (Subject subject in ComputerCentre.SubjectRepository.GetAll().ToList())
             {
-                if (subject.Software.Equals(s))
+                if (subject.Softwares.Contains(s))
                     return true;
             }
             return false;

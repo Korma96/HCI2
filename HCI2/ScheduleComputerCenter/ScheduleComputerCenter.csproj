@@ -72,6 +72,13 @@
     <Compile Include="Commands\RoutedCommands.cs" />
     <Compile Include="Converters\BackgroundConverter.cs" />
     <Compile Include="Converters\HeightConverter.cs" />
+    <Compile Include="Converters\SoftwaresConverter.cs" />
+    <Compile Include="Converters\TrueFalseConverter.cs" />
+    <Compile Include="Migrations\201806150008291_migration.cs" />
+    <Compile Include="Migrations\201806150008291_migration.Designer.cs">
+      <DependentUpon>201806150008291_migration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\201806151829132_FirstMigrations.cs" />
     <Compile Include="Migrations\201806151829132_FirstMigrations.Designer.cs">
       <DependentUpon>201806151829132_FirstMigrations.cs</DependentUpon>
@@ -92,6 +99,9 @@
     <Compile Include="View\AddNewOrUpdateTermDialog.xaml.cs">
       <DependentUpon>AddNewOrUpdateTermDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\AddSubjectControl.xaml.cs">
+      <DependentUpon>AddSubjectControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\AutoCompleteTextBox.xaml.cs">
       <DependentUpon>AutoCompleteTextBox.xaml</DependentUpon>
     </Compile>
@@ -101,6 +111,9 @@
     <Compile Include="View\courses.xaml.cs">
       <DependentUpon>courses.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\DragDropControl.xaml.cs">
+      <DependentUpon>DragDropControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\softwares.xaml.cs">
       <DependentUpon>softwares.xaml</DependentUpon>
     </Compile>
@@ -109,6 +122,13 @@
     </Compile>
     <Compile Include="View\TimePicker.xaml.cs">
       <DependentUpon>TimePicker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TutorialViewModel.cs" />
+    <Compile Include="View\TutorialWindow.xaml.cs">
+      <DependentUpon>TutorialWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\UpdateSubjectControl.xaml.cs">
+      <DependentUpon>UpdateSubjectControl.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -126,6 +146,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\AddSubjectControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\AutoCompleteTextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -142,6 +166,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\DragDropControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\softwares.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -153,6 +181,14 @@
     <Page Include="View\TimePicker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TutorialWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\UpdateSubjectControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -192,6 +228,13 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\add1.jpg" />
+    <Resource Include="Images\add2.jpg" />
+    <Content Include="Images\DragAndDrop_subjects.mp4" />
+    <Resource Include="Images\update1.jpg" />
+    <Resource Include="Images\update2.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\remove.png" />

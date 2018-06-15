@@ -18,6 +18,7 @@ namespace ScheduleComputerCenter.Model
         public int Price { get; set; }
         public string Description { get; set; }
         public List<Classroom> Classrooms { get; set; }
+        public List<Subject> Subjects { get; set; }
 
         public Software()
         {
