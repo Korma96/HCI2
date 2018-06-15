@@ -54,8 +54,7 @@
                 <StackPanel Orientation="Vertical">
                     <WrapPanel>
                         <TextBlock Text="Course : " Width="212"/>
-                        <ComboBox Loaded="loadCourses"  FontSize="20" Name="Course" Width="250" Margin="10">
-                        </ComboBox>
+                        <ComboBox Loaded="loadCourses" FontSize="14" Name="Course" Width="250" Margin="10" VerticalAlignment="Center"/>
                     </WrapPanel>
                     <WrapPanel>
                         <TextBlock Text="Softwares : " Width="212"/>

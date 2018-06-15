@@ -29,7 +29,7 @@ namespace ScheduleComputerCenter.Model
         
         public override string ToString()
         {
-            return Name;
+            return Code;
         }
     }
 }

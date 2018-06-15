@@ -53,7 +53,8 @@ namespace ScheduleComputerCenter.View
             foreach (Classroom cr in classroomsList)
             {
                 DataRow dr = dt.NewRow();
-                dr["Description"] = cr.Description;
+                if (cr.Description.Length > 40) dr["Description"] = cr.Description.Substring(1, 40) + "...";
+                else dr["Description"] = cr.Description;
                 dr["Name"] = cr.Name;
                 dr["Code"] = cr.Code;
                 dr["NumOfSeats"] = cr.NumOfSeats;
@@ -165,26 +166,17 @@ namespace ScheduleComputerCenter.View
 
                     }
 
-                    /*
-                    foreach (object item in softwareCombo.Items)
-                    {
-                        ComboBoxItem comboBoxItem = softwareCombo.ItemContainerGenerator.ContainerFromItem(item) as ComboBoxItem;
-                        FrameworkElement element = comboBoxItem.ContentTemplate.LoadContent() as FrameworkElement;
-                        
-                        CheckBox checkBox = element.FindName("software") as CheckBox;
-                        if (checkBox.IsChecked.Value) softwares.Add((Software)item);
-
-                    }
-                    */
+                   
                     classroom.Softwares = softwares;
 
                     if (UniqueCode(code.Text))
                     {
                         ComputerCentre.ClassroomRepository.Add(classroom);
                         ComputerCentre.ClassroomRepository.Context.SaveChanges();
-                        MessageBox.Show("Successfully added classroom");
                         btnAdd.Content = "Add";
                         view();
+                        MessageBox.Show("Successfully added classroom");
+                        Empty();
                     }
                     else
                     {
@@ -239,9 +231,10 @@ namespace ScheduleComputerCenter.View
                         }
                         ComputerCentre.ClassroomRepository.Get(id).Softwares = softwares;
                         ComputerCentre.ClassroomRepository.Context.SaveChanges();
-                        MessageBox.Show("Successfully edited classroom");
                         btnAdd.Content = "Add";
                         view();
+                        MessageBox.Show("Successfully updated classroom");
+                        Empty();
                     }
                 }
 
@@ -292,7 +285,28 @@ namespace ScheduleComputerCenter.View
                 smartTable.Text = dataRowView["SmartTable"].ToString();
                 projector.Text = dataRowView["Projector"].ToString();
                 osType.Text = dataRowView["OsType"].ToString();
-                softwareCombo.Text = dataRowView["Softwares"].ToString();
+                CheckBox checkBox;
+                int id = FindID(code.Text);
+
+                foreach (ComboBoxItem cbi in softwareCombo.Items)
+                {
+
+                    checkBox = cbi.Content as CheckBox;
+                    if (checkBox != null) checkBox.IsChecked = false;
+                }
+
+                foreach (Software s in ComputerCentre.ClassroomRepository.Get(id).Softwares)
+                {
+                    foreach (ComboBoxItem cbi in softwareCombo.Items)
+                    {
+                        checkBox = cbi.Content as CheckBox;
+                        if (checkBox != null)
+                        {
+                            if (s.Code.Equals(checkBox.Content)) checkBox.IsChecked = true;
+                        }
+
+                    }
+                }
                 numOfSeats.Text = dataRowView["NumOfSeats"].ToString();
                 btnAdd.Content = "Update";
                 classroomCode = code.Text;
@@ -315,8 +329,13 @@ namespace ScheduleComputerCenter.View
                     {
                         ComputerCentre.ClassroomRepository.Remove(cr);
                         ComputerCentre.ClassroomRepository.Context.SaveChanges();
-                        MessageBox.Show("Successfully deleted classroom");
                         view();
+                        if (btnAdd.Content.Equals("Update"))
+                        {
+                            Empty();
+                            btnAdd.Content = "Add";
+                        }
+                        MessageBox.Show("Successfully deleted classroom");
                         break;
                     }
                 }
@@ -349,6 +368,12 @@ namespace ScheduleComputerCenter.View
 
         private void btnExit_Click(object sender, RoutedEventArgs e)
         {
+            Empty();
+
+        }
+
+        private void Empty()
+        {
             desc.Text = "";
             name.Text = "";
             code.Text = "";
@@ -356,10 +381,18 @@ namespace ScheduleComputerCenter.View
             smartTable.Text = "";
             projector.Text = "";
             osType.Text = "";
-            softwareCombo.Text = "";
+            CheckBox checkBox;
+            foreach (ComboBoxItem cbi in softwareCombo.Items)
+            {
+                checkBox = cbi.Content as CheckBox;
+                if (checkBox != null)
+                {
+                    checkBox.IsChecked = false;
+                }
+
+            }
             numOfSeats.Text = "";
             btnAdd.Content = "Add";
-
         }
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {

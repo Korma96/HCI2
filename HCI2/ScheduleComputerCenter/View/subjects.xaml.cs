@@ -86,7 +86,6 @@ namespace ScheduleComputerCenter.View
             List<Course> courses = ComputerCentre.CourseRepository.GetAll().ToList();
             var combo = sender as ComboBox;
             combo.ItemsSource = courses;
-            combo.SelectedIndex = 0;
         }
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
@@ -190,20 +189,19 @@ namespace ScheduleComputerCenter.View
                                 }
 
                             }
+                            ComputerCentre.SubjectRepository.Get(id).Softwares = softwares;
                             ComputerCentre.SubjectRepository.Get(id).Course = (Course)Course.SelectedItem;
                             ComputerCentre.SubjectRepository.Get(id).MinNumOfClassesPerTerm = Int32.Parse(minNumOfClasses.Text);
                             ComputerCentre.SubjectRepository.Get(id).NumOfClasses = Int32.Parse(numOF.Text);
                             ComputerCentre.SubjectRepository.Context.SaveChanges();
                             ObservableSubjectsList.Clear();
                             foreach (Subject subject in ComputerCentre.SubjectRepository.GetAll().ToList()) ObservableSubjectsList.Add(subject);
-                            MessageBox.Show("Successfully edited subject");
+                            MessageBox.Show("Successfully updated subject");
                             btnAdd.Content = "Add";
-                            
                         }
                     }
-
-                    }
                 }
+            }
         }
         public OsType getOsType(string ostype)
         {
@@ -282,6 +280,14 @@ namespace ScheduleComputerCenter.View
                 osType.Text = dataRowView.OsType.ToString();
 
                 CheckBox checkBox;
+
+                foreach (ComboBoxItem cbi in softwareCombo.Items)
+                {
+
+                    checkBox = cbi.Content as CheckBox;
+                    if (checkBox != null) checkBox.IsChecked = false;
+                }
+
                 foreach (Software s in dataRowView.Softwares)
                 {
                     foreach (ComboBoxItem cbi in softwareCombo.Items)
@@ -334,10 +340,11 @@ namespace ScheduleComputerCenter.View
                 view();
                 if (btnAdd.Content.Equals("Update")) 
                 {
-                    Empty();
                     btnAdd.Content = "Add";
+                    Empty();
                 }
                 MessageBox.Show("Successfully deleted subject");
+                
 
             }
             else
@@ -382,5 +389,7 @@ namespace ScheduleComputerCenter.View
         {
             (sender as ComboBox).SelectedIndex = 0;
         }
+
+       
     }
 }
