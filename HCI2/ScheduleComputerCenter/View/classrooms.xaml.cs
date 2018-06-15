@@ -70,7 +70,7 @@ namespace ScheduleComputerCenter.View
                 dr["OsType"] = cr.OsType;
                 if (cr.SmartTable) dr["SmartTable"] = "YES";
                 else dr["SmartTable"] = "NO";
-                dr["Softwares"] = SoftwaresToString(cr.Softwares);
+                dr["Softwares"] = SubjectsWindow.SoftwaresToString(cr.Softwares);
                 dt.Rows.Add(dr);
             }
             gvData.ItemsSource = dt.AsDataView();
@@ -105,28 +105,6 @@ namespace ScheduleComputerCenter.View
             }
             // combo.ItemTemplate = SubjectsWindow.makeDataTemplate();
             
-        }
-
-        public string SoftwaresToString(List<Software> soft)
-        {
-
-            if (soft != null)
-            {
-
-                if (soft.Count > 0)
-                {
-                    string value = "";
-
-                    foreach (Software s in soft)
-                    {
-                        value += ", " + s.Code;
-                    }
-
-                    return value.Substring(2);
-                }
-            }
-            return "No softwares";
-
         }
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)

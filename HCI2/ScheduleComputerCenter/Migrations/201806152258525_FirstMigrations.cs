@@ -3,7 +3,7 @@ namespace ScheduleComputerCenter.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class migration : DbMigration
+    public partial class FirstMigrations : DbMigration
     {
         public override void Up()
         {
@@ -89,6 +89,7 @@ namespace ScheduleComputerCenter.Migrations
                         StartTime = c.Time(nullable: false, precision: 7),
                         EndTime = c.Time(nullable: false, precision: 7),
                         DayId = c.Int(nullable: false),
+                        ClassroomIndex = c.Int(nullable: false),
                         RowSpan = c.Int(nullable: false),
                         Subject_Id = c.Int(),
                     })

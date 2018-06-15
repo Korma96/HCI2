@@ -280,7 +280,6 @@ namespace ScheduleComputerCenter
 
             this.Focus(); // ovo smo stavili jer je na pocetku new command-a bila uvek disable-ovana
 
-
         }
 
         private void SoftwareCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -351,6 +350,13 @@ namespace ScheduleComputerCenter
                 {
                     newTerms.Add(new Term(Day.times[j], Day.times[j + 1], null, day, NumOfClassrooms));
                 }
+
+                ComputerCentre.context.Entry(day).State = EntityState.Modified;
+                day.Terms.AddRange(newTerms);
+                ComputerCentre.context.SaveChanges();
+            }
+        }
+
         private void ClassroomCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             if (!ComputerCentre.SoftwareRepository.GetAll().ToList().Any())
@@ -359,14 +365,8 @@ namespace ScheduleComputerCenter
             }
             else
             {
-                var w = new View.classrooms();
+                var w = new View.classrooms(this);
                 w.ShowDialog();
-            }
-        }
-
-                ComputerCentre.context.Entry(day).State = EntityState.Modified;
-                day.Terms.AddRange(newTerms);
-                ComputerCentre.context.SaveChanges();
             }
         }
 
@@ -431,55 +431,6 @@ namespace ScheduleComputerCenter
 
             return dataTemplate;
          }
-
-        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
-        {
-            if (!ComputerCentre.SoftwareRepository.GetAll().ToList().Any())
-            {
-                MessageBox.Show("No softwares available, please add software first!");
-            }
-            else
-            {
-                var w = new View.classrooms();
-                w.ShowDialog();
-            }
-        }
-
-        private void MenuItem_Click_2(object sender, RoutedEventArgs e)
-        {
-            var w = new View.courses();
-            w.ShowDialog();
-        }
-
-        private void MenuItem_Click_3(object sender, RoutedEventArgs e)
-        {
-            var w = new View.softwares();
-            w.ShowDialog();
-        }
-
-        private void MenuItem_Click_4(object sender, RoutedEventArgs e)
-        { 
-            if (!ComputerCentre.SoftwareRepository.GetAll().ToList().Any())
-            {
-                MessageBox.Show("No softwares available,\nplease add at least one software first!");
-            }
-            else if (!ComputerCentre.CourseRepository.GetAll().ToList().Any())
-            {
-                MessageBox.Show("No courses available,\nplease add at least one course first!");
-            }
-            else
-            {
-                var w = new View.SubjectsWindow();
-                w.ShowDialog();
-            }
-        }
-
-        private void MenuItem_Click_5(object sender, RoutedEventArgs e)
-        {
-            var w = new View.classrooms();
-            w.ShowDialog();
-        }
-
 
         private void dodajTextBlockTimes(Grid grid, int rows)
         {
@@ -863,7 +814,7 @@ namespace ScheduleComputerCenter
                 //Subjects.Remove(subject);
 
                 ListView listView = sender as ListView;
-                int indexOfClassroom = Grid.GetColumn(listView);
+                /*int indexOfClassroom = Grid.GetColumn(listView);
                 List<Classroom> classrooms = ComputerCentre.context.Classrooms.Include(s => s.Softwares).ToList();
                 int numOfClassrooms = classrooms.Count();
                 indexOfClassroom = indexOfClassroom % numOfClassrooms;
@@ -872,7 +823,7 @@ namespace ScheduleComputerCenter
                 if(!ClassroomMatchSubjectNeeds(classroom, subject))
                 {
                     return;
-                }
+                }*/
                 ListViewItem listViewItem = FindAncestor<ListViewItem>((DependencyObject)e.OriginalSource);
                 int indexOfTerm = listView.ItemContainerGenerator.IndexFromContainer(listViewItem);
                 //listView.SelectedItem = listViewItem;
@@ -959,12 +910,27 @@ namespace ScheduleComputerCenter
                     return false;
                 }
             }
-            foreach (Software s in subject.Softwares)
+
+            if (subject.Softwares != null)
             {
-                if (!classroom.Softwares.Contains(s))
+                if(classroom.Softwares != null)
                 {
-                    MessageBox.Show("Software doesn`t exist in classroom!");
-                    return false;
+                    foreach (Software s in subject.Softwares)
+                    {
+                        if (!classroom.Softwares.Contains(s))
+                        {
+                            MessageBox.Show("In classroom " + classroom.Code + " are the following softwares: " + SubjectsWindow.SoftwaresToString(classroom.Softwares) + ". Required softwares for the subject " + subject.Code + ": " + SubjectsWindow.SoftwaresToString(classroom.Softwares) + ".");
+                            return false;
+                        }
+                    }
+                }
+                else
+                {
+                    if(subject.Softwares.Count > 0)
+                    {
+                        MessageBox.Show("There is no software in the classroom " + classroom.Code + ". Required softwares for the subject " + subject.Code + ": " + SubjectsWindow.SoftwaresToString(classroom.Softwares) + ".");
+                        return false;
+                    }
                 }
             }
 

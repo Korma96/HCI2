@@ -74,14 +74,9 @@
     <Compile Include="Converters\HeightConverter.cs" />
     <Compile Include="Converters\SoftwaresConverter.cs" />
     <Compile Include="Converters\TrueFalseConverter.cs" />
-    <Compile Include="Migrations\201806150008291_migration.cs" />
-    <Compile Include="Migrations\201806150008291_migration.Designer.cs">
-      <DependentUpon>201806150008291_migration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Migrations\201806151829132_FirstMigrations.cs" />
-    <Compile Include="Migrations\201806151829132_FirstMigrations.Designer.cs">
-      <DependentUpon>201806151829132_FirstMigrations.cs</DependentUpon>
+    <Compile Include="Migrations\201806152258525_FirstMigrations.cs" />
+    <Compile Include="Migrations\201806152258525_FirstMigrations.Designer.cs">
+      <DependentUpon>201806152258525_FirstMigrations.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\ComputerCentre.cs" />
@@ -211,8 +206,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Migrations\201806151829132_FirstMigrations.resx">
-      <DependentUpon>201806151829132_FirstMigrations.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201806152258525_FirstMigrations.resx">
+      <DependentUpon>201806152258525_FirstMigrations.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
