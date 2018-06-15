@@ -28,9 +28,14 @@ namespace ScheduleComputerCenter.View
         List<Classroom> classroomsList = new List<Classroom>();
         string classroomCode = "";
 
-        public classrooms()
+        public MainWindow MWindow { get; set; } 
+
+        public classrooms(MainWindow mainWindow)
         {
             InitializeComponent();
+
+            this.MWindow = mainWindow;
+
             view();
         }
 
@@ -89,14 +94,29 @@ namespace ScheduleComputerCenter.View
 
         }
 
-        public string SoftwaresToString(List<Software> soft)
+        public string SoftwaresToString(List<Software> softwares)
         {
-            string value = "";
-            foreach (Software s in soft)
+            if(softwares == null)
             {
-                value += ", " + s.Name ;
+                return "No softwares";
             }
-            return value.Substring(2);
+            else
+            {
+                if (softwares.Count > 0)
+                {
+                    string value = "";
+                    foreach (Software s in softwares)
+                    {
+                        value += ", " + s.Name;
+                    }
+                    return value.Substring(2);
+                }
+                else
+                {
+                    return "No softwares";
+                }
+            }
+            
         }
         
         private void btnAdd_Click(object sender, RoutedEventArgs e)
@@ -129,11 +149,17 @@ namespace ScheduleComputerCenter.View
 
                     if (UniqueCode(code.Text))
                     {
+                        MWindow.dodajNoveTermineZaNovuUcionicu();
+
                         ComputerCentre.ClassroomRepository.Add(classroom);
-                        ComputerCentre.ClassroomRepository.Context.SaveChanges();
-                        MessageBox.Show("Successfully added classroom");
+                        ComputerCentre.context.SaveChanges();
+
+                        MWindow.ukloniUcioniceDaneTermine();
+                        MWindow.prikaziUcioniceDaneTermine();
+
                         btnAdd.Content = "Add";
                         view();
+                        MessageBox.Show("Successfully added classroom");
                     }
                     else
                     {

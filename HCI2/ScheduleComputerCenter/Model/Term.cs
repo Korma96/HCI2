@@ -13,6 +13,7 @@ namespace ScheduleComputerCenter.Model
         public TimeSpan EndTime { get; set; }
         public int DayId { get; set; }
         public Day Day { get; set; }
+        public int ClassroomIndex { get; set; }
         public Subject Subject { get; set; }
         public int RowSpan { get; set; }
 
@@ -21,31 +22,44 @@ namespace ScheduleComputerCenter.Model
 
         }
 
-        public Term(string startTimeStr, string endTimeStr, Subject subject, Day day)
+        public Term(string startTimeStr, string endTimeStr, Subject subject, Day day, int classroomIndex)
         {
             this.StartTime = TimeSpan.Parse(startTimeStr);
             this.EndTime = TimeSpan.Parse(endTimeStr);
             this.Subject = subject;
             this.Day = day;
+            this.ClassroomIndex = classroomIndex;
             this.RowSpan = 1;
         }
 
-        public Term(string startTimeStr, string endTimeStr, Subject subject, Day day, int rowSpan)
+        public Term(string startTimeStr, string endTimeStr, Subject subject, Day day, int classroomIndex, int rowSpan)
         {
             this.StartTime = TimeSpan.Parse(startTimeStr);
             this.EndTime = TimeSpan.Parse(endTimeStr);
             this.Subject = subject;
             this.Day = day;
+            this.ClassroomIndex = classroomIndex;
             this.RowSpan = rowSpan;
         }
 
-        public Term(TimeSpan startTime, TimeSpan endTime, Subject subject, Day day)
+        public Term(TimeSpan startTime, TimeSpan endTime, Subject subject, Day day, int classroomIndex)
         {
             this.StartTime = startTime;
             this.EndTime = endTime;
             this.Subject = subject;
             this.Day = day;
+            this.ClassroomIndex = classroomIndex;
             this.RowSpan = 1;
+        }
+
+        public Term(TimeSpan startTime, TimeSpan endTime, Subject subject, Day day, int classroomIndex, int rowspan)
+        {
+            this.StartTime = startTime;
+            this.EndTime = endTime;
+            this.Subject = subject;
+            this.Day = day;
+            this.ClassroomIndex = classroomIndex;
+            this.RowSpan = rowspan;
         }
     }
 }

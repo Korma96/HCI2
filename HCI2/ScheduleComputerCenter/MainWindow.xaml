@@ -107,8 +107,8 @@
                     </DockPanel>
                 </DockPanel>
                 <DockPanel DockPanel.Dock="Left">
-                    <Expander Name="SubjectExpander" Header="">
-                        <Grid DockPanel.Dock="Right" Name="RightGridTable">
+                    <Expander Name="SubjectExpander" Header="" ExpandDirection="Right">
+                        <Grid DockPanel.Dock="Right" Name="RightGridTable" Background="Aqua">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
@@ -131,7 +131,7 @@
                             <!--<Button Grid.Column="1" Grid.Row="1" Name="AddButton" Click="AddButton_Click">Add</Button>-->
                             <!--<TextBlock Grid.Column="0" Grid.Row="3">Subjects</TextBlock>-->
                             <!--<Button Grid.Column="1" Grid.Row="3" Name="RemoveButton" Click="RemoveButton_Click">Remove</Button>-->
-                            <ListView Name="SubjectsListView" Grid.Column="0" Grid.Row="2" ItemsSource="{Binding Subjects, UpdateSourceTrigger=PropertyChanged}" SelectionMode="Single" PreviewMouseLeftButtonDown="Subjects_PreviewMouseLeftButtonDown" MouseMove="Subjects_MouseMove">
+                            <ListView Name="SubjectsListView" Grid.Column="0" Grid.Row="2" ItemsSource="{Binding Subjects, UpdateSourceTrigger=PropertyChanged}" SelectionMode="Single" PreviewMouseLeftButtonDown="SubjectsOrTerms_PreviewMouseLeftButtonDown" MouseMove="Subjects_MouseMove">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <Grid>

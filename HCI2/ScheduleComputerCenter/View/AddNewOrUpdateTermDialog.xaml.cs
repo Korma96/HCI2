@@ -39,13 +39,23 @@ namespace ScheduleComputerCenter.View
 
         public List<Subject> ListSubjects { get; set; }
 
-        public AddNewOrUpdateTermDialog(MainWindow mainWindow, string title)
+        public Term OldTermForUpdate { get; set; }
+        public int OldTermForUpdateRow { get; set; }
+        public int OldTermForUpdateColumn { get; set; }
+
+        public AddNewOrUpdateTermDialog(MainWindow mainWindow, string title, Term oldTermForUpdate, int oldTermForUpdateRow, int oldTermForUpdateColumn)
         {
             InitializeComponent();
 
             Title = title;
 
             MWindow = mainWindow;
+
+            this.Owner = MWindow;
+
+            this.OldTermForUpdate = oldTermForUpdate;
+            this.OldTermForUpdateRow = oldTermForUpdateRow;
+            this.OldTermForUpdateColumn = oldTermForUpdateColumn;
 
             this.Closed += new EventHandler(Dialog_Closed);
 
@@ -67,7 +77,7 @@ namespace ScheduleComputerCenter.View
             foreach (Subject subject in ListSubjects)
             {
                 subjectName = subject.Name;
-                if (subject.Course != null) subjectName += " " + subject.Course.Name;
+                if (subject.Course != null) subjectName += " (" + subject.Course.Code + ")";
                 ComboSubject.Items.Add(new ComboBoxItem() { Content = subjectName });
             }
 
@@ -135,10 +145,18 @@ namespace ScheduleComputerCenter.View
         {
             int rowIndex = MWindow.SelectedElement.SelectedIndex;
             int columnIndex = Grid.GetColumn(MWindow.SelectedElement);
-            int rowSpan = MWindow.ObservableList[columnIndex][rowIndex].RowSpan;
+            if (rowIndex == -1) return;
 
-            string startTime = (MWindow.LeftGrid.Children[rowIndex] as TextBlock).Text.Split('-')[0].Trim();
-            string endTime = (MWindow.LeftGrid.Children[rowIndex + rowSpan - 1] as TextBlock).Text.Split('-')[1].Trim();
+            int preracunatRowIndex = perarcunajListviewStartRowNaLeftGridStartRow(rowIndex, columnIndex);
+
+            string startTime = (MWindow.LeftGrid.Children[preracunatRowIndex] as TextBlock).Text.Split('-')[0].Trim();
+            
+            int rowSpan;
+
+            if (this.OldTermForUpdate == null) rowSpan = MWindow.ObservableList[columnIndex][rowIndex].RowSpan;
+            else rowSpan = this.OldTermForUpdate.RowSpan;
+
+            string endTime = (MWindow.LeftGrid.Children[preracunatRowIndex + rowSpan - 1] as TextBlock).Text.Split('-')[1].Trim();
 
             int classRoomSelectedIndex = columnIndex % NumOfClassRooms;
 
@@ -194,6 +212,14 @@ namespace ScheduleComputerCenter.View
             //MWindow.SelectedElement.SelectedItems.Clear();
             //MWindow.SelectedElement = null;
 
+            Classroom classroom = MWindow.Classrooms[ComboClassRoom.SelectedIndex];
+            Subject subject = ListSubjects[ComboSubject.SelectedIndex];
+            if (!MWindow.ClassroomMatchSubjectNeeds(classroom, subject))
+            {
+                return;
+            }
+            
+
             string time1Str = StartTimePicker.getTime();
             string time2Str = EndTimePicker.getTime();
 
@@ -202,67 +228,116 @@ namespace ScheduleComputerCenter.View
             TimeSpan time2;
             bool time2Bool = TimeSpan.TryParse(time2Str, out time2);
 
+            if (!checkTimes(time1Bool, time2Bool, time1, time2))
+            {
+                return;
+            }
+
+            int columnDay = MainWindow.GetColumnForDay(MWindow.TopTopGrid, ComboDay.Text);
+            int columnClassRoom = MainWindow.GetColumnForClassRoom(MWindow.TopBottomGrid, ComboClassRoom.Text, columnDay, NumOfClassRooms);
+
+            // ovo dodavanje crtica smo uveli da bismo znali da razlikujemo da li se radi o pocetku ili kraju termina
+            int startRow = MainWindow.GetRowForTime(MWindow.LeftGrid, time1Str + " -");
+            int endRow = MainWindow.GetRowForTime(MWindow.LeftGrid, "- " + time2Str);
+            int rowSpan = endRow - startRow + 1;
+            int preracunatStartRow = perarcunajStartRowNaListviewStartRow(startRow, columnClassRoom);
+            int preracunatEndRow = preracunatStartRow + rowSpan - 1;
+
+            if (daLiJeZauzetNekiDeoTermina(preracunatStartRow, preracunatEndRow, columnClassRoom))
+            {
+                return;
+            }
+
+            if(this.OldTermForUpdate != null)
+            {
+                MWindow.obrisiTerminiUbaciPrazneTermine(this.OldTermForUpdate, this.OldTermForUpdateRow, this.OldTermForUpdateColumn);
+                ComputerCentre.context.SaveChanges();
+
+                preracunatStartRow = perarcunajStartRowNaListviewStartRow(startRow, columnClassRoom);
+            }
+
+            Term oldTerm = MWindow.ObservableList[columnClassRoom][preracunatStartRow];
+            Term newTerm = new Term(time1, time2, subject, oldTerm.Day, oldTerm.ClassroomIndex, rowSpan); 
+                   
+            obrisiPrazneTermine(columnClassRoom, preracunatStartRow, rowSpan);
+
+            newTerm = ComputerCentre.context.Terms.Add(newTerm);
+            ComputerCentre.context.SaveChanges();
+
+            MWindow.ObservableList[columnClassRoom].Insert(preracunatStartRow, newTerm);
+
+            this.Close();
+        }
+
+        private bool checkTimes(bool time1Bool, bool time2Bool, TimeSpan time1, TimeSpan time2)
+        {
             if (time1Bool && time2Bool)
             {
                 if (time1 >= time2)
                 {
                     MessageBox.Show("End time must greater than start time!");
+                    return false;
                 }
-                else if(time1 < sevenHours)
+                else if (time1 < sevenHours)
                 {
                     MessageBox.Show("Start time must equal or greater than 7 o'clock!");
+                    return false;
                 }
-                else if(time2 > twentyTwoHours)
+                else if (time2 > twentyTwoHours)
                 {
                     MessageBox.Show("End time must equal or less than 22 o'clock!");
+                    return false;
                 }
-                else
+
+                return true;
+            }
+
+            MessageBox.Show("Problem with time!");
+            return false;
+        }
+
+        private bool daLiJeZauzetNekiDeoTermina(int preracunatStartRow, int preracunatEndRow, int columnClassRoom)
+        {
+            bool zauzeto;
+
+            for (int row = preracunatStartRow; row <= preracunatEndRow; row++)
+            {
+                if (MWindow.ObservableList[columnClassRoom][row].Subject != null)
                 {
-                    int columnDay = MainWindow.GetColumnForDay(MWindow.TopTopGrid, ComboDay.Text);
-                    int columnClassRoom = MainWindow.GetColumnForClassRoom(MWindow.TopBottomGrid, ComboClassRoom.Text, columnDay, NumOfClassRooms);
-
-                    // ovo dodavanje crtica smo uveli da bismo znali da razlikujemo da li se radi o pocetku ili kraju termina
-                    int startRow = MainWindow.GetRowForTime(MWindow.LeftGrid, time1Str + " -");
-                    int endRow = MainWindow.GetRowForTime(MWindow.LeftGrid, "- " + time2Str);
-                    int rowSpan = endRow - startRow + 1;
-                    int preracunatStartRow = perarcunajStartRowNaListviewStartRow(startRow, columnClassRoom);
-                    int preracunatEndRow = preracunatStartRow + rowSpan - 1;
-
-                    List<int> columnAndRowsForRemove = new List<int>();
-                    columnAndRowsForRemove.Add(columnClassRoom);
-
-
-                    for (int row = preracunatStartRow; row <= preracunatEndRow; row++)
+                    zauzeto = true;
+                    if(OldTermForUpdate != null)
                     {
-                        if (MWindow.ObservableList[columnClassRoom][row].Subject != null)
+                        if (row == preracunatStartRow || row == preracunatEndRow) // dovoljno je proveravati samo za pocetno i krajnje polje
                         {
-                            MessageBox.Show("Zauzet neki deo termina!");
-                            return;
-                        }
-                        else
-                        {
-                            columnAndRowsForRemove.Add(row);
+                            zauzeto = !daLiPomereniTerminZauzimaStaraPolja(OldTermForUpdateRow, OldTermForUpdateColumn, OldTermForUpdate.RowSpan, row, columnClassRoom);
                         }
                     }
 
-                    Subject subject = ListSubjects[ComboSubject.SelectedIndex];
-                    Term oldTerm = MWindow.ObservableList[columnClassRoom][preracunatStartRow];
-                    oldTerm.StartTime = time1;
-                    oldTerm.EndTime = time2;
-                    oldTerm.Subject = subject;
-                    oldTerm.RowSpan = rowSpan;
-                    MWindow.ObservableList[columnClassRoom].Insert(preracunatStartRow, oldTerm);
-                    obrisiPrazneTermine(columnAndRowsForRemove);
+                    if (zauzeto)
+                    {
+                        MessageBox.Show("Zauzet neki deo termina!");
+                        return true;
+                    }
 
-                    ComputerCentre.context.Entry(oldTerm.Day).State = EntityState.Modified;
-
-                    ComputerCentre.context.SaveChanges();
-
-                    this.Close();
                 }
 
             }
-            else MessageBox.Show("Problem with time!");
+
+            return false;
+        }
+
+        private bool daLiPomereniTerminZauzimaStaraPolja(int oldTermForUpdateRow, int oldTermForUpdateColumn, int oldTermForUpdateRowSpan, int row, int columnClassRoom)
+        {
+            if (OldTermForUpdateColumn != columnClassRoom) return false;
+
+            int kraj = oldTermForUpdateRow + oldTermForUpdateRowSpan;
+
+            for (int i = OldTermForUpdateRow; i < kraj; i++)
+            {
+                if (i == row) return true;
+            }
+
+            return false;
         }
 
         private int perarcunajStartRowNaListviewStartRow(int startRow, int columnClassRoom)
@@ -279,21 +354,35 @@ namespace ScheduleComputerCenter.View
             return preracunatStartRow;
         }
 
+        private int perarcunajListviewStartRowNaLeftGridStartRow(int startRow, int columnClassRoom)
+        {
+            int preracunatStartRow = 0;
+
+            for (int i = 0;  i < startRow; i++)
+            {
+                preracunatStartRow += MWindow.ObservableList[columnClassRoom][i].RowSpan;
+            }
+
+            return preracunatStartRow;
+        }
+
         private void cancelClick(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
 
-        private void obrisiPrazneTermine(List<int> columnAndRowsForRemove)
+        private void obrisiPrazneTermine(int column, int row, int rowSpan)
         {
-            int column = columnAndRowsForRemove[0];
-            int indexOfTerm;
+            Term term;
 
-            for (int i = 1; i < columnAndRowsForRemove.Count; i++)
+            for (int i = 0; i < rowSpan; i++)
             {
-                indexOfTerm = columnAndRowsForRemove[i] + 1; // plus 1 sam dodao jer smo prethodno dodali novi element
-                                                             // i sve se transiralo za 1
-                MWindow.ObservableList[column].RemoveAt(indexOfTerm);
+                /* indexOfTerm = columnAndRowsForRemove[i] + 1; // plus 1 sam dodao jer smo prethodno dodali novi element
+                                                              // i sve se transiralo za 1*/
+                term = MWindow.ObservableList[column][row];
+                ComputerCentre.TermRepository.Remove(term);
+                MWindow.ObservableList[column].RemoveAt(row);
+                //day.Terms.RemoveAt(row);
             }
 
         }

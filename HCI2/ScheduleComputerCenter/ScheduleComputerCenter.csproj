@@ -72,6 +72,11 @@
     <Compile Include="Commands\RoutedCommands.cs" />
     <Compile Include="Converters\BackgroundConverter.cs" />
     <Compile Include="Converters\HeightConverter.cs" />
+    <Compile Include="Migrations\201806151829132_FirstMigrations.cs" />
+    <Compile Include="Migrations\201806151829132_FirstMigrations.Designer.cs">
+      <DependentUpon>201806151829132_FirstMigrations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\ComputerCentre.cs" />
     <Compile Include="Model\Day.cs" />
     <Compile Include="Model\InvertSign.cs" />
@@ -170,6 +175,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Migrations\201806151829132_FirstMigrations.resx">
+      <DependentUpon>201806151829132_FirstMigrations.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -185,7 +193,9 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\remove.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\add_new.png" />
   </ItemGroup>
