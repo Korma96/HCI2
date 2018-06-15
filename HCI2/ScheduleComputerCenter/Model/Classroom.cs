@@ -9,6 +9,7 @@ namespace ScheduleComputerCenter.Model
     public class Classroom
     {
         public int Id { get; set; }
+        public string Code { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int NumOfSeats { get; set; }
@@ -22,9 +23,10 @@ namespace ScheduleComputerCenter.Model
         {
         }
 
-        public Classroom(string name, string description, int numOfSeats, bool projector, bool table, bool smartTable, OsType osType, List<Software> softwares)
+        public Classroom(string name, string code, string description, int numOfSeats, bool projector, bool table, bool smartTable, OsType osType, List<Software> softwares)
         {
             Name = name;
+            Code = code;
             Description = description;
             NumOfSeats = numOfSeats;
             Projector = projector;

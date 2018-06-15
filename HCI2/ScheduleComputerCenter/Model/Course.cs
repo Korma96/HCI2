@@ -10,6 +10,7 @@ namespace ScheduleComputerCenter.Model
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Code { get; set; }
         public string DateOfFounding { get; set; }
         public string Description { get; set; }
         public string Mark { get; set; }
@@ -18,9 +19,10 @@ namespace ScheduleComputerCenter.Model
         {
         }
 
-        public Course(string name, string dateOfFounding, string description)
+        public Course(string name,string code, string dateOfFounding, string description)
         {
             Name = name;
+            Code = code;
             DateOfFounding = dateOfFounding;
             Description = description;
             Mark = makeMark(Name); ;
@@ -37,6 +39,10 @@ namespace ScheduleComputerCenter.Model
                 case 3: return "" + tokens[0][0] + tokens[1][0] + tokens[2][0];
                 default: return "" + tokens[0][0] + tokens[1][0] + tokens[2][0];
             }
+        }
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

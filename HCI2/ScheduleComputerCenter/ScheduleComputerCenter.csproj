@@ -72,7 +72,6 @@
     <Compile Include="Commands\RoutedCommands.cs" />
     <Compile Include="Converters\BackgroundConverter.cs" />
     <Compile Include="Converters\HeightConverter.cs" />
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\ComputerCentre.cs" />
     <Compile Include="Model\Day.cs" />
     <Compile Include="Model\InvertSign.cs" />
@@ -186,17 +185,12 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controller\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Images\add_new.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\update.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\remove.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

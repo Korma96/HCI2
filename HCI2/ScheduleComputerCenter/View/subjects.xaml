@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ScheduleComputerCenter.View"
         mc:Ignorable="d"
-        Title="subjects" Height="668" Width="800" Background="YellowGreen">
+        Title="subjects" Height="834.739" Width="1177.087" Background="YellowGreen">
     <Window.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="20"/>
@@ -19,11 +19,15 @@
         </Style>
     </Window.Resources>
     <DockPanel Name="dockMain" VerticalAlignment="top" HorizontalAlignment="Center" LastChildFill="False">
-        <StackPanel DockPanel.Dock="Left" Orientation="Vertical">
+        <StackPanel DockPanel.Dock="Right" Orientation="Vertical">
             <Label Content="Subjects" HorizontalAlignment="Center" FontSize="36" FontWeight="Bold"></Label>
             <WrapPanel Width="648">
                 <TextBlock Text="Name : " Width="212"/>
                 <TextBox x:Name="name" />
+            </WrapPanel>
+            <WrapPanel>
+                <TextBlock Text="Code : " Width="212"/>
+                <TextBox Name="code" />
             </WrapPanel>
             <WrapPanel>
                 <TextBlock Text="Course : " Width="212"/>
@@ -32,20 +36,19 @@
             </WrapPanel>
             <WrapPanel>
                 <TextBlock Text="Number of students : " Width="212"/>
-                <TextBox Name="numOfStudents" />
+                <TextBox  PreviewTextInput="NumberValidationTextBox" Name="numOfStudents" />
             </WrapPanel>
             <WrapPanel>
-                <TextBlock Text="Min number of classes : " Width="212"/>
+                <TextBlock  PreviewTextInput="NumberValidationTextBox" Text="Min number of classes : " Width="212"/>
                 <TextBox Name="minNumOfClasses" />
             </WrapPanel>
             <WrapPanel>
                 <TextBlock Text="Total number of classes : " Width="212"/>
-                <TextBox Name="numOF" />
+                <TextBox  PreviewTextInput="NumberValidationTextBox" Name="numOF" />
             </WrapPanel>
             <WrapPanel>
                 <TextBlock Text="Projector : " Width="212"/>
                 <ComboBox FontSize="20" Name="projector" Width="250" Margin="10">
-                    <ComboBoxItem Content="Projector in classroom" Selector.IsSelected="True" />
                     <ComboBoxItem Content="YES" />
                     <ComboBoxItem Content="NO" />
                 </ComboBox>
@@ -53,7 +56,6 @@
             <WrapPanel>
                 <TextBlock Text="Table : " Width="212"/>
                 <ComboBox FontSize="20" Name="table" Width="250" Margin="10">
-                    <ComboBoxItem Content="Table in classroom" Selector.IsSelected="True" />
                     <ComboBoxItem Content="YES" />
                     <ComboBoxItem Content="NO" />
                 </ComboBox>
@@ -61,7 +63,6 @@
             <WrapPanel>
                 <TextBlock Text="Smart table : " Width="212"/>
                 <ComboBox FontSize="20" Name="smartTable" Width="250" Margin="10">
-                    <ComboBoxItem Content="Smart table in classroom" Selector.IsSelected="True" />
                     <ComboBoxItem Content="YES" />
                     <ComboBoxItem Content="NO" />
                 </ComboBox>
@@ -69,7 +70,6 @@
             <WrapPanel>
                 <TextBlock Text="OS type : " Width="212"/>
                 <ComboBox FontSize="20" Name="osType" Width="250" Margin="10">
-                    <ComboBoxItem Content="OS in classroom" Selector.IsSelected="True" />
                     <ComboBoxItem Content="WINDOWS" />
                     <ComboBoxItem Content="LINUX" />
                     <ComboBoxItem Content="Both" />
@@ -83,19 +83,18 @@
                 <TextBlock Text="Software : " Width="210"/>
                 <ComboBox Loaded="loadSoftwares"  FontSize="20" x:Name="software" Width="250" Margin="10"/>
             </WrapPanel>
-
             <WrapPanel Margin="0" HorizontalAlignment="Center" Height="59">
-                <Button Name="btnAdd" Content="Add" FontSize="25" Width="120" Margin="5" Click="btnAdd_Click" />
-                <Button Name="btnEdit" Content="Edit" FontSize="25" Width="120" Margin="5" Click="btnEdit_Click" />
-                <Button Name="btnDelete" Content="Delete" FontSize="25" Width="120" Margin="5" Click="btnDelete_Click" />
-                <Button Name="btnExit" Content="Exit" FontSize="25" Width="120" Margin="5" Background="#400000" Foreground="Bisque" Click="btnExit_Click" />
+                <Button x:Name="btnAdd" Content="Add" FontSize="25" Width="120" Margin="5" Click="btnAdd_Click" />
+                <Button x:Name="btnEdit" Content="Edit" FontSize="25" Width="120" Margin="5" Click="btnEdit_Click" />
+                <Button x:Name="btnDelete" Content="Delete" FontSize="25" Width="120" Margin="5" Click="btnDelete_Click" />
+                <Button x:Name="btnExit" Content="Cancel" FontSize="25" Width="120" Margin="5" Background="#400000" Foreground="Bisque" Click="btnExit_Click" />
             </WrapPanel>
         </StackPanel>
-        <StackPanel DockPanel.Dock="Right" Orientation="Vertical">
+        <StackPanel DockPanel.Dock="Left" Orientation="Vertical" Width="422">
             <Label Name="noSubjects" Content="No records found." HorizontalAlignment="Center" FontSize="16" FontWeight="Bold" Foreground="#FFE10000">
             </Label>
             <WrapPanel Margin="20" HorizontalAlignment="Center">
-                <DataGrid AutoGenerateColumns="True" Name="gvData" SelectionMode="Single" FontSize="15" Padding="5" Background="Black" />
+                <DataGrid AutoGenerateColumns="True"  CanUserAddRows = "False" Name="gvData" SelectionMode="Single" FontSize="15" Padding="5" Background="Black" />
             </WrapPanel>
         </StackPanel>
     </DockPanel>

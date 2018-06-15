@@ -8,8 +8,8 @@ namespace ScheduleComputerCenter.Model
 {
     public enum OsType
     {
-        Windows,
-        Linux,
-        Any
+        WINDOWS,
+        LINUX,
+        ANY
     }
 }

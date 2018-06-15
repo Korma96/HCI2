@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Collections.ObjectModel;
+using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 
 namespace ScheduleComputerCenter
 {
@@ -47,6 +49,7 @@ namespace ScheduleComputerCenter
             WindowState = WindowState.Maximized;
 
             Subjects = new ObservableCollection<Subject>();
+            FilterSubjectsForListView("");
             ObservableList = new ObservableCollection<ObservableCollection<Term>>();
 
             // popunjavanje baze
@@ -315,6 +318,18 @@ namespace ScheduleComputerCenter
 
         private void MenuItem_Click_2(object sender, RoutedEventArgs e)
         {
+            var w = new View.courses();
+            w.ShowDialog();
+        }
+
+        private void MenuItem_Click_3(object sender, RoutedEventArgs e)
+        {
+            var w = new View.softwares();
+            w.ShowDialog();
+        }
+
+        private void MenuItem_Click_4(object sender, RoutedEventArgs e)
+        { 
             if (!ComputerCentre.SoftwareRepository.GetAll().ToList().Any())
             {
                 MessageBox.Show("No softwares available,\nplease add at least one software first!");
@@ -328,18 +343,6 @@ namespace ScheduleComputerCenter
                 var w = new View.SubjectsWindow();
                 w.ShowDialog();
             }
-        }
-
-        private void MenuItem_Click_3(object sender, RoutedEventArgs e)
-        {
-            var w = new View.softwares();
-            w.ShowDialog();
-        }
-
-        private void MenuItem_Click_4(object sender, RoutedEventArgs e)
-        {
-            var w = new View.courses();
-            w.ShowDialog();
         }
 
         private void MenuItem_Click_5(object sender, RoutedEventArgs e)
@@ -749,6 +752,16 @@ namespace ScheduleComputerCenter
                 //Subjects.Remove(subject);
 
                 ListView listView = sender as ListView;
+                int indexOfClassroom = Grid.GetColumn(listView);
+                List<Classroom> classrooms = ComputerCentre.context.Classrooms.Include(s => s.Softwares).ToList();
+                int numOfClassrooms = classrooms.Count();
+                indexOfClassroom = indexOfClassroom % numOfClassrooms;
+
+                Classroom classroom = classrooms[indexOfClassroom];
+                if(!ClassroomMatchSubjectNeeds(classroom, subject))
+                {
+                    return;
+                }
                 ListViewItem listViewItem = FindAncestor<ListViewItem>((DependencyObject)e.OriginalSource);
                 int indexOfTerm = listView.ItemContainerGenerator.IndexFromContainer(listViewItem);
                 //listView.SelectedItem = listViewItem;
@@ -801,28 +814,90 @@ namespace ScheduleComputerCenter
             }
         }
 
-        private void AddButton_Click(object sender, RoutedEventArgs e)
+        private bool ClassroomMatchSubjectNeeds(Classroom classroom, Subject subject)
         {
-            List<Subject> s = autoComplete.collection.ToList();
-
-            String text = this.autoComplete.Text;
-            foreach (var sub in s)
+            if(subject.Projector)
             {
-                if (sub.Name.Equals(text))
+                if(!classroom.Projector)
                 {
-                    // check if subject already exists on ListView
-                    foreach (var subj in Subjects)
-                    {
-                        if (text.Equals(subj.Name))
-                        {
-                            return;
-                        }
-                    }
-                    Subjects.Add(sub);
+                    MessageBox.Show("Projector doesn`t exist in classroom!");
+                    return false;
                 }
             }
-
+            if(subject.SmartTable)
+            {
+                if(!classroom.SmartTable)
+                {
+                    MessageBox.Show("Smart table doesn`t exist in classroom!");
+                    return false;
+                }
+            }
+            if(subject.Table)
+            {
+                if(!classroom.Table)
+                {
+                    MessageBox.Show("Table doesn`t exist in classroom!");
+                    return false;
+                }
+            }
+            if (!classroom.Softwares.Contains(subject.Software))
+            {
+                MessageBox.Show("Software doesn`t exist in classroom!");
+                return false;
+            }
+            return true;
         }
 
+        //private void AddButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    List<Subject> s = autoComplete.collection.ToList();
+
+        //    String text = this.autoComplete.Text;
+        //    foreach (var sub in s)
+        //    {
+        //        if (sub.Name.Equals(text))
+        //        {
+        //            // check if subject already exists on ListView
+        //            foreach (var subj in Subjects)
+        //            {
+        //                if (text.Equals(subj.Name))
+        //                {
+        //                    return;
+        //                }
+        //            }
+        //            Subjects.Add(sub);
+        //        }
+        //    }
+
+        //}
+
+        public void FilterSubjectsForListView(string text)
+        {
+            List<Subject> subjects;
+            try
+            {
+                subjects = ComputerCentre.SubjectRepository.GetAll().AsQueryable().Include(x => x.Software).ToList();
+            }
+            catch
+            {
+                subjects = new List<Subject>();
+            }
+            Subjects = new ObservableCollection<Subject>();
+            subjects = subjects.OrderBy(o => o.Name).ToList(); ;
+            foreach(var s in subjects)
+            {
+                if (s.Name.ToUpper().Contains(text.ToUpper()))
+                {
+                    Subjects.Add(s);
+                }
+            }
+            SubjectsListView.ItemsSource = Subjects;
+        }
+
+        private void FilterTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            String text = FilterTextBox.Text;
+            FilterSubjectsForListView(text);
+        }
     }
 }

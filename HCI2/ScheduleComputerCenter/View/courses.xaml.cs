@@ -24,6 +24,7 @@ namespace ScheduleComputerCenter.View
     {
         DataTable dt;
         List<Course> coursesList = new List<Course>();
+        string courseCode = "";
 
         public courses()
         {
@@ -35,6 +36,7 @@ namespace ScheduleComputerCenter.View
             coursesList = ComputerCentre.CourseRepository.GetAll().ToList();
             dt = new DataTable();
             dt.Columns.Add("Name");
+            dt.Columns.Add("Code");
             dt.Columns.Add("DateOfFounding");
             dt.Columns.Add("Description");
             foreach (Course c in coursesList)
@@ -42,6 +44,7 @@ namespace ScheduleComputerCenter.View
                 DataRow dr = dt.NewRow();
                 dr["Description"] = c.Description;
                 dr["Name"] = c.Name;
+                dr["Code"] = c.Code;
                 dr["DateOfFounding"] = c.DateOfFounding;
                 dt.Rows.Add(dr);
             }
@@ -62,32 +65,90 @@ namespace ScheduleComputerCenter.View
         {
             if (btnAdd.Content.Equals("Add"))
             {
-                
-                string Name = nameCourse.Text;
-                string Description = desc.Text;
-                string DateOfFounding = yearOfFounding.Text;
-                Course course = new Course(Name,Description,DateOfFounding);
-                ComputerCentre.CourseRepository.Add(course);
-                ComputerCentre.CourseRepository.Context.SaveChanges();
-                
-                MessageBox.Show("Successfully added course");
-                btnAdd.Content = "Add";
-                view();
+                if (code.Text.Equals("") || nameCourse.Text.Equals("") || yearOfFounding.Text.Equals(""))
+                {
+                    
+                    MessageBox.Show("Some obligatory fields are empty");
+
+                }
+                else
+                {
+                    if (UniqueCode(code.Text))
+                    {
+                        string Name = nameCourse.Text;
+                        string Description = desc.Text;
+                        string DateOfFounding = yearOfFounding.Text;
+                        string Code = code.Text;
+                        Course course = new Course(Name, Code, DateOfFounding, Description);
+                        ComputerCentre.CourseRepository.Add(course);
+                        ComputerCentre.CourseRepository.Context.SaveChanges();
+                        MessageBox.Show("Successfully added course");
+                        btnAdd.Content = "Add";
+                        view();
+                    }
+
+                    else
+                    {
+                        MessageBox.Show("Course code has to be unique");
+                    }
+
+                }
             }
             else
             {
+                
+                if (!(code.Text).Equals(courseCode) & !UniqueCode(code.Text))
+                {
+                    MessageBox.Show("Course code has to be unique");
+                }
+                else
+                {
+                    if (code.Text.Equals("") || nameCourse.Text.Equals("") || yearOfFounding.Text.Equals(""))
+                    {
+                        MessageBox.Show("Some obligatory fields are empty");
+
+                    }
+                    else
+                    {
+                        int id = FindID(courseCode);
+                        ComputerCentre.CourseRepository.Get(id).Name = nameCourse.Text;
+                        ComputerCentre.CourseRepository.Get(id).Code = code.Text;
+                        ComputerCentre.CourseRepository.Get(id).Description = desc.Text;
+                        ComputerCentre.CourseRepository.Get(id).DateOfFounding = yearOfFounding.Text;
+                        ComputerCentre.CourseRepository.Context.SaveChanges();
+                        MessageBox.Show("Successfully updated course");
+                        btnAdd.Content = "Add";
+                        view();
+
+                    }
+                }
 
             }
         }
+
+        public int FindID(string code)
+        {
+            foreach (Course c in coursesList)
+            {
+                if (code.Equals(c.Code))
+                {
+                    return c.Id;
+                }
+            }
+            return 0;
+        }
+
         private void btnEdit_Click(object sender, RoutedEventArgs e)
         {
             if (gvData.SelectedItems.Count > 0)
             {
                 DataRowView dataRowView = (DataRowView)gvData.SelectedItems[0];
                 desc.Text = dataRowView["Description"].ToString();
-                nameCourse.Text = dataRowView["Table"].ToString();
-                yearOfFounding.Text = dataRowView["YearOfFounding"].ToString();
+                code.Text = dataRowView["Code"].ToString();
+                nameCourse.Text = dataRowView["Name"].ToString();
+                yearOfFounding.Text = dataRowView["DateOfFounding"].ToString();
                 btnAdd.Content = "Update";
+                courseCode = code.Text;
             }
             else
             {
@@ -96,29 +157,69 @@ namespace ScheduleComputerCenter.View
         }
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
+            btnAdd.Content = "Add";
             if (gvData.SelectedItems.Count > 0)
             {
                 DataRowView dataRowView = (DataRowView)gvData.SelectedItems[0];
-                String name = dataRowView["name"].ToString();
+                String code = dataRowView["Code"].ToString();
                 foreach (Course c in coursesList)
                 {
-                    if (name.Equals(c.Name))
+                    if (code.Equals(c.Code))
                     {
-                        ComputerCentre.CourseRepository.Remove(c);
-                        ComputerCentre.CourseRepository.Context.SaveChanges();
-                        MessageBox.Show("Successfully deleted course");
-                        view();
-                        break;
+                        if (!CourseUseSubject(c))
+                        {
+                            ComputerCentre.CourseRepository.Remove(c);
+                            ComputerCentre.CourseRepository.Context.SaveChanges();
+                            MessageBox.Show("Successfully deleted course");
+                            view();
+                            break;
+                        }
+                        else
+                        {
+                            MessageBox.Show("This course is in use, so it can't be deleted.");
+                            break;
+                        }
                     }
+                    
                 }
             }
             else
-                MessageBox.Show("Please Select Any Software From the list...");
+            {
+                MessageBox.Show("Please Select Any Course From the list...");
+            }
         }
         private void btnExit_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            desc.Text = "";
+            code.Text = "";
+            nameCourse.Text = "";
+            yearOfFounding.Text = "";
+            btnAdd.Content = "Add";
         }
+        public Boolean UniqueCode(String code)
+        {
+            foreach (Course c in coursesList)
+            {
+                if (code.Equals(c.Code)) return false;
+            }
+            return true;
+        }
+        
+    private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+    {
+        Regex regex = new Regex("[^0-9]+");
+        e.Handled = regex.IsMatch(e.Text);
+    }
+
+    public bool CourseUseSubject(Course c)
+    {
+        foreach (Subject subject in ComputerCentre.SubjectRepository.GetAll().ToList())
+        {
+            if (subject.Course.Equals(c))
+                return true;
+        }
+        return false;
+    }
     }
         
 }
