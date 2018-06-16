@@ -72,9 +72,9 @@
     <Compile Include="Commands\RoutedCommands.cs" />
     <Compile Include="Converters\BackgroundConverter.cs" />
     <Compile Include="Converters\HeightConverter.cs" />
-    <Compile Include="Migrations\201806120802085_mymigration.cs" />
-    <Compile Include="Migrations\201806120802085_mymigration.Designer.cs">
-      <DependentUpon>201806120802085_mymigration.cs</DependentUpon>
+    <Compile Include="Migrations\201806132032101_migration.cs" />
+    <Compile Include="Migrations\201806132032101_migration.Designer.cs">
+      <DependentUpon>201806132032101_migration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\ComputerCentre.cs" />
@@ -122,6 +122,9 @@
     </Compile>
     <Compile Include="View\UpdateSubjectControl.xaml.cs">
       <DependentUpon>UpdateSubjectControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\WorkingWithModelClassesControl.xaml.cs">
+      <DependentUpon>WorkingWithModelClassesControl.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -183,6 +186,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\WorkingWithModelClassesControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\OsType.cs" />
@@ -204,8 +211,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Migrations\201806120802085_mymigration.resx">
-      <DependentUpon>201806120802085_mymigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201806132032101_migration.resx">
+      <DependentUpon>201806132032101_migration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -20,6 +20,9 @@
         <DataTemplate x:Key="UpdateSubjectControl" DataType="{x:Type local:TutorialViewModel}">
             <local:UpdateSubjectControl />
         </DataTemplate>
+        <DataTemplate x:Key="WorkingWithModelClassesControl" DataType="{x:Type local:TutorialViewModel}">
+            <local:WorkingWithModelClassesControl />
+        </DataTemplate>
     </Window.Resources>
 
     <Grid>
@@ -42,6 +45,9 @@
                         </DataTrigger>
                         <DataTrigger Binding="{Binding SwitchView, UpdateSourceTrigger=PropertyChanged}" Value="2">
                             <Setter Property="ContentTemplate" Value="{StaticResource UpdateSubjectControl}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SwitchView, UpdateSourceTrigger=PropertyChanged}" Value="3">
+                            <Setter Property="ContentTemplate" Value="{StaticResource WorkingWithModelClassesControl}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

@@ -38,7 +38,10 @@ namespace ScheduleComputerCenter.View
             SwitchView = 0;
             ExplanationList = new List<string>()
             {
-                " Adding term to schedule using drag and drop", " Adding term to schedule using mouse right click, or using shortcut(CTRL+N)", "Updating term using mouse right click, or using shortcut(CTRL+U)"
+                " Adding term to schedule using drag and drop",
+                " Adding term to schedule using mouse right click, or using shortcut(CTRL+N)",
+                " Updating term using mouse right click, or using shortcut(CTRL+U)",
+                " CRUD operations on entities by choosing option from menu or using shortcuts"
             };
             index = 0;
             StepTextBlockText = "Step " + (index + 1).ToString() + "/" + ExplanationList.Count.ToString() + " :";
