@@ -21,13 +21,13 @@ namespace ScheduleComputerCenter.Model
         public Boolean Table { get; set; }
         public Boolean SmartTable { get; set; }
         public OsType OsType { get; set; }
-        public Software Software { get; set; }
+        public List<Software> Softwares { get; set; }
 
         public Subject()
         {
         }
 
-        public Subject(string name,string code, Course course, string description, int numOfStudents, int minNumOfClassesPerTerm, int numOfClasses, bool projector, bool table, bool smartTable, OsType osType, Software software)
+        public Subject(string name,string code, Course course, string description, int numOfStudents, int minNumOfClassesPerTerm, int numOfClasses, bool projector, bool table, bool smartTable, OsType osType, List<Software> softwares)
         {
             Code = code;
             Name = name;
@@ -40,7 +40,7 @@ namespace ScheduleComputerCenter.Model
             Table = table;
             SmartTable = smartTable;
             OsType = osType;
-            Software = software;
+            Softwares = softwares;
         }
 
         

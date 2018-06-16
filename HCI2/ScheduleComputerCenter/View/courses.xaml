@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ScheduleComputerCenter.View"
         mc:Ignorable="d"
-        Title="Courses" Height="450" Width="800" Background="YellowGreen">
+        Title="Courses" Height="450" Width="934" Background="Firebrick">
     <Window.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="20"/>
@@ -18,11 +18,11 @@
             <Setter Property="Margin" Value="10"/>
         </Style>
     </Window.Resources>
-    <DockPanel Name="dockMain" VerticalAlignment="top" HorizontalAlignment="Center" LastChildFill="False">
-        <StackPanel>
+    <ScrollViewer Width="Auto" Height="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+        <StackPanel Orientation="Vertical">
             <Label Content="Courses" HorizontalAlignment="Center" FontSize="36" FontWeight="Bold"></Label>
-            <DockPanel>
-                <StackPanel DockPanel.Dock="Right">
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Height="121">
+                <StackPanel Orientation="Vertical" Width="452">
                     <WrapPanel>
                         <TextBlock Text="Name of Course : "/>
                         <TextBox Name="nameCourse" />
@@ -31,7 +31,10 @@
                         <TextBlock Text="Code : "/>
                         <TextBox Name="code" />
                     </WrapPanel>
-                <WrapPanel>
+                </StackPanel>
+                <StackPanel Orientation="Vertical">
+
+                    <WrapPanel>
                     <TextBlock Text="Year of founding : "/>
                     <TextBox PreviewTextInput="NumberValidationTextBox" x:Name="yearOfFounding" />
                 </WrapPanel>
@@ -39,20 +42,20 @@
                     <TextBlock Text="Description : "/>
                     <TextBox Name="desc" Height="40"/>
                 </WrapPanel>
-                <WrapPanel Margin="0" HorizontalAlignment="Center" Height="59">
-                    <Button Name="btnAdd" Content="Add" FontSize="25" Width="120" Margin="5" Click="btnAdd_Click" />
-                    <Button Name="btnEdit" Content="Edit" FontSize="25" Width="120" Margin="5" Click="btnEdit_Click" />
-                    <Button Name="btnDelete" Content="Delete" FontSize="25" Width="120" Margin="5" Click="btnDelete_Click" />
-                    <Button Name="btnExit" Content="Cancel" FontSize="25" Width="120" Margin="5" Background="#400000" Foreground="Bisque" Click="btnExit_Click" />
-                </WrapPanel>
+                </StackPanel>
             </StackPanel>
+            <WrapPanel Margin="0" HorizontalAlignment="Center" Height="59">
+                <Button Name="btnAdd" Content="Add" FontSize="25" Width="120" Margin="5" Click="btnAdd_Click" />
+                <Button Name="btnEdit" Content="Edit" FontSize="25" Width="120" Margin="5" Click="btnEdit_Click" />
+                <Button Name="btnDelete" Content="Delete" FontSize="25" Width="120" Margin="5" Click="btnDelete_Click" />
+                <Button Name="btnExit" Content="Cancel" FontSize="25" Width="120" Margin="5" Background="#400000" Foreground="Bisque" Click="btnExit_Click" />
+            </WrapPanel>
             <StackPanel>
-                <Label Content="No records found." Name="noCourses" HorizontalAlignment="Center" FontSize="16" FontWeight="Bold" Foreground="#FFE10000"></Label>
+                <Label Content="No records found." Name="noCourses" HorizontalAlignment="Center" FontSize="16" FontWeight="Bold" Foreground="White"></Label>
                 <WrapPanel Margin="20" HorizontalAlignment="Center">
-                        <DataGrid AutoGenerateColumns="True" CanUserAddRows = "False" Name="gvData" SelectionMode="Single" FontSize="15" Padding="5" Background="Black" />
+                    <DataGrid AutoGenerateColumns="True" IsReadOnly="True" CanUserAddRows = "False" Name="gvData" SelectionMode="Single" FontSize="15" Padding="5" Background="Black" />
                 </WrapPanel>
             </StackPanel>
-             </DockPanel>
         </StackPanel>
-    </DockPanel>
+    </ScrollViewer>
 </Window>

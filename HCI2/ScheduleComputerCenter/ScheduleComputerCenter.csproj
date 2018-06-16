@@ -72,9 +72,11 @@
     <Compile Include="Commands\RoutedCommands.cs" />
     <Compile Include="Converters\BackgroundConverter.cs" />
     <Compile Include="Converters\HeightConverter.cs" />
-    <Compile Include="Migrations\201806132032101_migration.cs" />
-    <Compile Include="Migrations\201806132032101_migration.Designer.cs">
-      <DependentUpon>201806132032101_migration.cs</DependentUpon>
+    <Compile Include="Converters\SoftwaresConverter.cs" />
+    <Compile Include="Converters\TrueFalseConverter.cs" />
+    <Compile Include="Migrations\201806152258525_FirstMigrations.cs" />
+    <Compile Include="Migrations\201806152258525_FirstMigrations.Designer.cs">
+      <DependentUpon>201806152258525_FirstMigrations.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\ComputerCentre.cs" />
@@ -143,8 +145,8 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\AddSubjectControl.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\AutoCompleteTextBox.xaml">
       <SubType>Designer</SubType>
@@ -163,8 +165,8 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\DragDropControl.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\softwares.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -179,12 +181,12 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\TutorialWindow.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\UpdateSubjectControl.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\WorkingWithModelClassesControl.xaml">
       <SubType>Designer</SubType>
@@ -211,8 +213,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Migrations\201806132032101_migration.resx">
-      <DependentUpon>201806132032101_migration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201806152258525_FirstMigrations.resx">
+      <DependentUpon>201806152258525_FirstMigrations.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -229,7 +231,16 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\add1.jpg" />
+    <Resource Include="Images\add2.jpg" />
+    <Content Include="Images\DragAndDrop_subjects.mp4" />
+    <Resource Include="Images\update1.jpg" />
+    <Resource Include="Images\update2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\remove.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\add_new.png" />
   </ItemGroup>

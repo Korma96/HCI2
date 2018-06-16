@@ -30,7 +30,7 @@ namespace ScheduleComputerCenter.View
             // ... Create a new BitmapImage.
             BitmapImage b = new BitmapImage();
             b.BeginInit();
-            b.UriSource = new Uri(@"E:\baza\Projekti\HCIrepository\HCI2\ScheduleComputerCenter\Images\update1.jpg");
+            b.UriSource = new Uri("/ScheduleComputerCenter;component/Images/update1.jpg", UriKind.RelativeOrAbsolute);
             b.EndInit();
 
             // ... Get Image reference from sender.
@@ -44,7 +44,7 @@ namespace ScheduleComputerCenter.View
             // ... Create a new BitmapImage.
             BitmapImage b = new BitmapImage();
             b.BeginInit();
-            b.UriSource = new Uri(@"E:\baza\Projekti\HCIrepository\HCI2\ScheduleComputerCenter\Images\update2.jpg");
+            b.UriSource = new Uri("/ScheduleComputerCenter;component/Images/update2.jpg", UriKind.RelativeOrAbsolute);
             b.EndInit();
 
             // ... Get Image reference from sender.

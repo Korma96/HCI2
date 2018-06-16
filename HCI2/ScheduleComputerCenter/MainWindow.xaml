@@ -6,26 +6,15 @@
         xmlns:local="clr-namespace:ScheduleComputerCenter"
         mc:Ignorable="d"
         xmlns:V="clr-namespace:ScheduleComputerCenter.View"
+        xmlns:commands ="clr-namespace:ScheduleComputerCenter.Commands"
         Title="Schedule for a Computer Center" Height="750" Width="1288">
 
 
     <DockPanel>
         <ScrollViewer DockPanel.Dock="Top" Width="Auto" Height="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
-            <DockPanel>
-                <Menu DockPanel.Dock ="Top" Background="Gray" Height="25">
-                    <MenuItem Header="Data" FontWeight="Heavy"  Height="25">
-                        <MenuItem Header="Classrooms..." Click="MenuItem_Click_1"></MenuItem>
-                        <MenuItem Header="Courses..." Click="MenuItem_Click_2"></MenuItem>
-                        <MenuItem Header="Softwares..." Click="MenuItem_Click_3"></MenuItem>
-                        <MenuItem Header="Subjects..." Click="MenuItem_Click_4"></MenuItem>
-                    </MenuItem>
-                    <MenuItem Header="Schedule" FontWeight="Heavy" Height="25">
-                    </MenuItem>
-                    <MenuItem Header="Tutorial" FontWeight="Heavy" Height="25">
-                        <MenuItem Header="Start" FontWeight="Heavy" Height="25" Click="StartTutorial"/>
-                    </MenuItem>
-                </Menu>
-                <DockPanel DockPanel.Dock="Right">
+            <DockPanel Name="MainDockPanel">
+                <DockPanel DockPanel.Dock="Bottom">
+                    <DockPanel DockPanel.Dock="Right">
                     <DockPanel DockPanel.Dock="Top">
                         <DockPanel DockPanel.Dock="Top">
                             <Grid DockPanel.Dock="Left">
@@ -109,9 +98,9 @@
                         </Grid>
                     </DockPanel>
                 </DockPanel>
-                <DockPanel DockPanel.Dock="Left">
-                    <Expander Name="SubjectExpander" Header="">
-                        <Grid DockPanel.Dock="Right" Name="RightGridTable">
+                    <DockPanel DockPanel.Dock="Left">
+                    <Expander Name="SubjectExpander" Header="" ExpandDirection="Right">
+                        <Grid DockPanel.Dock="Right" Name="RightGridTable" Background="Aqua">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
@@ -134,7 +123,7 @@
                             <!--<Button Grid.Column="1" Grid.Row="1" Name="AddButton" Click="AddButton_Click">Add</Button>-->
                             <!--<TextBlock Grid.Column="0" Grid.Row="3">Subjects</TextBlock>-->
                             <!--<Button Grid.Column="1" Grid.Row="3" Name="RemoveButton" Click="RemoveButton_Click">Remove</Button>-->
-                            <ListView Name="SubjectsListView" Grid.Column="0" Grid.Row="2" ItemsSource="{Binding Subjects, UpdateSourceTrigger=PropertyChanged}" SelectionMode="Single" PreviewMouseLeftButtonDown="Subjects_PreviewMouseLeftButtonDown" MouseMove="Subjects_MouseMove">
+                                <ListView Name="SubjectsListView" Grid.Column="0" Grid.Row="2" ItemsSource="{Binding Subjects, UpdateSourceTrigger=PropertyChanged}" SelectionMode="Single" PreviewMouseLeftButtonDown="SubjectsOrTerms_PreviewMouseLeftButtonDown" MouseMove="Subjects_MouseMove">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <Grid>
@@ -145,6 +134,7 @@
                             </ListView>
                         </Grid>
                     </Expander>
+                </DockPanel>
                 </DockPanel>
             </DockPanel>
         </ScrollViewer>
