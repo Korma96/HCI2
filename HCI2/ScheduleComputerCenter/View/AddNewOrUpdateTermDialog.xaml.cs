@@ -228,6 +228,13 @@ namespace ScheduleComputerCenter.View
             TimeSpan time2;
             bool time2Bool = TimeSpan.TryParse(time2Str, out time2);
 
+            TimeSpan difference = time2 - time1;
+            if(difference.TotalMinutes < subject.MinNumOfClassesPerTerm*45)
+            {
+                MessageBox.Show("Number of minimum classes is " + subject.MinNumOfClassesPerTerm + "!");
+                return;
+            }
+
             if (!checkTimes(time1Bool, time2Bool, time1, time2))
             {
                 return;
