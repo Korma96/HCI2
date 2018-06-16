@@ -56,7 +56,7 @@ namespace ScheduleComputerCenter
             ObservableList = new ObservableCollection<ObservableCollection<Term>>();
 
             // popunjavanje baze
-            //SComputerCentre.AddDummyData();
+            //ComputerCentre.AddDummyData();
 
             CommandBinding AddNewTermCommandBinding = new CommandBinding(RoutedCommands.AddNewTermCommand, AddNewTermCommand_Executed, AddNewTermCommand_CanExecute);
             CommandBinding UpdateTermCommandBinding = new CommandBinding(RoutedCommands.UpdateTermCommand, UpdateTermCommand_Executed, UpdateTermCommand_CanExecute);
@@ -202,7 +202,7 @@ namespace ScheduleComputerCenter
                         }
                     }
 
-                    Classrooms = ComputerCentre.ClassroomRepository.GetAll().ToList();
+                    Classrooms = ComputerCentre.context.Classrooms.Include(s => s.Softwares).ToList();
                     NumOfClassrooms = Classrooms.Count;
                     if (NumOfClassrooms > 0)
                     {
@@ -575,7 +575,7 @@ namespace ScheduleComputerCenter
 
             Term term = ObservableList[indexOfClassroom][indexOfTerm];
             AddNewOrUpdateTermDialog anoutd = new AddNewOrUpdateTermDialog(this, "Update term", term, indexOfTerm, indexOfClassroom);
-            anoutd.inicijalizacijaDialoga(term.Subject.Name);
+            anoutd.inicijalizacijaDialoga(term.Subject);
             anoutd.ShowDialog();
 
         }
@@ -814,16 +814,16 @@ namespace ScheduleComputerCenter
                 //Subjects.Remove(subject);
 
                 ListView listView = sender as ListView;
-                /*int indexOfClassroom = Grid.GetColumn(listView);
-                List<Classroom> classrooms = ComputerCentre.context.Classrooms.Include(s => s.Softwares).ToList();
-                int numOfClassrooms = classrooms.Count();
-                indexOfClassroom = indexOfClassroom % numOfClassrooms;
+                //int indexOfClassroom = Grid.GetColumn(listView);
+                //List<Classroom> classrooms = ComputerCentre.context.Classrooms.Include(s => s.Softwares).ToList();
+                //int numOfClassrooms = classrooms.Count();
+                //indexOfClassroom = indexOfClassroom % numOfClassrooms;
 
-                Classroom classroom = classrooms[indexOfClassroom];
-                if(!ClassroomMatchSubjectNeeds(classroom, subject))
-                {
-                    return;
-                }*/
+                //Classroom classroom = classrooms[indexOfClassroom];
+                //if (!ClassroomMatchSubjectNeeds(classroom, subject))
+                //{
+                //    return;
+                //}
                 ListViewItem listViewItem = FindAncestor<ListViewItem>((DependencyObject)e.OriginalSource);
                 int indexOfTerm = listView.ItemContainerGenerator.IndexFromContainer(listViewItem);
                 //listView.SelectedItem = listViewItem;
@@ -831,7 +831,7 @@ namespace ScheduleComputerCenter
                 SelectedElement = listView;
 
                 AddNewOrUpdateTermDialog anoutd = new AddNewOrUpdateTermDialog(this, "Add new term", null, -1, -1);
-                anoutd.inicijalizacijaDialoga(subject.Name);
+                anoutd.inicijalizacijaDialoga(subject);
                 anoutd.ShowDialog();
             }
             else if (e.Data.GetDataPresent("myFormatTerm"))
@@ -853,7 +853,7 @@ namespace ScheduleComputerCenter
                 SelectedElement = listView;
 
                 AddNewOrUpdateTermDialog anoutd = new AddNewOrUpdateTermDialog(this, "Change term", term, oldTermRow, oldTermColumn);
-                anoutd.inicijalizacijaDialoga(term.Subject.Name);
+                anoutd.inicijalizacijaDialoga(term.Subject);
                 anoutd.ShowDialog();
 
 
@@ -965,7 +965,8 @@ namespace ScheduleComputerCenter
             List<Subject> subjects;
             try
             {
-                subjects = ComputerCentre.SubjectRepository.GetAll().AsQueryable().Include(x => x.Softwares).ToList();
+                subjects = ComputerCentre.context.Subjects.Include(s => s.Softwares).Include(x => x.Course).ToList();
+                //subjects = ComputerCentre.SubjectRepository.GetAll().AsQueryable().Include(x => x.Softwares).Include(x => x.Course).ToList();
             }
             catch
             {

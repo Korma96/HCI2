@@ -72,7 +72,7 @@ namespace ScheduleComputerCenter.View
             DialogGrid.Children.Add(subjectTextBlock);
 
             ComboSubject = new ComboBox() { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, IsEditable = false, Height = 30 };
-            ListSubjects = ComputerCentre.SubjectRepository.GetAll().ToList();
+            ListSubjects = ComputerCentre.context.Subjects.Include(s => s.Softwares).Include(x => x.Course).ToList();
             string subjectName;
             foreach (Subject subject in ListSubjects)
             {
@@ -141,7 +141,7 @@ namespace ScheduleComputerCenter.View
             DialogGrid.Children.Add(btnCancel);
         }
 
-        public void inicijalizacijaDialoga(string subjectName)
+        public void inicijalizacijaDialoga(Subject subject)
         {
             int rowIndex = MWindow.SelectedElement.SelectedIndex;
             int columnIndex = Grid.GetColumn(MWindow.SelectedElement);
@@ -163,7 +163,7 @@ namespace ScheduleComputerCenter.View
             double a = columnIndex / NumOfClassRooms;
             int daySelectedIndex = Convert.ToInt32(Math.Floor(a)); // floor zaokruzuje na najblizi manji broj
 
-            selectSubject(subjectName);
+            selectSubject(subject);
 
             StartTimePicker.setHoursAndMinutes(startTime);
 
@@ -175,13 +175,13 @@ namespace ScheduleComputerCenter.View
 
         }
 
-        private void selectSubject(string subjectName)
+        private void selectSubject(Subject subject)
         {
-            if(subjectName != null)
+            if(subject != null)
             {
                 foreach (ComboBoxItem cbi in ComboSubject.Items)
                 {
-                    if (cbi.Content.Equals(subjectName))
+                    if (cbi.Content.Equals(subject.Name + " (" + subject.Course.Code + ")"))
                     {
                         cbi.IsSelected = true;
                         return;
