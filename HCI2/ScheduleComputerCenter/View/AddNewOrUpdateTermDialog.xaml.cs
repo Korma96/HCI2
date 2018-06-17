@@ -219,7 +219,6 @@ namespace ScheduleComputerCenter.View
                 return;
             }
             
-
             string time1Str = StartTimePicker.getTime();
             string time2Str = EndTimePicker.getTime();
 
@@ -272,6 +271,16 @@ namespace ScheduleComputerCenter.View
             ComputerCentre.context.SaveChanges();
 
             MWindow.ObservableList[columnClassRoom].Insert(preracunatStartRow, newTerm);
+
+            if(MWindow.tutorialOn)
+            {
+                if (MWindow.tutorialHelper[MWindow.currentTutorial])
+                {
+                    MWindow.tutorialHelper[MWindow.currentTutorial] = false;
+                    MWindow.tutorialWindow.Show();
+                    MWindow.tutorialWindow.NextButton.IsEnabled = true;
+                }
+            }
 
             this.Close();
         }

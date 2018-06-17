@@ -14,14 +14,17 @@
         <DataTemplate x:Key="DragDropControl" DataType="{x:Type local:TutorialViewModel}">
             <local:DragDropControl />
         </DataTemplate>
+        <DataTemplate x:Key="MoveTermControl" DataType="{x:Type local:TutorialViewModel}">
+            <local:MoveTermControl />
+        </DataTemplate>
         <DataTemplate x:Key="AddSubjectControl" DataType="{x:Type local:TutorialViewModel}">
             <local:AddSubjectControl />
         </DataTemplate>
         <DataTemplate x:Key="UpdateSubjectControl" DataType="{x:Type local:TutorialViewModel}">
             <local:UpdateSubjectControl />
         </DataTemplate>
-        <DataTemplate x:Key="WorkingWithModelClassesControl" DataType="{x:Type local:TutorialViewModel}">
-            <local:WorkingWithModelClassesControl />
+        <DataTemplate x:Key="RemoveTermControl" DataType="{x:Type local:TutorialViewModel}">
+            <local:RemoveTermControl />
         </DataTemplate>
     </Window.Resources>
 
@@ -34,20 +37,24 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="5*" />
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ContentControl Content="{Binding }" Name="StepControl" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
+        <ContentControl Content="{Binding }" Name="StepControl" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4">
             <ContentControl.Style>
                 <Style TargetType="{x:Type ContentControl}">
                     <Setter Property="ContentTemplate" Value="{StaticResource DragDropControl}" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding SwitchView, UpdateSourceTrigger=PropertyChanged}" Value="1">
-                            <Setter Property="ContentTemplate" Value="{StaticResource AddSubjectControl}" />
+                            <Setter Property="ContentTemplate" Value="{StaticResource MoveTermControl}" />
                         </DataTrigger>
                         <DataTrigger Binding="{Binding SwitchView, UpdateSourceTrigger=PropertyChanged}" Value="2">
-                            <Setter Property="ContentTemplate" Value="{StaticResource UpdateSubjectControl}" />
+                            <Setter Property="ContentTemplate" Value="{StaticResource AddSubjectControl}" />
                         </DataTrigger>
                         <DataTrigger Binding="{Binding SwitchView, UpdateSourceTrigger=PropertyChanged}" Value="3">
-                            <Setter Property="ContentTemplate" Value="{StaticResource WorkingWithModelClassesControl}" />
+                            <Setter Property="ContentTemplate" Value="{StaticResource UpdateSubjectControl}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SwitchView, UpdateSourceTrigger=PropertyChanged}" Value="4">
+                            <Setter Property="ContentTemplate" Value="{StaticResource RemoveTermControl}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -55,6 +62,7 @@
         </ContentControl>
         <TextBlock Name="StepTextBlock" Text="{Binding StepTextBlockText}" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" FontSize="20"/>
         <TextBlock Name="DescriptionTextBlock" Text="{Binding DescriptionTextBlockText}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" TextAlignment="Center" FontSize="15"/>
-        <Button Name="NextButton" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="Next step >>" FontSize="15" Grid.Row="1" Grid.Column="2" Click="NextButton_Click"/>
+        <Button Name="LetsStart" Margin="0,0,5,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="Let`s start !" FontSize="15" Grid.Row="1" Grid.Column="2" Click="LetsStart_Click"/>
+        <Button Name="NextButton" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="Next step >>" FontSize="15" Grid.Row="1" Grid.Column="3" Click="NextButton_Click"/>
     </Grid>
 </Window>
