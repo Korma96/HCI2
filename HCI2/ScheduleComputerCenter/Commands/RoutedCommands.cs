@@ -86,5 +86,14 @@ namespace ScheduleComputerCenter.Commands
             }
             );
 
+        public static ICommand EndTutorialCommand = new RoutedUICommand(
+            "End Tutorial Command",
+            "EndTutorialCommand",
+            typeof(RoutedCommands),
+            new InputGestureCollection()
+            {
+                new KeyGesture(Key.E, ModifierKeys.Control),
+            }
+            );
     }
 }

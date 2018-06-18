@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace ScheduleComputerCenter.View
 {
     /// <summary>
-    /// Interaction logic for DragDropControl.xaml
+    /// Interaction logic for MoveTermControl.xaml
     /// </summary>
-    public partial class DragDropControl : UserControl
+    public partial class MoveTermControl : UserControl
     {
-        public DragDropControl()
+        public MoveTermControl()
         {
             InitializeComponent();
             MediaElement.LoadedBehavior = MediaState.Manual;
@@ -41,6 +41,5 @@ namespace ScheduleComputerCenter.View
         {
             MediaElement.Stop();
         }
-
     }
 }

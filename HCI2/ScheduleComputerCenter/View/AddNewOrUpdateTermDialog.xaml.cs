@@ -219,7 +219,6 @@ namespace ScheduleComputerCenter.View
                 return;
             }
             
-
             string time1Str = StartTimePicker.getTime();
             string time2Str = EndTimePicker.getTime();
 
@@ -227,6 +226,13 @@ namespace ScheduleComputerCenter.View
             bool time1Bool = TimeSpan.TryParse(time1Str, out time1);
             TimeSpan time2;
             bool time2Bool = TimeSpan.TryParse(time2Str, out time2);
+
+            TimeSpan difference = time2 - time1;
+            if(difference.TotalMinutes < subject.MinNumOfClassesPerTerm*45)
+            {
+                MessageBox.Show("Number of minimum classes is " + subject.MinNumOfClassesPerTerm + "!");
+                return;
+            }
 
             if (!checkTimes(time1Bool, time2Bool, time1, time2))
             {
@@ -265,6 +271,16 @@ namespace ScheduleComputerCenter.View
             ComputerCentre.context.SaveChanges();
 
             MWindow.ObservableList[columnClassRoom].Insert(preracunatStartRow, newTerm);
+
+            if(MWindow.tutorialOn)
+            {
+                if (MWindow.tutorialHelper[MWindow.currentTutorial])
+                {
+                    MWindow.tutorialHelper[MWindow.currentTutorial] = false;
+                    MWindow.tutorialWindow.Show();
+                    MWindow.tutorialWindow.NextButton.IsEnabled = true;
+                }
+            }
 
             this.Close();
         }
