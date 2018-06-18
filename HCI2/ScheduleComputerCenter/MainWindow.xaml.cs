@@ -56,7 +56,7 @@ namespace ScheduleComputerCenter
             ObservableList = new ObservableCollection<ObservableCollection<Term>>();
 
             // popunjavanje baze
-            //ComputerCentre.AddDummyData();
+            ComputerCentre.AddDummyData();
 
             CommandBinding AddNewTermCommandBinding = new CommandBinding(RoutedCommands.AddNewTermCommand, AddNewTermCommand_Executed, AddNewTermCommand_CanExecute);
             CommandBinding UpdateTermCommandBinding = new CommandBinding(RoutedCommands.UpdateTermCommand, UpdateTermCommand_Executed, UpdateTermCommand_CanExecute);
@@ -308,15 +308,19 @@ namespace ScheduleComputerCenter
 
         private void SoftwareCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            this.IsEnabled = false;
             var w = new View.softwares();
             w.ShowDialog();
+            this.IsEnabled = true;
 
         }
 
         private void CourseCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            this.IsEnabled = false;
             var w = new View.courses();
             w.ShowDialog();
+            this.IsEnabled = true;
         }
 
         private void SubjectCommand_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -331,9 +335,11 @@ namespace ScheduleComputerCenter
             }
             else
             {
+                this.IsEnabled = false;
                 var w = new View.SubjectsWindow();
                 w.ShowDialog();
             }
+            this.IsEnabled = true;
         }
 
         public void dodajNoveTermineZaNovuUcionicu()
@@ -365,9 +371,11 @@ namespace ScheduleComputerCenter
             }
             else
             {
+                this.IsEnabled = false;
                 var w = new View.classrooms(this);
                 w.ShowDialog();
             }
+            this.IsEnabled = true;
         }
 
         private DataTemplate makeDataTemplate()

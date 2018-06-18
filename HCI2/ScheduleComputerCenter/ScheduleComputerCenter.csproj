@@ -74,11 +74,6 @@
     <Compile Include="Converters\HeightConverter.cs" />
     <Compile Include="Converters\SoftwaresConverter.cs" />
     <Compile Include="Converters\TrueFalseConverter.cs" />
-    <Compile Include="Migrations\201806152258525_FirstMigrations.cs" />
-    <Compile Include="Migrations\201806152258525_FirstMigrations.Designer.cs">
-      <DependentUpon>201806152258525_FirstMigrations.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\ComputerCentre.cs" />
     <Compile Include="Model\Day.cs" />
     <Compile Include="Model\InvertSign.cs" />
@@ -213,9 +208,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Migrations\201806152258525_FirstMigrations.resx">
-      <DependentUpon>201806152258525_FirstMigrations.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
