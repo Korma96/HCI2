@@ -319,6 +319,10 @@ namespace ScheduleComputerCenter.View
                     {
                         ComputerCentre.ClassroomRepository.Remove(cr);
                         ComputerCentre.ClassroomRepository.Context.SaveChanges();
+
+                        MWindow.ukloniUcioniceDaneTermine();
+                        MWindow.prikaziUcioniceDaneTermine();
+
                         view();
                         if (btnAdd.Content.Equals("Update"))
                         {

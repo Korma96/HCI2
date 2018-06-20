@@ -33,7 +33,7 @@ namespace ScheduleComputerCenter
         private const int NUM_OF_ROWS_IN_MAIN_GRID = 60;
         private const int NUM_OF_COLS_IN_MAIN_GRID = 36;
 
-        public static double HEIGHT_OF_ROWS_IN_MAIN_GRID = 50.0;
+        public static double HEIGHT_OF_ROWS_IN_MAIN_GRID = 25.0;
         private const double WIDTH_OF_COLS_IN_MAIN_GRID = 32.0;
 
         public string[] days = { "PONEDELJAK", "UTORAK", "SREDA", "ČETVRTAK", "PETAK", "SUBOTA" };
@@ -56,7 +56,7 @@ namespace ScheduleComputerCenter
             ObservableList = new ObservableCollection<ObservableCollection<Term>>();
 
             // popunjavanje baze
-            ComputerCentre.AddDummyData();
+            //ComputerCentre.AddDummyData();
 
             CommandBinding AddNewTermCommandBinding = new CommandBinding(RoutedCommands.AddNewTermCommand, AddNewTermCommand_Executed, AddNewTermCommand_CanExecute);
             CommandBinding UpdateTermCommandBinding = new CommandBinding(RoutedCommands.UpdateTermCommand, UpdateTermCommand_Executed, UpdateTermCommand_CanExecute);
@@ -66,6 +66,7 @@ namespace ScheduleComputerCenter
             CommandBinding CourseCommandBinding = new CommandBinding(RoutedCommands.CourseCommand, CourseCommand_Executed, CourseCommand_CanExecute);
             CommandBinding SoftwareCommandBinding = new CommandBinding(RoutedCommands.SoftwareCommand, SoftwareCommand_Executed, SoftwareCommand_CanExecute);
             CommandBinding StartTutorialCommandBinding = new CommandBinding(RoutedCommands.StartTutorialCommand, StartTutorialCommand_Executed, StartTutorialCommand_CanExecute);
+            CommandBinding HelpCommandBinding = new CommandBinding(ApplicationCommands.Help, HelpCommand_Executed, HelpCommand_CanExecute);
             this.CommandBindings.Add(AddNewTermCommandBinding);
             this.CommandBindings.Add(UpdateTermCommandBinding);
             this.CommandBindings.Add(RemoveTermCommandBinding);
@@ -74,6 +75,7 @@ namespace ScheduleComputerCenter
             this.CommandBindings.Add(CourseCommandBinding);
             this.CommandBindings.Add(SoftwareCommandBinding);
             this.CommandBindings.Add(StartTutorialCommandBinding);
+            this.CommandBindings.Add(HelpCommandBinding);
 
             Menu menu = new Menu() { Background = Brushes.Gray, Height = 25 };
             MenuItem Data = new MenuItem() { Header = "Data", FontWeight = FontWeights.Heavy, Height = 25 };
@@ -81,18 +83,20 @@ namespace ScheduleComputerCenter
             MenuItem courses = new MenuItem() { Header = "Courses", Command = RoutedCommands.CourseCommand };
             MenuItem softwares = new MenuItem() { Header = "Softwares", Command = RoutedCommands.SoftwareCommand };
             MenuItem subjects = new MenuItem() { Header = "Subjects", Command = RoutedCommands.SubjectCommand };
-            MenuItem Schedule = new MenuItem() { Header = "Schedule", FontWeight = FontWeights.Heavy, Height = 25 };
+            //MenuItem Schedule = new MenuItem() { Header = "Schedule", FontWeight = FontWeights.Heavy, Height = 25 };
             MenuItem Tutorial = new MenuItem() { Header = "Tutorial", FontWeight = FontWeights.Heavy, Height = 25 };
             MenuItem StartTutorial = new MenuItem() { Header = "StartTutorial", Command = RoutedCommands.StartTutorialCommand};
             Tutorial.Items.Add(StartTutorial);
+            //MenuItem Help = new MenuItem() { Header = "Help", FontWeight = FontWeights.Heavy, Height = 25, Command = ApplicationCommands.Help};
 
             Data.Items.Add(classrooms);
             Data.Items.Add(softwares);
             Data.Items.Add(subjects);
             Data.Items.Add(courses);
             menu.Items.Add(Data);
-            menu.Items.Add(Schedule);
+            //menu.Items.Add(Schedule);
             menu.Items.Add(Tutorial);
+            //menu.Items.Add(Help);
             DockPanel.SetDock(menu, Dock.Top);
             MainDockPanel.Children.Add(menu);
 
@@ -238,7 +242,7 @@ namespace ScheduleComputerCenter
 
                         styleListViewItem.Setters.Add(new Setter(ListViewItem.BackgroundProperty, Brushes.LightGray));
                         styleListViewItem.Setters.Add(new Setter(ListViewItem.HeightProperty, new Binding("RowSpan") { Converter = new Converters.HeightConverter() }));
-
+                        styleListViewItem.Setters.Add(new Setter(HelpProvider.HelpKeyProperty, "term"));
 
                         for (int i = 0; i < NUM_OF_DAYS * NumOfClassrooms; i++)
                         {
@@ -469,12 +473,16 @@ namespace ScheduleComputerCenter
 
         private void dodajTextBlockClassrooms(Grid grid, int numOfClassrooms)
         {
+
+            Style style = new Style(typeof(TextBlock));
+            style.Setters.Add(new Setter(HelpProvider.HelpKeyProperty, "classroom"));
+
             TextBlock newTextBlock;
             for(int i = 0; i < NUM_OF_DAYS; i++)
             {
                 for (int j = 0; j < numOfClassrooms; j++)
                 {
-                    newTextBlock = new TextBlock() { Margin = new Thickness(2), Text = Classrooms[j].Name, Background = Brushes.Gray };
+                    newTextBlock = new TextBlock() { Margin = new Thickness(2), Text = Classrooms[j].Name, Background = Brushes.Gray, Style = style };
                     Grid.SetRow(newTextBlock, 0);
                     Grid.SetColumn(newTextBlock, i*numOfClassrooms + j);
                     grid.Children.Add(newTextBlock);
@@ -970,6 +978,12 @@ namespace ScheduleComputerCenter
 
         public void FilterSubjectsForListView(string text)
         {
+            
+            Style styleListViewItem = new Style(typeof(ListViewItem));
+            styleListViewItem.Setters.Add(new Setter(HelpProvider.HelpKeyProperty, "subject"));
+
+            SubjectsListView.ItemContainerStyle = styleListViewItem;
+
             List<Subject> subjects;
             try
             {
@@ -996,6 +1010,22 @@ namespace ScheduleComputerCenter
         {
             String text = FilterTextBox.Text;
             FilterSubjectsForListView(text);
+        }
+
+        private void HelpCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+            e.Handled = true;
+        }
+
+        private void HelpCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            IInputElement focusedControl = FocusManager.GetFocusedElement(Application.Current.Windows[0]);
+            if (focusedControl is DependencyObject)
+            {
+                string str = HelpProvider.GetHelpKey((DependencyObject)focusedControl);
+                HelpProvider.ShowHelp(str, this);
+            }
         }
 
     }

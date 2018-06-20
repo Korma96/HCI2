@@ -74,6 +74,11 @@
     <Compile Include="Converters\HeightConverter.cs" />
     <Compile Include="Converters\SoftwaresConverter.cs" />
     <Compile Include="Converters\TrueFalseConverter.cs" />
+    <Compile Include="Migrations\201806201340396_FirstMigrations.cs" />
+    <Compile Include="Migrations\201806201340396_FirstMigrations.Designer.cs">
+      <DependentUpon>201806201340396_FirstMigrations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\ComputerCentre.cs" />
     <Compile Include="Model\Day.cs" />
     <Compile Include="Model\InvertSign.cs" />
@@ -104,6 +109,11 @@
     <Compile Include="View\DragDropControl.xaml.cs">
       <DependentUpon>DragDropControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\HelpProvider.cs" />
+    <Compile Include="View\HelpViewer.xaml.cs">
+      <DependentUpon>HelpViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\JavaScriptControllHelper.cs" />
     <Compile Include="View\softwares.xaml.cs">
       <DependentUpon>softwares.xaml</DependentUpon>
     </Compile>
@@ -163,6 +173,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\HelpViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\softwares.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -208,6 +222,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Migrations\201806201340396_FirstMigrations.resx">
+      <DependentUpon>201806201340396_FirstMigrations.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -224,6 +241,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="View\Help\error.htm" />
+    <Resource Include="View\Help\graph2.png" />
+    <Content Include="View\Help\Ime.htm" />
+    <Content Include="View\Help\Indeks.htm" />
+    <Content Include="View\Help\index.htm" />
+    <Content Include="View\Help\Prezime.htm" />
+    <Resource Include="Images\model.jpg" />
+    <Resource Include="Images\model2.jpg" />
     <Resource Include="Images\add1.jpg" />
     <Resource Include="Images\add2.jpg" />
     <Content Include="Images\DragAndDrop_subjects.mp4" />
@@ -239,5 +264,6 @@
   <ItemGroup>
     <Resource Include="Images\update.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
