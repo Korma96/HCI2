@@ -16,21 +16,21 @@ using System.Windows.Shapes;
 namespace ScheduleComputerCenter.View
 {
     /// <summary>
-    /// Interaction logic for RemoveTermControl.xaml
+    /// Interaction logic for WorkingWithModelClassesControl.xaml
     /// </summary>
-    public partial class RemoveTermControl : UserControl
+    public partial class WorkingWithModelClassesControl : UserControl
     {
-        public RemoveTermControl()
+        public WorkingWithModelClassesControl()
         {
             InitializeComponent();
         }
 
-        private void Image_Loaded(object sender, RoutedEventArgs e)
+        private void ImageLoaded(object sender, RoutedEventArgs e)
         {
             // ... Create a new BitmapImage.
             BitmapImage b = new BitmapImage();
             b.BeginInit();
-            b.UriSource = new Uri("/ScheduleComputerCenter;component/Images/remove1.jpg", UriKind.RelativeOrAbsolute);
+            b.UriSource = new Uri(@"E:\baza\Projekti\HCIrepository\HCI2\ScheduleComputerCenter\Images\model.jpg");
             b.EndInit();
 
             // ... Get Image reference from sender.
@@ -39,12 +39,12 @@ namespace ScheduleComputerCenter.View
             image.Source = b;
         }
 
-        private void Image_Loaded2(object sender, RoutedEventArgs e)
+        private void ImageLoaded2(object sender, RoutedEventArgs e)
         {
             // ... Create a new BitmapImage.
             BitmapImage b = new BitmapImage();
             b.BeginInit();
-            b.UriSource = new Uri("/ScheduleComputerCenter;component/Images/remove2.jpg", UriKind.RelativeOrAbsolute);
+            b.UriSource = new Uri(@"E:\baza\Projekti\HCIrepository\HCI2\ScheduleComputerCenter\Images\model2.jpg");
             b.EndInit();
 
             // ... Get Image reference from sender.

@@ -23,24 +23,6 @@ namespace ScheduleComputerCenter.View
         public DragDropControl()
         {
             InitializeComponent();
-            MediaElement.LoadedBehavior = MediaState.Manual;
-            MediaElement.Play();
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            MediaElement.Play();
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            MediaElement.Pause();
-        }
-
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-            MediaElement.Stop();
-        }
-
     }
 }

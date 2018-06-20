@@ -43,29 +43,13 @@ namespace ScheduleComputerCenter
 
         public ListView SelectedElement { get; set; }
 
-        public TutorialWindow tutorialWindow { get; set; }
-
-        public bool tutorialOn = false;
-
-        public Dictionary<string, bool> tutorialHelper;
-
-        public string currentTutorial = "";
-
 
         public MainWindow()
         {
             InitializeComponent();
             this.DataContext = this;
-            Application.Current.MainWindow = this;
+
             WindowState = WindowState.Maximized;
-
-            tutorialHelper = new Dictionary<string, bool>();
-            tutorialHelper.Add("DragDrop", false);
-            tutorialHelper.Add("AddSubject", false);
-            tutorialHelper.Add("UpdateSubject", false);
-            tutorialHelper.Add("RemoveTerm", false);
-            tutorialHelper.Add("MoveTerm", false);
-
 
             Subjects = new ObservableCollection<Subject>();
             FilterSubjectsForListView("");
@@ -82,7 +66,6 @@ namespace ScheduleComputerCenter
             CommandBinding CourseCommandBinding = new CommandBinding(RoutedCommands.CourseCommand, CourseCommand_Executed, CourseCommand_CanExecute);
             CommandBinding SoftwareCommandBinding = new CommandBinding(RoutedCommands.SoftwareCommand, SoftwareCommand_Executed, SoftwareCommand_CanExecute);
             CommandBinding StartTutorialCommandBinding = new CommandBinding(RoutedCommands.StartTutorialCommand, StartTutorialCommand_Executed, StartTutorialCommand_CanExecute);
-            CommandBinding EndTutorialCommandBinding = new CommandBinding(RoutedCommands.EndTutorialCommand, EndTutorialCommand_Executed, EndTutorialCommand_CanExecute);
             this.CommandBindings.Add(AddNewTermCommandBinding);
             this.CommandBindings.Add(UpdateTermCommandBinding);
             this.CommandBindings.Add(RemoveTermCommandBinding);
@@ -91,7 +74,6 @@ namespace ScheduleComputerCenter
             this.CommandBindings.Add(CourseCommandBinding);
             this.CommandBindings.Add(SoftwareCommandBinding);
             this.CommandBindings.Add(StartTutorialCommandBinding);
-            this.CommandBindings.Add(EndTutorialCommandBinding);
 
             Menu menu = new Menu() { Background = Brushes.Gray, Height = 25 };
             MenuItem Data = new MenuItem() { Header = "Data", FontWeight = FontWeights.Heavy, Height = 25 };
@@ -101,10 +83,8 @@ namespace ScheduleComputerCenter
             MenuItem subjects = new MenuItem() { Header = "Subjects", Command = RoutedCommands.SubjectCommand };
             MenuItem Schedule = new MenuItem() { Header = "Schedule", FontWeight = FontWeights.Heavy, Height = 25 };
             MenuItem Tutorial = new MenuItem() { Header = "Tutorial", FontWeight = FontWeights.Heavy, Height = 25 };
-            MenuItem StartTutorial = new MenuItem() { Name="StartTutorialMenuItem", Header = "StartTutorial", Command = RoutedCommands.StartTutorialCommand};
-            MenuItem EndTutorial = new MenuItem() { Name = "EndTutorialMenuItem", Header = "EndTutorial", Command = RoutedCommands.EndTutorialCommand };
+            MenuItem StartTutorial = new MenuItem() { Header = "StartTutorial", Command = RoutedCommands.StartTutorialCommand};
             Tutorial.Items.Add(StartTutorial);
-            Tutorial.Items.Add(EndTutorial);
 
             Data.Items.Add(classrooms);
             Data.Items.Add(softwares);
@@ -575,10 +555,6 @@ namespace ScheduleComputerCenter
 
         private void AddNewTermCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (currentTutorial.Equals("AddSubject"))
-            {
-                tutorialHelper["AddSubject"] = true;
-            }
             AddNewOrUpdateTermDialog anoutd = new AddNewOrUpdateTermDialog(this, "Add new term", null, -1, -1);
             anoutd.inicijalizacijaDialoga(null);
             anoutd.ShowDialog();
@@ -602,10 +578,6 @@ namespace ScheduleComputerCenter
 
         private void UpdateTermCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (currentTutorial.Equals("UpdateSubject"))
-            {
-                tutorialHelper["UpdateSubject"] = true;
-            }
             int indexOfClassroom = Grid.GetColumn(SelectedElement);
             int indexOfTerm = SelectedElement.SelectedIndex;
 
@@ -624,69 +596,8 @@ namespace ScheduleComputerCenter
 
         private void StartTutorialCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if(tutorialOn)
-            {
-                return;
-            }
-            tutorialOn = true;
-            tutorialWindow = new TutorialWindow();
-            tutorialWindow.handler += new EventHandler(TutorialWindowClosing);
-            tutorialWindow.handlerForCurrentView += new EventHandler(SetCurrentTutorial);
-            tutorialWindow.ShowDialog();
-        }
-
-        private void EndTutorialCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
-            e.Handled = true;
-        }
-
-        private void EndTutorialCommand_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            if(!tutorialOn)
-            {
-                return;
-            }
-            tutorialOn = false;
-            tutorialWindow.Close();
-        }
-
-        private void SetCurrentTutorial(object sender, EventArgs e)
-        {
-            int index = (int)sender;
-            switch(index)
-            {
-                case 0:
-                {
-                    currentTutorial = "DragDrop";
-                    break;
-                }
-                case 1:
-                {
-                    currentTutorial = "MoveTerm";
-                    break;
-                }
-                case 2:
-                {
-                    currentTutorial = "AddSubject";
-                    break;
-                }
-                case 3:
-                {
-                    currentTutorial = "UpdateSubject";
-                    break;
-                }
-                case 4:
-                {
-                    currentTutorial = "RemoveTerm";
-                    break;
-                }
-            }
-        }
-
-        private void TutorialWindowClosing(object sender, EventArgs e)
-        {
-            tutorialOn = false;
+            var t = new TutorialWindow();
+            t.ShowDialog();
         }
 
         private void RemoveTermCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -706,10 +617,6 @@ namespace ScheduleComputerCenter
 
         private void RemoveTermCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (currentTutorial.Equals("RemoveTerm"))
-            {
-                tutorialHelper["RemoveTerm"] = true;
-            }
             int indexOfClassroom = Grid.GetColumn(SelectedElement);
             int indexOfTerm = SelectedElement.SelectedIndex;
 
@@ -728,14 +635,7 @@ namespace ScheduleComputerCenter
                 ComputerCentre.context.SaveChanges();
                 SelectedElement.SelectedItems.Clear();
                 SelectedElement = null;
-                if (tutorialOn)
-                {
-                    if (tutorialHelper[currentTutorial])
-                    {
-                        tutorialHelper[currentTutorial] = false;
-                        tutorialWindow.Show();
-                    }
-                }
+
             }
 
         }
@@ -928,7 +828,6 @@ namespace ScheduleComputerCenter
                 //indexOfClassroom = indexOfClassroom % numOfClassrooms;
 
                 //Classroom classroom = classrooms[indexOfClassroom];
-                //Classroom classroom = classrooms[indexOfClassroom];
                 //if (!ClassroomMatchSubjectNeeds(classroom, subject))
                 //{
                 //    return;
@@ -939,10 +838,6 @@ namespace ScheduleComputerCenter
                 listView.SelectedIndex = indexOfTerm;
                 SelectedElement = listView;
 
-                if (currentTutorial.Equals("DragDrop"))
-                {
-                    tutorialHelper["DragDrop"] = true;
-                }
                 AddNewOrUpdateTermDialog anoutd = new AddNewOrUpdateTermDialog(this, "Add new term", null, -1, -1);
                 anoutd.inicijalizacijaDialoga(subject);
                 anoutd.ShowDialog();
@@ -965,10 +860,6 @@ namespace ScheduleComputerCenter
                 listView.SelectedIndex = indexOfTerm;
                 SelectedElement = listView;
 
-                if (currentTutorial.Equals("MoveTerm"))
-                {
-                    tutorialHelper["MoveTerm"] = true;
-                }
                 AddNewOrUpdateTermDialog anoutd = new AddNewOrUpdateTermDialog(this, "Change term", term, oldTermRow, oldTermColumn);
                 anoutd.inicijalizacijaDialoga(term.Subject);
                 anoutd.ShowDialog();

@@ -39,10 +39,9 @@ namespace ScheduleComputerCenter.View
             ExplanationList = new List<string>()
             {
                 " Adding term to schedule using drag and drop",
-                " Moving term using drag and drop",
-                " Adding term using mouse right click, or using shortcut(CTRL+N)",
+                " Adding term to schedule using mouse right click, or using shortcut(CTRL+N)",
                 " Updating term using mouse right click, or using shortcut(CTRL+U)",
-                " Removing term using mouse right click, or using shortcut(CTRL+R)",
+                " CRUD operations on entities by choosing option from menu or using shortcuts"
             };
             index = 0;
             StepTextBlockText = "Step " + (index + 1).ToString() + "/" + ExplanationList.Count.ToString() + " :";
@@ -56,3 +55,59 @@ namespace ScheduleComputerCenter.View
 
     }
 }
+//if (index >= ExplanationList.Count)
+//{
+//    NextButton.IsEnabled = false;
+//    return;
+//}
+//StepStackPanel.Children.RemoveAt(0);
+//if(index == 1 || index == 2)
+//{
+//    StepStackPanel.Children.RemoveAt(0);
+//}
+//StepTextBlock.Text = StepsList[index];
+//DescriptionTextBlock.Text = ExplanationList[index];
+
+//Image nextImage = ImagesList[index];
+//Viewbox vb = new Viewbox();
+//vb.HorizontalAlignment = HorizontalAlignment.Left;
+//vb.Child = nextImage;
+//if (index == 0 || index == 1)
+//{
+//    vb.Width = 400;
+//    vb.Height = 375;
+//}
+//else
+//{
+//    vb.Width = 800;
+//    vb.Height = 375;
+//}
+
+//StepStackPanel.Children.Add(vb);
+//if(index == 0)
+//{
+//    Image nextImage2 = new Image() { Source = new BitmapImage(new Uri("../../Images/add_subject2.png", UriKind.RelativeOrAbsolute)) };
+//    Viewbox vb2 = new Viewbox();
+//    vb2.HorizontalAlignment = HorizontalAlignment.Right;
+//    vb2.Child = nextImage2;
+//    vb2.Width = 400;
+//    vb2.Height = 375;
+//    StepStackPanel.Children.Add(vb2);
+//}
+//if (index == 1)
+//{
+//    Image nextImage2 = new Image() { Source = new BitmapImage(new Uri("../../Images/update2.png", UriKind.RelativeOrAbsolute)) };
+//    Viewbox vb2 = new Viewbox();
+//    vb2.HorizontalAlignment = HorizontalAlignment.Right;
+//    vb2.Child = nextImage2;
+//    vb2.Width = 400;
+//    vb2.Height = 375;
+//    StepStackPanel.Children.Add(vb2);
+//}
+//index++;
+//if (index >= ExplanationList.Count)
+//{
+//    NextButton.IsEnabled = false;
+//}
+//UpdateLayout();
+//InvalidateVisual();
